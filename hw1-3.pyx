@@ -5,6 +5,10 @@ Spyder Editor
 This is a temporary script file.
 """
 
+import cython
+import numpy
+
+
 def summmation(a):
     sums = a[0]
     i = 1
