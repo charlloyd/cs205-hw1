@@ -6,6 +6,10 @@ This is a temporary script file.
 """
 import numpy
 
+# test cases
+sizes = [2**6, 2**10, 2**20, 2**32]
+lists = [[1]*size for size in sizes]
+
 
 def summmation(a):
     sums = a[0]
