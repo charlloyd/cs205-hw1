@@ -7,11 +7,10 @@ def serial_summation(long [:] a):
     cdef long sums
     cdef int i, N 
     
-    i = 1
-    N = a.shape[0]-1
-    sums = a[0]
+    N = a.shape[0]
+    sums = a[N]
     
-    for i in range(N):
+    for i in range(N-1):
         sums += a[i]
         
     return sums
@@ -21,11 +20,10 @@ def parallel_sum(long [:] a):
     cdef long sums
     cdef int i, N
     
-    i=1
-    N = a.shape[0]-1
-    sums = a[0]
+    N = a.shape[0]
+    sums = a[N]
     
-    for i in prange(N, nogil=True, schedule='dynamic'):
+    for i in prange(N-1, nogil=True, schedule='dynamic'):
         sums += a[i];
     return sums;
     
