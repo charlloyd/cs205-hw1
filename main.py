@@ -12,7 +12,7 @@ serial_timings = []
 start = 0
 
 for i in range(len(sizes)):
-  myarray = np.ascontiguousarray([1]*sizes[i], dtype=np.int_)
+  myarray = np.ones((sizes[i],), dtype=np.int_)
   start = time.time()
   print(hw13.parallel_sum(myarray))
   parallel_timings.append(time.time()-start)
