@@ -8,7 +8,7 @@ from libcpp.vector cimport vector
 # but means python style negative indexing will cause segfaults
 
 # Serial summation
-cpdef long serial_summation(vector[long]& a):
+cpdef long serial_summation(long[:]& a):
     cdef long sums = a[0]
     cdef size_t i
     
@@ -18,7 +18,7 @@ cpdef long serial_summation(vector[long]& a):
     return sums
 
 # Parallelize summation using Cython
-cpdef long parallel_sum(vector[long]& a) nogil:
+cpdef long parallel_sum(long[:]& a) nogil:
     cdef long sums = a[0]
     cdef size_t i
     
