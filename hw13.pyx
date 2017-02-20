@@ -12,7 +12,7 @@ cpdef long serial_summation(vector[long]& a):
     cdef long sums = a[0]
     cdef size_t i
     
-    for i in range(1,a.shape[0]):
+    for i in range(1,a.size()):
         sums += a[i]
         
     return sums
@@ -22,7 +22,7 @@ cpdef long parallel_sum(vector[long]& a) nogil:
     cdef long sums = a[0]
     cdef size_t i
     
-    for i in prange(1, a.shape[0], nogil=True, num_threads=64, schedule='static'):
+    for i in prange(1, a.size(), nogil=True, num_threads=64, schedule='static'):
         sums += a[i];
     return sums;
     
