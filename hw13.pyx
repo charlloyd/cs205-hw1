@@ -15,9 +15,13 @@ def serial_summation(a):
 
 # Parallelize summation using Cython
 def parallel_sum(double [:] a):
-    cdef double sum = 0;
-    cdef int i = 0;
-    cdef int N = a.shape[0];
+    cdef double sum;
+    cdef int i;
+    cdef int N;
+    
+    i=0;
+    N = a.shape[0];
+    sum = 0;
     
     with nogil:
         for i in prange(N, schedule='dynamic'):
