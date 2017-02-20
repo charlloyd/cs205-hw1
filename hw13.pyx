@@ -18,7 +18,7 @@ cdef serial_summation(long [:] a):
 
 # Parallelize summation using Cython
 cdef parallel_sum(long [:] a) nogil:
-    cdef long sums  a[0]
+    cdef long sums = a[0]
     cdef size_t i
     
     for i in prange(1, a.shape[0], nogil=True, num_threads=64, schedule='static'):
