@@ -21,7 +21,7 @@ cpdef long parallel_sum(long[:] a) nogil:
     cdef long sums = a[0]
     cdef size_t i
     
-    for i in prange(1, a.shape[0], nogil=True, num_threads=5, schedule='dynamic'):
+    for i in prange(1, a.shape[0], nogil=True, num_threads=8, schedule='dynamic'):
         sums += a[i];
     return sums;
     
