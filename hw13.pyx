@@ -2,7 +2,6 @@
 #cython: boundscheck=False, wraparound=False, nonecheck=False
 
 from cython.parallel import parallel, prange
-from libcpp.vector cimport vector
 
 # DON'T USE NEGATIVE INDEXING!!! Turning this option off makes code faster, 
 # but means python style negative indexing will cause segfaults
