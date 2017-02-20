@@ -21,7 +21,7 @@ for i in range(len(sizes)):
   serial_timings.append(time.time()-start)
 
 print(["Parallel: ",parallel_timings])
-print(["Serial: ",parallel_timings])
+print(["Serial: ",serial_timings])
   
 with open("timings.csv", 'w', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
