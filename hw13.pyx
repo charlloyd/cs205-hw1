@@ -12,7 +12,7 @@ cpdef long serial_summation(long[:]& a):
     cdef long sums = a[0]
     cdef size_t i
     
-    for i in range(1,a.size()):
+    for i in range(1,sizeof(a)):
         sums += a[i]
         
     return sums
