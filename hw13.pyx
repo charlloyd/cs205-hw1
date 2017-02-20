@@ -8,10 +8,8 @@ from cython.parallel import parallel, prange
 
 # Serial summation
 cdef serial_summation(long [:] a):
-    cdef long sums
+    cdef long sums = a[0]
     cdef size_t i
-    
-    sums = a[0]
     
     for i in range(1,a.shape[0]):
         sums += a[i]
@@ -20,10 +18,8 @@ cdef serial_summation(long [:] a):
 
 # Parallelize summation using Cython
 cdef parallel_sum(long [:] a) nogil:
-    cdef long sums
+    cdef long sums  a[0]
     cdef size_t i
-    
-    sums = a[0]
     
     for i in prange(1, a.shape[0], nogil=True, num_threads=64, schedule='static'):
         sums += a[i];
