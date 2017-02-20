@@ -1,6 +1,7 @@
 
 from cython.parallel import parallel, prange
 
+boundscheck(False)
 # Serial summation
 def serial_summation(a):
     sums = a[0]
@@ -11,7 +12,6 @@ def serial_summation(a):
         i += 1
         
     return sums
-
 
 # Parallelize summation using Cython
 def parallel_sum(double [:] a):
