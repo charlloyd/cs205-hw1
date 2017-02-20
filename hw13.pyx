@@ -17,9 +17,11 @@ def serial_summation(a):
 def parallel_sum(double [:] a):
     cdef double sum = 0;
     cdef int i = 0;
+    cdef int N = a.shape[0];
     
-    for i in prange(len(a), schedule='dynamic'):
-        sum += a[i];
+    with nogil:
+        for i in prange(N, schedule='dynamic'):
+            sum += a[i];
     return sum;
 
 # Optimize this parallelization
