@@ -7,8 +7,6 @@ lists = [[1]*size for size in sizes] #each element is a list of specified size
 
 lists = [np.asarray(list) for list in lists] # list of arrays?
 
-myarray = np.asarray(lists[0])
-
 for i in range(len(lists)):
   print(hw13.parallel_sum(lists[i]))
 
