@@ -22,9 +22,9 @@ def parallel_sum(long [:] a):
     N = a.shape[0]
     sums = 0
     
-    for i in prange(N, nogil=True):
+    for i in prange(N, nogil=True, schedule='dynamic'):
         sums += a[i];
-    return sums
+    return sums;
     
 #     with nogil:
 #         for i in prange(N, schedule='dynamic'):
