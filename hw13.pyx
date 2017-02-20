@@ -1,11 +1,16 @@
 #!python
-#cython: boundscheck=False
+#cython: boundscheck=False, wraparound=False, nonecheck=False
+
 from cython.parallel import parallel, prange
+
+# DON'T USE NEGATIVE INDEXING!!! Turning this option off makes code faster, 
+# but means python style negative indexing will cause segfaults
 
 # Serial summation
 def serial_summation(long [:] a):
     cdef long sums
-    cdef int i, N 
+    cdef int N
+    cdef size_t i
     
     N = a.shape[0]
     sums = a[N-1]
@@ -18,7 +23,8 @@ def serial_summation(long [:] a):
 # Parallelize summation using Cython
 def parallel_sum(long [:] a):
     cdef long sums
-    cdef int i, N
+    cdef int N
+    cdef size_t i
     
     N = a.shape[0]
     sums = a[N-1]
