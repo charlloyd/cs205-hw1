@@ -1,7 +1,7 @@
-
+#!python
+#cython: boundscheck=False
 from cython.parallel import parallel, prange
 
-boundscheck(False)
 # Serial summation
 def serial_summation(a):
     sums = a[0]
