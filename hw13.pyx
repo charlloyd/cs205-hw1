@@ -13,9 +13,9 @@ def serial_summation(long [:] a):
     cdef size_t i
     
     N = a.shape[0]
-    sums = a[N-1]
+    sums = 0
     
-    for i in range(N-1):
+    for i in range(N):
         sums += a[i]
         
     return sums
@@ -27,9 +27,9 @@ def parallel_sum(long [:] a):
     cdef size_t i
     
     N = a.shape[0]
-    sums = a[N-1]
+    sums = 0
     
-    for i in prange(N-1, nogil=True, num_threads=16, schedule='static'):
+    for i in prange(N, nogil=True, num_threads=16, schedule='static'):
         sums += a[i];
     return sums;
     
