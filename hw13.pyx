@@ -7,29 +7,25 @@ from cython.parallel import parallel, prange
 # but means python style negative indexing will cause segfaults
 
 # Serial summation
-def serial_summation(long [:] a):
+cdef serial_summation(long [:] a):
     cdef long sums
-    cdef int N
     cdef size_t i
     
-    N = a.shape[0]
-    sums = 0
+    sums = a[0]
     
-    for i in range(N):
+    for i in range(1,a.shape[0]):
         sums += a[i]
         
     return sums
 
 # Parallelize summation using Cython
-def parallel_sum(long [:] a):
+cdef parallel_sum(long [:] a) nogil:
     cdef long sums
-    cdef int N
     cdef size_t i
     
-    N = a.shape[0]
-    sums = 0
+    sums = a[0]
     
-    for i in prange(N, nogil=True, num_threads=64, schedule='static'):
+    for i in prange(1, a.shape[0], nogil=True, num_threads=64, schedule='static'):
         sums += a[i];
     return sums;
     
