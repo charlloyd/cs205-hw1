@@ -20,7 +20,7 @@ for i in range(len(sizes)):
   print(hw13.serial_summation(myarray))
   serial_timings.append(time.time()-start)
   
-with open("timings.csv", 'wb') as f:
+with open("timings.csv", 'wb', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow([str(i) for i in parallel_timings])
     writer.writerow([str(i) for i in serial_timings])
