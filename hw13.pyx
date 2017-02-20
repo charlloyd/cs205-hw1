@@ -3,13 +3,16 @@
 from cython.parallel import parallel, prange
 
 # Serial summation
-def serial_summation(a):
-    sums = a[0]
+def serial_summation(long [:] a):
+    cdef long sums
+    int i ,N 
+    
     i = 1
-    N = len(a)
-    while i < N:
+    N = a.shape[0]
+    sums = a[0]
+    
+    for i in range(N):
         sums += a[i]
-        i += 1
         
     return sums
 
@@ -18,9 +21,9 @@ def parallel_sum(long [:] a):
     cdef long sums
     cdef int i, N
     
-    i=0
+    i=1
     N = a.shape[0]
-    sums = 0
+    sums = a[0]
     
     for i in prange(N, nogil=True, schedule='dynamic'):
         sums += a[i];
