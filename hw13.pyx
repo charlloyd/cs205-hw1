@@ -15,18 +15,17 @@ def serial_summation(a):
 
 # Parallelize summation using Cython
 def parallel_sum(double [:] a):
-    cdef double sums;
-    cdef int i;
-    cdef int N;
+    cdef double sums
+    cdef int i, N
     
-    i=0;
-    N = a.shape[0];
-    sums = 0;
+    i=0
+    N = a.shape[0]
+    sums = 0
     
     with nogil:
         for i in prange(N, schedule='dynamic'):
-            sums += a[i];
-    return sums;
+            sums += a[i]
+    return sums
 
 # Optimize this parallelization
 # adjust the number of threads to make the algorithm cost optimal
