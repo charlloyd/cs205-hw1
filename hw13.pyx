@@ -7,7 +7,7 @@ from cython.parallel import parallel, prange
 # but means python style negative indexing will cause segfaults
 
 # Serial summation
-cdef serial_summation(long [:] a):
+cdef long serial_summation(long [:] a):
     cdef long sums = a[0]
     cdef size_t i
     
@@ -17,7 +17,7 @@ cdef serial_summation(long [:] a):
     return sums
 
 # Parallelize summation using Cython
-cdef parallel_sum(long [:] a) nogil:
+cdef long parallel_sum(long [:] a) nogil:
     cdef long sums = a[0]
     cdef size_t i
     
