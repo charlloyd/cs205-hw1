@@ -5,7 +5,7 @@ from cython.parallel import parallel, prange
 # Serial summation
 def serial_summation(long [:] a):
     cdef long sums
-    int i ,N 
+    cdef int i, N 
     
     i = 1
     N = a.shape[0]
