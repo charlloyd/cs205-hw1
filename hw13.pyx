@@ -29,7 +29,7 @@ def parallel_sum(long [:] a):
     N = a.shape[0]
     sums = 0
     
-    for i in prange(N, nogil=True, num_threads=16, schedule='static'):
+    for i in prange(N, nogil=True, num_threads=64, schedule='static'):
         sums += a[i];
     return sums;
     
