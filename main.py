@@ -21,6 +21,7 @@ for i in range(len(sizes)):
   serial_timings.append(time.time()-start)
   
 with open("timings.csv", 'wb') as f:
-    writer = csv.writer(f)
-    writer.writerows([parallel_timings, serial_timings])
+    writer = csv.writer(f, delimiter = ',')
+    writer.writerow([str(i) for i in parallel_timings])
+    writer.writerow([str(i) for i in serial_timings])
     f.close()
