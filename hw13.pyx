@@ -14,8 +14,8 @@ def serial_summation(a):
     return sums
 
 # Parallelize summation using Cython
-def parallel_sum(double [:] a):
-    cdef double sums
+def parallel_sum(long [:] a):
+    cdef long sums
     cdef int i, N
     
     i=0
