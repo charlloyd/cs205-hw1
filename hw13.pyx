@@ -1,3 +1,6 @@
+
+from cython.parallel import parallel, prange
+
 # Serial summation
 def serial_summation(a):
     sums = a[0]
@@ -10,6 +13,17 @@ def serial_summation(a):
     return sums
 
 
+# Parallelize summation using Cython
+def parallel_sum(a):
+    sum = 0 
+    for i in prange(len(a)):
+        sum += a[i]
+    return sum
 
+# Optimize this parallelization
+# adjust the number of threads to make the algorithm cost optimal
+
+        
+        
 
 
