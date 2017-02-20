@@ -19,6 +19,9 @@ for i in range(len(sizes)):
   start = time.time()
   print(hw13.serial_summation(myarray))
   serial_timings.append(time.time()-start)
+
+print(["Parallel: ",parallel_timings])
+print(["Serial: ",parallel_timings])
   
 with open("timings.csv", 'w', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
