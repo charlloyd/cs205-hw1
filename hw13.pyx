@@ -14,11 +14,13 @@ def serial_summation(a):
 
 
 # Parallelize summation using Cython
-def parallel_sum(a):
-    sum = 0 
-    for i in prange(len(a)):
-        sum += a[i]
-    return sum
+def parallel_sum(double a):
+    cdef real sum = 0;
+    cdef double i = 0;
+    
+    for i in prange(len(a), schedule='dynamic'):
+        sum += a[i];
+    return sum;
 
 # Optimize this parallelization
 # adjust the number of threads to make the algorithm cost optimal
