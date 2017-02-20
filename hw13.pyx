@@ -22,10 +22,14 @@ def parallel_sum(long [:] a):
     N = a.shape[0]
     sums = 0
     
-    with nogil:
-        for i in prange(N, schedule='dynamic'):
-            sums += a[i]
+    for i in prange(N, nogil=True):
+        sums += a[i];
     return sums
+    
+#     with nogil:
+#         for i in prange(N, schedule='dynamic'):
+#             sums += a[i]
+#     return sums
 
 # Optimize this parallelization
 # adjust the number of threads to make the algorithm cost optimal
