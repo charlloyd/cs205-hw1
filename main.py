@@ -12,17 +12,19 @@ parallel_timings_thread = []
 serial_timings = []
 start = 0
 
-for i in range(len(sizes)):
-  myarray = np.ones((sizes[i],), dtype=np.int_)
-  start = time.time()
-  print(hw13.parallel_sum(myarray))
-  parallel_timings_naive.append(time.time()-start)
-  start = time.time()
-  print(hw13.parallel_sum_thread(myarray))
-  parallel_timings_thread.append(time.time()-start)
-  start = time.time()
-  print(hw13.serial_summation(myarray))
-  serial_timings.append(time.time()-start)
+#for i in range(len(sizes)):
+i=0
+myarray = np.ones((sizes[i],), dtype=np.int_)
+start = time.time()
+print(hw13.parallel_sum(myarray))
+parallel_timings_naive.append(time.time()-start)
+start = time.time()
+print(hw13.serial_summation(myarray))
+serial_timings.append(time.time()-start)
+start = time.time()
+print(hw13.parallel_sum_thread(myarray))
+parallel_timings_thread.append(time.time()-start)
+
 
 print(["Parallel Naive: ",parallel_timings_naive])
 print(["Parallel Threaded: ",parallel_timings_thread])
