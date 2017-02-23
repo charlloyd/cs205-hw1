@@ -2,7 +2,7 @@
 #cython: boundscheck=False, wraparound=False, nonecheck=False
 #cython: --compile-args=-fopenmp --link-args=-fopenmp --force -a
 
-from cython.parallel cimport parallel, prange, threadid
+from cython.parallel cimport parallel, prange, threadid, numavailable
 from cython.operator cimport dereference as deref
 
 # DON'T USE NEGATIVE INDEXING!!! Turning this option off makes code faster, 
@@ -33,7 +33,7 @@ cpdef long parallel_sum(long[:] a):
 
 # Attempt at more cost effective Sum
 cpdef long parallel_sum_thread(long[:] data):
-    nthreads = cython.parallel.numavailable(schedule='dynamic')
+    nthreads = numavailable(schedule='dynamic')
     cdef double* buf = <double*>malloc(100 * nthreads * sizeof(double))
     cdef double* threadbuf
     cdef unsigned int N = data.shape[0]
