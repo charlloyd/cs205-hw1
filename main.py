@@ -24,7 +24,8 @@ for i in range(len(sizes)):
   print(hw13.serial_summation(myarray))
   serial_timings.append(time.time()-start)
 
-print(["Parallel: ",parallel_timings])
+print(["Parallel Naive: ",parallel_timings_naive])
+print(["Parallel Threaded: ",parallel_timings_thread])
 print(["Serial: ",serial_timings])
   
 with open("timings.csv", 'w', newline='') as f:
