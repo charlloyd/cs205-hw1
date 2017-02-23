@@ -58,7 +58,7 @@ cpdef long parallel_sum_thread(long[:] data):
 
         if tid == 0:
             sums = temp_data[0]
-            return sums
+        return sums
 
 
 
