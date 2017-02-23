@@ -37,7 +37,6 @@ cpdef long parallel_sum_thread(long[:] data):
     cdef long sums = 0
     cdef int N = data.shape[0]
     cdef size_t i
-    cdef threadlocal(double) temp_sum = 0
 
     with nogil, parallel:
         cdef tid = threadid()
