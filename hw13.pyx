@@ -33,18 +33,18 @@ cpdef long parallel_sum(long[:] a):
 
 # Attempt at more cost effective Sum
 cpdef long parallel_sum_thread(long[:] data):
-#    cdef double* buf = <double*>malloc(threadsavailable(schedule='dynamic') * sizeof(double))
+    nthreads = cython.parallel.numavailable(schedule='dynamic')
+    cdef double* buf = <double*>malloc(100 * nthreads * sizeof(double))
 #    cdef double* threadbuf
     cdef unsigned int N = data.shape[0]
-    cdef long[:] temp_data = data
+    cdef long[:] * temp_data = address(data)
     cdef unsigned int tid, s
 
 
 
     with nogil, parallel():
         tid = threadid()
-#        threadbuf = buf + tid # thread setup?
-        temp_data[tid] = data[tid]
+        threadbuf = buf + tid # thread setup
 
 #        for s in range(N/2, N):
 #            if tid < s:
