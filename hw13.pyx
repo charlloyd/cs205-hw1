@@ -2,9 +2,10 @@
 #cython: boundscheck=False, wraparound=False, nonecheck=False
 #cython: --compile-args=-fopenmp --link-args=-fopenmp --force -a
 
-from cython.parallel cimport parallel, prange, threadsavailable, threadid
+from cython.parallel cimport parallel, prange, threadid
 from cython.operator cimport dereference as deref
 from libc.stdlib cimport malloc, free
+cimport openmp
 
 # DON'T USE NEGATIVE INDEXING!!! Turning this option off makes code faster, 
 # but means python style negative indexing will cause segfaults
@@ -34,11 +35,11 @@ cpdef long parallel_sum(long[:] a):
 
 # Attempt at more cost effective Sum
 cpdef long parallel_sum_thread(long[:] data):
-    nthreads = numavailable(schedule='dynamic')
-    cdef double* buf = <double*>malloc(100 * nthreads * sizeof(double))
+    nthreads = openmp.omp_get_num_threads()
+    cdef double* buf = <double*>malloc(nthreads * sizeof(double))
     cdef double* threadbuf
     cdef unsigned int N = data.shape[0]
-    cdef long[:] temp_data = data
+    cdef long[::] temp_data = data
     cdef unsigned int tid, s
 
 
