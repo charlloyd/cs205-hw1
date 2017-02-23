@@ -50,7 +50,7 @@ cpdef long parallel_sum_thread(long[:]* data):
             if tid < s:
                 temp_data[tid] += temp_data[tid + s];
 
-        if tid < 2:
+        if tid < 32:
             temp_data[tid] += temp_data[tid + 32];
             temp_data[tid] += temp_data[tid + 16];
             temp_data[tid] += temp_data[tid + 8];
