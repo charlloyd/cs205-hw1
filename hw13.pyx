@@ -51,11 +51,11 @@ cpdef long parallel_sum_thread(long[:] data):
                 temp_data[tid] += temp_data[tid + s];
 
         if tid < 2:
-#            temp_data[tid] += temp_data[tid + 32];
-#            temp_data[tid] += temp_data[tid + 16];
-#            temp_data[tid] += temp_data[tid + 8];
-#            temp_data[tid] += temp_data[tid + 4];
-#            temp_data[tid] += temp_data[tid + 2];
+            temp_data[tid] += temp_data[tid + 32];
+            temp_data[tid] += temp_data[tid + 16];
+            temp_data[tid] += temp_data[tid + 8];
+            temp_data[tid] += temp_data[tid + 4];
+            temp_data[tid] += temp_data[tid + 2];
             temp_data[tid] += temp_data[tid + 1];
 
         if tid == 0:
