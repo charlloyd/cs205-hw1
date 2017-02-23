@@ -32,7 +32,7 @@ cpdef long parallel_sum(long[:] a):
 # adjust the number of threads to make the algorithm cost optimal
 
 # Attempt at more cost effective Sum
-cpdef long parallel_sum_thread(long[:] *data):
+cpdef long parallel_sum_thread(long[:] data):
 #    cdef double* buf = <double*>malloc(threadsavailable(schedule='dynamic') * sizeof(double))
 #    cdef double* threadbuf
     cdef unsigned int N = data.shape[0]
@@ -46,9 +46,9 @@ cpdef long parallel_sum_thread(long[:] *data):
 #        threadbuf = buf + tid # thread setup?
         temp_data[tid] = data[tid]
 
-        for s in range(N/2, N):
-            if tid < s:
-                temp_data[tid] += temp_data[tid + s];
+#        for s in range(N/2, N):
+#            if tid < s:
+#                temp_data[tid] += temp_data[tid + s];
 
         if tid < 32:
             temp_data[tid] += temp_data[tid + 32];
