@@ -59,8 +59,7 @@ cpdef long parallel_sum_thread(long[:] data):
 #            temp_data[tid] += temp_data[tid + 2];
 #            temp_data[tid] += temp_data[tid + 1];
 
-    with gil:
-        return temp_data[0]
+    return temp_data[0]
 
 
 
