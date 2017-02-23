@@ -45,7 +45,6 @@ cpdef long parallel_sum_thread(long[:]* data):
         tid = threadid()
 #        threadbuf = buf + tid # thread setup?
 #        temp_data[tid] = data[tid]
-        print(threadid())
 
         for s in prange(N/2, N):
             if tid < s:
