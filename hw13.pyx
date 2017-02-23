@@ -4,6 +4,7 @@
 
 from cython.parallel cimport parallel, prange, threadid, numavailable
 from cython.operator cimport dereference as deref
+from libc.stdlib cimport malloc, free
 
 # DON'T USE NEGATIVE INDEXING!!! Turning this option off makes code faster, 
 # but means python style negative indexing will cause segfaults
