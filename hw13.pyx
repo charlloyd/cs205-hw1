@@ -32,33 +32,33 @@ cpdef long parallel_sum(long[:] a):
 
 # Attempt at more cost effective Sum
 cpdef long parallel_sum_thread(long[:] data):
-    cdef double* buf = <double*>malloc(threadsavailable(schedule='dynamic') * sizeof(double))
-    cdef double* threadbuf
-    cdef long sums = 0
+#    cdef double* buf = <double*>malloc(threadsavailable(schedule='dynamic') * sizeof(double))
+#    cdef double* threadbuf
+    cdef long temp_data
+    cdef long sums
     cdef int N = data.shape[0]
-    cdef size_t i
-    cdef tid
+cdef threadlocal(tid)
 
     with nogil, parallel:
         tid = threadid()
-#       threadbuf = buf + threadid() # thread setup
+#        threadbuf = buf + tid # thread setup?
+        temp_data[tid] = data[tid]
 
-        for s in prange(N/2, schedule='dynamic'):
-            if (tid < s) {
-                data[tid] += data[tid + s];
-            }
-            _syncthreads();
+        for s in prange(N/2, N schedule='dynamic'):
+            if tid < s:
+                temp_data[tid] += temp_data[tid + s];
 
-        if (tid < 32)   {
-            data[tid] += data[tid + 32];
-            data[tid] += data[tid + 16];
-            data[tid] += data[tid + 8];
-            data[tid] += data[tid + 4];
-            data[tid] += data[tid + 2];
-            data[tid] += data[tid + 1];
-        }
+        if tid < N/2:
+            temp_data[tid] += temp_data[tid + 32];
+            temp_data[tid] += temp_data[tid + 16];
+            temp_data[tid] += temp_data[tid + 8];
+            temp_data[tid] += temp_data[tid + 4];
+            temp_data[tid] += temp_data[tid + 2];
+            temp_data[tid] += temp_data[tid + 1];
 
-    return sums;
+        if tid == 0:
+            sums = temp_data[0]
+    return sums
 
 
 
