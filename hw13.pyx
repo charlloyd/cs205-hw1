@@ -39,7 +39,7 @@ cpdef long parallel_sum_thread(long[:] data):
     cdef long sums
     cdef unsigned int tid, s
 
-    cdef long[N] temp_data
+    cdef long[4] temp_data
 
     with nogil, parallel():
 #        global temp_data
