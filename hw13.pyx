@@ -35,9 +35,11 @@ cpdef long parallel_sum_thread(long[:] data):
 #    cdef double* buf = <double*>malloc(threadsavailable(schedule='dynamic') * sizeof(double))
 #    cdef double* threadbuf
     cdef int N = data.shape[0]
-    cdef long[:] temp_data
+
     cdef long sums
     cdef unsigned int tid, s
+
+    cdef long[N] temp_data
 
     with nogil, parallel():
 #        global temp_data
