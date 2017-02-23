@@ -3,7 +3,7 @@
 #cython: --compile-args=-fopenmp --link-args=-fopenmp --force -a
 
 from cython.parallel cimport parallel, prange, threadid
-from cython.operator cimport dereference
+from cython.operator cimport dereference as deref
 
 # DON'T USE NEGATIVE INDEXING!!! Turning this option off makes code faster, 
 # but means python style negative indexing will cause segfaults
@@ -36,7 +36,7 @@ cpdef long parallel_sum_thread(long[:]* data):
 #    cdef double* buf = <double*>malloc(threadsavailable(schedule='dynamic') * sizeof(double))
 #    cdef double* threadbuf
     cdef unsigned int N = data.shape[0]
-    cdef long[:] temp_data = dereference(data)
+    cdef long[:] temp_data = deref(data)
     cdef long sums
     cdef unsigned int tid, s
 
