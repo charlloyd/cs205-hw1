@@ -44,18 +44,18 @@ cpdef long parallel_sum_thread(long[:] data):
     with nogil, parallel():
         tid = threadid()
 #        threadbuf = buf + tid # thread setup?
-        temp_data[tid] = data[tid]
+#        temp_data[tid] = data[tid]
 
         for s in prange(N/2, N):
             if tid < s:
                 temp_data[tid] += temp_data[tid + s];
 
-        if tid < 32:
-            temp_data[tid] += temp_data[tid + 32];
-            temp_data[tid] += temp_data[tid + 16];
-            temp_data[tid] += temp_data[tid + 8];
-            temp_data[tid] += temp_data[tid + 4];
-            temp_data[tid] += temp_data[tid + 2];
+        if tid < 2:
+#            temp_data[tid] += temp_data[tid + 32];
+#            temp_data[tid] += temp_data[tid + 16];
+#            temp_data[tid] += temp_data[tid + 8];
+#            temp_data[tid] += temp_data[tid + 4];
+#            temp_data[tid] += temp_data[tid + 2];
             temp_data[tid] += temp_data[tid + 1];
 
         if tid == 0:
