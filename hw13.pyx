@@ -2,7 +2,7 @@
 #cython: boundscheck=False, wraparound=False, nonecheck=False
 #cython: --compile-args=-fopenmp --link-args=-fopenmp --force -a
 
-from cython.parallel cimport parallel, prange, threadid, numavailable
+from cython.parallel cimport parallel, prange, threadsavailable, threadid
 from cython.operator cimport dereference as deref
 from libc.stdlib cimport malloc, free
 
