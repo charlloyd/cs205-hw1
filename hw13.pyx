@@ -2,7 +2,7 @@
 #cython: boundscheck=False, wraparound=False, nonecheck=False
 #cython: --compile-args=-fopenmp --link-args=-fopenmp --force -a
 
-from cython.parallel import parallel, prange, threadsavailable, threadid
+from cython.parallel cimport parallel, prange, threadid
 
 # DON'T USE NEGATIVE INDEXING!!! Turning this option off makes code faster, 
 # but means python style negative indexing will cause segfaults
@@ -31,24 +31,24 @@ cpdef long parallel_sum(long[:] a):
 # adjust the number of threads to make the algorithm cost optimal
 
 # Attempt at more cost effective Sum
-cpdef long parallel_sum_thread(long[:] data):
+cdef long parallel_sum_thread(long[:] data):
 #    cdef double* buf = <double*>malloc(threadsavailable(schedule='dynamic') * sizeof(double))
 #    cdef double* threadbuf
-    cdef long temp_data
-    cdef long sums
     cdef int N = data.shape[0]
-    cdef threadlocal(tid)
+    cdef long[:] temp_data
+    cdef long sums
+    cdef unsigned int tid, s
 
-    with nogil, parallel:
+    with nogil, parallel():
         tid = threadid()
 #        threadbuf = buf + tid # thread setup?
         temp_data[tid] = data[tid]
 
-        for s in prange(N/2, N schedule='dynamic'):
+        for s in prange(N/2, N):
             if tid < s:
                 temp_data[tid] += temp_data[tid + s];
 
-        if tid < N/2:
+        if tid < 32:
             temp_data[tid] += temp_data[tid + 32];
             temp_data[tid] += temp_data[tid + 16];
             temp_data[tid] += temp_data[tid + 8];
@@ -58,7 +58,7 @@ cpdef long parallel_sum_thread(long[:] data):
 
         if tid == 0:
             sums = temp_data[0]
-    return sums
+            return sums
 
 
 
