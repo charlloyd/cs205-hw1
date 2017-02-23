@@ -45,7 +45,7 @@ cpdef long parallel_sum_thread(long[:] data):
     with nogil, parallel():
         tid = threadid()
 #        threadbuf = buf + tid # thread setup?
-        temp_data[tid] = deref(data[tid])
+        temp_data[tid] = data[tid]
 
         for s in prange(N/2, N):
             if tid < s:
