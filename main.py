@@ -4,7 +4,7 @@ import time
 import csv
 
 # test cases
-sizes =  [2**6, 2**10, 2**20, 2**32]
+sizes =  [2**6, 2**10]#, 2**20, 2**32]
 #lists = [np.asarray([1]*size) for size in sizes] #each element is a list of specified size
 
 parallel_timings_naive = []

@@ -3,7 +3,6 @@
 #cython: --compile-args=-fopenmp --link-args=-fopenmp --force -a
 
 from cython.parallel import parallel, prange, threadsavailable, threadid
-from
 
 # DON'T USE NEGATIVE INDEXING!!! Turning this option off makes code faster, 
 # but means python style negative indexing will cause segfaults
@@ -41,7 +40,7 @@ cpdef long parallel_sum_thread(long[:] data):
     cdef threadlocal(double) temp_sum = 0
 
     with nogil, parallel:
-        tid = threadid()
+        cdef tid = threadid()
 #       threadbuf = buf + threadid() # thread setup
 
         for s in prange(N/2, schedule='dynamic'):
