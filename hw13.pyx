@@ -70,8 +70,9 @@ cpdef  long parallel_sum_thread( long[:] data):
     print np.asarray(temp_data)
     print np.asarray(data)
     free(buf)
-    print(sums)
+
     sums = 0
+    print(sums)
     return sums
 
 
