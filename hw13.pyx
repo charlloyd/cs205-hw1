@@ -41,7 +41,7 @@ cpdef long parallel_sum_thread(long[::] data):
     cdef unsigned int chunk = N/nthreads
     cdef long sums = 0
 
-    for s in prange(1, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
+    for s in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
             sums += data[s]
 
     return sums
