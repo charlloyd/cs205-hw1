@@ -21,10 +21,13 @@ serial_result=[]
 
 start = 0
 myarray = []
-nthreads = np.asarray(os.environ.get('SLURM_ARRAY_TASK_ID'))
-nthreads.astype(np.int32)
+nthreads = int(os.environ.get('SLURM_ARRAY_TASK_ID'))
+nthreads = int('64')
 
-for i in range(len(sizes)):
+iter = range(len(sizes))
+
+
+for i in iter:
     myarray = np.ones((sizes[i],), dtype=np.int_)
     start = time.time()
     parallel_result_naive.append(hw13.parallel_sum(myarray, nthreads))
@@ -36,12 +39,10 @@ for i in range(len(sizes)):
     parallel_result_thread.append(hw13.parallel_sum_thread(myarray, nthreads))
     parallel_timings_thread.append(time.time()-start)
 
-parallel_spd_naive = [i for i in parallel_timings_naive[i]/serial_timings[i]]
-parallel_spd_thread = [i for i in parallel_timings_thread[i]/serial_timings[i]]
-parallel_eff_naive = [i for i in parallel_spd_naive[i]/nthreads]
-parallel_eff_thread = [i for i in parallel_spd_thread[i]/nthreads]
-
-
+parallel_spd_naive = [serial_timings[i]/parallel_timings_naive[i] for i in iter]
+parallel_spd_thread = [serial_timings[i]/parallel_timings_thread[i] for i in iter ]
+parallel_eff_naive = [parallel_spd_naive[i]/nthreads for i in iter ]
+parallel_eff_thread = [parallel_spd_thread[i]/nthreads for i in iter ]
 
 
 
