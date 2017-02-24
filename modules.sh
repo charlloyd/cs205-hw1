@@ -7,3 +7,5 @@ module load gcc/6.2.0-fasrc02
 srun --mem-per-cpu=4000 -p general -n 64 --pty -t 0-06:00 /bin/bash
 
 python setup.py build_ext --inplace
+
+python main.py
