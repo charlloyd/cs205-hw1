@@ -43,7 +43,7 @@ cpdef long parallel_sum_thread( long[:] data):
     cdef  long[:] temp_data = data
     cdef unsigned int tid, s
     cdef long sums
-    cdef double test[N]
+    cdef double* test[N]
 
     sums=0
 
