@@ -5,7 +5,7 @@
 #SBATCH -p general
 #SBATCH -t 30
 #SBATCH -N 1
-#SBATCH −-cpus−per−task = $SLURM_ARRAY_TASK_ID
+#SBATCH −-cpus−per−task=$SLURM_ARRAY_TASK_ID
 #SBATCH --mem=10000
 
 ## Load software ##
