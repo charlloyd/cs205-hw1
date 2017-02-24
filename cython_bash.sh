@@ -5,7 +5,7 @@
 #SBATCH -p general
 #SBATCH -t 30
 #SBATCH -N 1
-#SBATCH −c 64
+#SBATCH -c 4
 #SBATCH --mem=10000
 
 ## Load software ##
