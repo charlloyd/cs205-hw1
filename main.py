@@ -21,19 +21,19 @@ serial_result=[]
 
 start = 0
 myarray = []
-nthreads = np.asarray(os.environ.get('SLURM_ARRAY_TASK_ID'))
+nthreads = np.asarray('4')
 nthreads.astype(np.int32)
 
 for i in range(len(sizes)):
     myarray = np.ones((sizes[i],), dtype=np.int_)
     start = time.time()
-    parallel_result_naive.append(hw13.parallel_sum(myarray, nthreads))
+    parallel_result_naive.append(hw13.parallel_sum(myarray))
     parallel_timings_naive.append(time.time()-start)
     start = time.time()
     serial_result.append(hw13.serial_summation(myarray))
     serial_timings.append(time.time()-start)
     start = time.time()
-    parallel_result_thread.append(hw13.parallel_sum_thread(myarray, nthreads))
+    parallel_result_thread.append(hw13.parallel_sum_thread(myarray))
     parallel_timings_thread.append(time.time()-start)
 
 parallel_spd_naive = [i for i in parallel_timings_naive[i]/serial_timings[i]]
