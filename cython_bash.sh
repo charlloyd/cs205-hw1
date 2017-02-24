@@ -6,7 +6,7 @@
 #SBATCH -t 30
 #SBATCH -N 1
 #SBATCH -n %a
-#SBATCH --mem=40000
+#SBATCH --mem=10000
 
 ## Load software ##
 module load python/3.4.1-fasrc01

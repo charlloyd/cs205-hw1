@@ -55,7 +55,7 @@ myarray = []
 
 for i in range(len(sizes)):
     myarray = np.ones((sizes[i],), dtype=np.int_)
-    myarray = myarray.astype(numpy.float32)
+    myarray = myarray.astype(np.float32)
     myarray_sum = np.empty_like(myarray)
 
     myarray_gpu = cuda.mem_alloc(2*myarray.nbytes)

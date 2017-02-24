@@ -22,7 +22,7 @@ cpdef long serial_summation(long[:] a):
     return sums
 
 # Parallelize summation using Cython
-cpdef long parallel_sum(long[:] a):
+cpdef long parallel_sum(long[:] a, int ):
     cdef  long  sums = a[0]
     cdef size_t i
     
@@ -47,7 +47,5 @@ cpdef long parallel_sum_thread(long[::] data):
 
     return sums
 
-
-def efficiency(
 
 
