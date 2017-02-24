@@ -40,7 +40,7 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
     cdef unsigned int chunk = N/nthreads
     cdef long sums = 0
 
-    for s in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
+    for s in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
         sums += data[s]
 
     return sums
@@ -56,8 +56,8 @@ cpdef double matMult_naive(double[::,::] mat, double[:] vec, int nthreads):
     for n in range(N):
         out[n] = 0
 
-    for s in prange(0, N, nogil=True, num_threads=nthreads, schedule='dynamic'):
-        for j in range(J):
+    for s in prange(N, nogil=True, num_threads=nthreads, schedule='dynamic'):
+        for j in prange(J, num_threads=nthreads, schedule='dynamic'):
             out[s] += mat[s,j] * vec[j]
 
     return out
