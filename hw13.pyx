@@ -35,7 +35,7 @@ cpdef long parallel_sum( long[:] a):
 # adjust the number of threads to make the algorithm cost optimal
 
 # Attempt at more cost effective Sum
-cpdef double * parallel_sum_thread( long[:] data):
+cpdef np.array parallel_sum_thread( long[:] data):
     nthreads = openmp.omp_get_num_threads()
     cdef double* buf = <double*>malloc(nthreads * sizeof(double))
     cdef double* threadbuf
@@ -66,7 +66,7 @@ cpdef double * parallel_sum_thread( long[:] data):
             temp_data[tid] += temp_data[tid + 1];
 
     free(buf)
-    return test
+    return np.asarray(test)
 
 
 
