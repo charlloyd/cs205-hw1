@@ -38,11 +38,11 @@ cpdef long parallel_sum_thread(long[:] data):
     nthreads = openmp.omp_get_num_threads()
     cdef double* buf = <double*>malloc(nthreads * sizeof(double))
     cdef double* threadbuf
-    cdef unsigned int N = data.shape[0]
-    cdef long[::] temp_data = data
+    cdef int N = data.shape[0]
+    cdef long temp_data[N]
     cdef unsigned int tid, s
 
-
+    temp_data = deref(data)
 
     with nogil, parallel():
         tid = threadid()
