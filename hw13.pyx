@@ -67,8 +67,8 @@ cpdef  long parallel_sum_thread( long[:] data):
                 sums = temp_data[0]
                 print(sums)
 
-    print deref(np.asarray(temp_data))
-    print deref(np.asarray(data))
+    print np.asarray(temp_data)
+    print np.asarray(data)
     free(buf)
     print(sums)
     sums = 0
