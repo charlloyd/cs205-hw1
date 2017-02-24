@@ -45,8 +45,8 @@ cpdef long parallel_sum_thread( long[:] data):
 
     sums=0
 
-    with nogil, parallel(num_threads=nthreads, schedule='guided'):
-        for s in prange(N, chunksize=chunk):
+    with nogil, parallel(num_threads=nthreads):
+        for s in prange(N, chunksize=chunk,schedule='guided'):
             sums += temp_data[s]
 
     return sums
