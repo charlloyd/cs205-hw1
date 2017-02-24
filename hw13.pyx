@@ -35,14 +35,12 @@ cpdef long parallel_sum( long[:] a):
 
 # Attempt at more cost effective Sum
 cpdef long parallel_sum_thread( long[:] data):
-    nthreads = openmp.omp_get_num_threads()
+    cdef unsigned int nthreads = openmp.omp_get_num_threads()
     cdef unsigned int N = data.shape[0]
     cdef long[::] temp_data = data
     cdef unsigned int tid, s
     cdef unsigned int chunk = N/nthreads
-    cdef long sums
-
-    sums=0
+    cdef long sums = 0
 
     for s in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
             sums += temp_data[s]
