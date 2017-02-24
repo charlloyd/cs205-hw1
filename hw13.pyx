@@ -6,7 +6,7 @@ from cython.parallel cimport parallel, prange, threadid
 from cython.operator cimport dereference as deref
 from libc.stdlib cimport malloc, free
 cimport openmp
-cimport numpy as np
+import numpy as np
 
 # DON'T USE NEGATIVE INDEXING!!! Turning this option off makes code faster, 
 # but means python style negative indexing will cause segfaults
@@ -47,7 +47,6 @@ cpdef long[:] parallel_sum_thread( long[:] data):
 
     sums=0
 
-    print np.asarray(temp_data)
     with nogil, parallel():
         tid = threadid()
         threadbuf = buf + tid # thread setup
