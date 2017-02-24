@@ -43,7 +43,7 @@ cpdef  long parallel_sum_thread( long[:] data):
     cdef unsigned int tid, s
     cdef long sums
 
-    sums=0;
+    sums=0
 
     print temp_data
     with nogil, parallel():
@@ -68,7 +68,8 @@ cpdef  long parallel_sum_thread( long[:] data):
     print temp_data
     print data
     free(buf)
-    return sums
+
+    return(sums)
 
 
 
