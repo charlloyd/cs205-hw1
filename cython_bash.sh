@@ -5,7 +5,7 @@
 #SBATCH -p general
 #SBATCH -t 30
 #SBATCH -N 1
-#SBATCH -n %a
+#SBATCH ---ntasks=%a
 #SBATCH --mem=10000
 
 ## Load software ##
