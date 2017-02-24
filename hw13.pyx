@@ -37,36 +37,17 @@ cpdef long parallel_sum( long[:] a):
 # Attempt at more cost effective Sum
 cpdef long parallel_sum_thread( long[:] data):
     nthreads = openmp.omp_get_num_threads()
-    cdef double* buf = <double*>malloc(nthreads * sizeof(double))
-    cdef double* threadbuf
     cdef unsigned int N = data.shape[0]
-    cdef  long[::] temp_data = data
-    cdef unsigned int tid, s, k
+    cdef long[::] temp_data = data
+    cdef unsigned int tid, s
     cdef long sums
-    cdef double* test
 
     sums=0
 
-    with nogil, parallel():
-        tid = threadid()
-        threadbuf = buf + tid # thread setup
+    with nogil, parallel(num_threads=nthreads, schedule='guided'):
+        for s in prange(N, chunksize=N/nthreads):
+            sums += temp_data[s]
 
-        for s in prange(N/2, N):
-            if tid < s:
-                temp_data[tid] += temp_data[tid + s];
-
-        for k in prange(1):
-            if tid < 32:
-                temp_data[tid] += temp_data[tid + 32];
-                temp_data[tid] += temp_data[tid + 16];
-                temp_data[tid] += temp_data[tid + 8];
-                temp_data[tid] += temp_data[tid + 4];
-                temp_data[tid] += temp_data[tid + 2];
-                temp_data[tid] += temp_data[tid + 1];
-            if tid == 0:
-                sums += temp_data[0]
-
-    free(buf)
     return sums
 
 
