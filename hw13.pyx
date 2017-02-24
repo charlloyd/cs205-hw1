@@ -63,13 +63,14 @@ cpdef  long parallel_sum_thread( long[:] data):
             temp_data[tid] += temp_data[tid + 1];
         with gil:
             if tid==0:
-                nonlocal sums = temp_data[0]
+                sums = temp_data[0]
 
     print deref(temp_data)
     print deref(data)
     free(buf)
-
-    return(sums)
+    print(sums)
+    sums = 0
+    return sums
 
 
 
