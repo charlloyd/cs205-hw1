@@ -36,3 +36,5 @@ with open("timings.csv", 'w', newline='') as f:
     writer.writerow([str(i) for i in parallel_timings_thread])
     writer.writerow([str(i) for i in serial_timings])
     f.close()
+
+exit()

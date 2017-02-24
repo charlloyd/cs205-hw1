@@ -61,7 +61,7 @@ cpdef  long parallel_sum_thread( long[:] data):
             temp_data[tid] += temp_data[tid + 4];
             temp_data[tid] += temp_data[tid + 2];
             temp_data[tid] += temp_data[tid + 1];
-        print threadbuf
+        printf(threadbuf)
         if tid==0:
             sums = temp_data[0]
 
