@@ -45,7 +45,7 @@ cpdef  long parallel_sum_thread( long[:] data):
 
     sums=0
 
-    print temp_data
+    print deref(temp_data)
     with nogil, parallel():
         global sums
         tid = threadid()
@@ -66,8 +66,8 @@ cpdef  long parallel_sum_thread( long[:] data):
             if tid==0:
                 sums = temp_data[0]
 
-    print temp_data
-    print data
+    print deref(temp_data)
+    print deref(data)
     free(buf)
 
     return(sums)
