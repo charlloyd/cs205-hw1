@@ -5,7 +5,7 @@
 #SBATCH -p general
 #SBATCH -t 30
 #SBATCH -N 1
-#SBATCH --ntasks=%a
+#SBATCH −-cpus−per−task=%a
 #SBATCH --mem=10000
 
 ## Load software ##
