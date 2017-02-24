@@ -11,8 +11,8 @@ cimport openmp
 # but means python style negative indexing will cause segfaults
 
 # Serial summation
-cpdef long serial_summation(long[:] a):
-    cdef long sums = a[0]
+cpdef  long double serial_summation( long double[:] a):
+    cdef  long double sums = a[0]
     cdef size_t i
     
     for i in range(1,a.shape[0]):
@@ -21,8 +21,8 @@ cpdef long serial_summation(long[:] a):
     return sums
 
 # Parallelize summation using Cython
-cpdef long parallel_sum(long[:] a):
-    cdef long sums = a[0]
+cpdef  long double parallel_sum( long double[:] a):
+    cdef  long double sums = a[0]
     cdef size_t i
     
     for i in prange(1, a.shape[0], nogil=True, schedule='dynamic'):
@@ -34,16 +34,15 @@ cpdef long parallel_sum(long[:] a):
 # adjust the number of threads to make the algorithm cost optimal
 
 # Attempt at more cost effective Sum
-cpdef long parallel_sum_thread(long[:] data):
+cpdef  long double parallel_sum_thread( long double[:] data):
     nthreads = openmp.omp_get_num_threads()
     cdef double* buf = <double*>malloc(nthreads * sizeof(double))
     cdef double* threadbuf
-    cdef int N = data.shape[0]
-    cdef long temp_data[data.shape[0]]
+    cdef unsigned int N = data.shape[0]
+    cdef  long double[:] temp_data = data
     cdef unsigned int tid, s
 
-    temp_data = deref(data)
-
+    print temp_data
     with nogil, parallel():
         tid = threadid()
         threadbuf = buf + tid # thread setup
@@ -59,7 +58,8 @@ cpdef long parallel_sum_thread(long[:] data):
             temp_data[tid] += temp_data[tid + 4];
             temp_data[tid] += temp_data[tid + 2];
             temp_data[tid] += temp_data[tid + 1];
-
+    print temp_data
+    print data
     return temp_data[0]
 
 
