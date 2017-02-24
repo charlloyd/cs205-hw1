@@ -3,6 +3,7 @@ import hw13
 import time
 import csv
 
+
 # test cases
 sizes =  [2**6, 2**10, 2**20, 2**32]
 #lists = [np.asarray([1]*size) for size in sizes] #each element is a list of specified size
@@ -11,6 +12,8 @@ parallel_timings_naive = []
 parallel_timings_thread = []
 serial_timings = []
 start = 0
+myarray = []
+
 
 for i in range(len(sizes)):
     myarray = np.ones((sizes[i],), dtype=np.int_)
@@ -25,11 +28,11 @@ for i in range(len(sizes)):
     parallel_timings_thread.append(time.time()-start)
 
 
-print(["Parallel Naive: ",parallel_timings_naive])
-print(["Parallel Threaded: ",parallel_timings_thread])
-print(["Serial: ",serial_timings])
+parallel_timings_naive.insert(0,"Parallel Naive CPU ")
+parallel_timings_naive.insert(0,"Parallel Chunked CPU ")
+parallel_timings_naive.insert(0,"Serial CPU ")
   
-with open("timings.csv", 'w', newline='') as f:
+with open("timings_.csv", 'w', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow([str(i) for i in parallel_timings_naive])
     writer.writerow([str(i) for i in parallel_timings_thread])
