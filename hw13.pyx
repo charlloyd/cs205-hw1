@@ -47,6 +47,7 @@ cpdef  long parallel_sum_thread( long[:] data):
 
     print temp_data
     with nogil, parallel():
+        global sums
         tid = threadid()
         threadbuf = buf + tid # thread setup
 
