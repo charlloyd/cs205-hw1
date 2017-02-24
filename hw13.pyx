@@ -57,7 +57,6 @@ cpdef long parallel_sum_thread( long[:] data):
 
         for k in prange(1):
             if tid < 32:
-                test = threadbuf +temp_data[tid]
                 temp_data[tid] += temp_data[tid + 32];
                 temp_data[tid] += temp_data[tid + 16];
                 temp_data[tid] += temp_data[tid + 8];
