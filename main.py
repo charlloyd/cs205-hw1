@@ -2,11 +2,11 @@ import numpy as np
 import hw13
 import time
 import csv
+import openmp
 
 
 # test cases
-sizes =  [2**6, 2**10, 2**20, 2**32]
-#lists = [np.asarray([1]*size) for size in sizes] #each element is a list of specified size
+sizes =  [2**6, 2**10, 2**20]#, 2**32]
 
 parallel_timings_naive = []
 parallel_timings_thread = []
@@ -28,12 +28,16 @@ for i in range(len(sizes)):
     parallel_timings_thread.append(time.time()-start)
 
 
-parallel_timings_naive.insert(0,"Parallel Naive CPU ")
-parallel_timings_naive.insert(0,"Parallel Chunked CPU ")
-parallel_timings_naive.insert(0,"Serial CPU ")
+parallel_timings_naive.insert(0,"Parallel Naive CPU Times")
+parallel_timings_naive.insert(0,"Parallel Chunked CPU Times")
+parallel_timings_naive.insert(0,"Serial CPU Times")
+colnames = ["Algorithm"]
+colnames.append(sizes)
+colnames.append(sizes)
   
 with open("timings_.csv", 'w', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
+    writer.writerow([str(i) for i in colnames])
     writer.writerow([str(i) for i in parallel_timings_naive])
     writer.writerow([str(i) for i in parallel_timings_thread])
     writer.writerow([str(i) for i in serial_timings])

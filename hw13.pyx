@@ -48,3 +48,6 @@ cpdef long parallel_sum_thread(long[::] data):
     return sums
 
 
+def efficiency(
+
+
