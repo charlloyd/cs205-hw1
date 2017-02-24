@@ -52,9 +52,9 @@ cpdef long parallel_sum_thread( long[:] data):
         tid = threadid()
         threadbuf = buf + tid # thread setup
 
-#        for s in range(N/2, N):
-#            if tid < s:
-#                temp_data[tid] += temp_data[tid + s];
+        for s in prange(N/2, N):
+            if tid < s:
+                temp_data[tid] += temp_data[tid + s];
 
         if tid < 32:
             test[tid] = threadbuf +temp_data[tid]
@@ -66,8 +66,9 @@ cpdef long parallel_sum_thread( long[:] data):
             temp_data[tid] += temp_data[tid + 1];
         if tid==0:
             sums += temp_data[0]
+
     free(buf)
-    return sums
+    return test
 
 
 
