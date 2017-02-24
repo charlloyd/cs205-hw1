@@ -46,7 +46,7 @@ cpdef  long parallel_sum_thread( long[:] data):
 
     sums=0
 
-    print deref(np.asarray(temp_data))
+    print np.asarray(temp_data)
     with nogil, parallel():
         tid = threadid()
         threadbuf = buf + tid # thread setup
