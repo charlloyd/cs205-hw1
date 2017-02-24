@@ -43,6 +43,7 @@ cpdef long parallel_sum_thread( long[:] data):
     cdef  long[:] temp_data = data
     cdef unsigned int tid, s
     cdef long sums
+    cdef long test[N]
 
     sums=0
 
@@ -56,23 +57,16 @@ cpdef long parallel_sum_thread( long[:] data):
 #                temp_data[tid] += temp_data[tid + s];
 
         if tid < 32:
+            test[tid] = threadbuf +temp_data[tid]
             temp_data[tid] += temp_data[tid + 32];
             temp_data[tid] += temp_data[tid + 16];
             temp_data[tid] += temp_data[tid + 8];
             temp_data[tid] += temp_data[tid + 4];
             temp_data[tid] += temp_data[tid + 2];
             temp_data[tid] += temp_data[tid + 1];
-        with gil:
-            if tid==0:
-                sums = temp_data[0]
-                print(sums)
-
-    print np.asarray(temp_data)
-    print np.asarray(data)
+        if tid==0:
+            sums += temp_data[0]
     free(buf)
-
-    sums = 0
-    print(sums)
     return sums
 
 
