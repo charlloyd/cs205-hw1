@@ -15,4 +15,6 @@ module load centos6/cython-0.20_python-3.3.2
 module load gcc/6.2.0-fasrc02
 
 ## EXECUTE CODE ##
+python setup.py build_ext --inplace
+
 python main.py
