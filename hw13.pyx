@@ -2,6 +2,10 @@
 #cython: boundscheck=False, wraparound=False, nonecheck=False
 #cython: --compile-args=-fopenmp --link-args=-fopenmp --force -a
 
+###########################
+# HW 1 QUESTION 3
+###########################
+
 from cython.parallel cimport parallel, prange, threadid
 from cython.operator cimport dereference as deref
 from libc.stdlib cimport malloc, free
@@ -10,7 +14,7 @@ from libc.stdlib cimport malloc, free
 # but means python style negative indexing will cause segfaults
 
 ###########################
-# 3. summation
+# SUMMATION
 ###########################
 
 # Serial summation
