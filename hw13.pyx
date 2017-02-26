@@ -55,3 +55,5 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
 ###########################
 # MATRIX VECTOR MULTIPLICATION
 ###########################
+
+# note -- I moved 2 functions for matrix vector multiplication into hw14.pyx so i could get this file to compile
