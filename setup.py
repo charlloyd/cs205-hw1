@@ -7,5 +7,7 @@ ext_modules = [
     Extension("hw14", ["hw14.pyx"], extra_compile_args=['-fopenmp'], extra_link_args=['-fopenmp'])]
 
 setup(
-    name='hw1',
-    ext_modules=cythonize(ext_modules))
+  name = 'hw1',
+  cmdclass = {'build_ext': build_ext},
+  ext_modules = ext_modules,
+)
