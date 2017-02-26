@@ -24,7 +24,7 @@ cpdef long serial_summation(long[:] a):
     for _ in xrange(1, a.shape[0]):
         sums += 1
         
-    print('hi')
+    print(sums)
     return sums
 
 # Parallelize summation using Cython
