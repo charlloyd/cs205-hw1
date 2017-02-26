@@ -51,3 +51,7 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
         sums += data[s]
         
     return sums
+
+###########################
+# MATRIX VECTOR MULTIPLICATION
+###########################
