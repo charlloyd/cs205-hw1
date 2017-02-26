@@ -19,7 +19,7 @@ from libc.stdlib cimport malloc, free
 
 # Serial summation
 cpdef long serial_summation(long[:] a):
-    cdef  long  sums = a[0]
+    cdef  long  sums = 0
     cdef size_t i
     
     for i in range(1,a.shape[0]):
