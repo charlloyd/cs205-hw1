@@ -3,7 +3,7 @@
 #cython: --compile-args=-fopenmp --link-args=-fopenmp --force -a
 
 ###########################
-# HW 1 QUESTION 3
+## HW 1 QUESTION 3
 ###########################
 
 from cython.parallel cimport parallel, prange, threadid
