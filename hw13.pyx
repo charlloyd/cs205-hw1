@@ -6,9 +6,12 @@ from cython.parallel cimport parallel, prange, threadid
 from cython.operator cimport dereference as deref
 from libc.stdlib cimport malloc, free
 
-
 # DON'T USE NEGATIVE INDEXING!!! Turning this option off makes code faster, 
 # but means python style negative indexing will cause segfaults
+
+###########################
+# 3. summation
+###########################
 
 # Serial summation
 cpdef long serial_summation(long[:] a):
@@ -27,8 +30,8 @@ cpdef long parallel_sum(long[:] a, int nthreads):
     
     for i in prange(1, a.shape[0], nogil=True, schedule='dynamic', num_threads=nthreads):
         sums += a[i];
+        
     return sums;
-    
 
 # Optimize this parallelization
 # adjust the number of threads to make the algorithm cost optimal
@@ -42,9 +45,12 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
 
     for s in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
         sums += data[s]
-
+        
     return sums
 
+###########################
+# 4. matrix multiplication
+###########################
 
 cpdef double matMult_naive(double[::,::] mat, double[:] vec, int nthreads):
     cdef unsigned int N = vec.shape[0]
@@ -77,6 +83,3 @@ cpdef double matMult_thread(double[::,::] mat, double[:] vec, int nthreads):
             out[s] += mat[s,j] * vec[j]
 
     return out
-
-
-
