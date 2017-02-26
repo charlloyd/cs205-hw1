@@ -29,7 +29,7 @@ iter = range(len(sizes))
 for i in iter:
     myarray = np.ones((sizes[i],), dtype=np.int_)
     start = time.time()
-    #parallel_result_naive.append(hw13.parallel_sum(myarray, nthreads))
+    parallel_result_naive.append(hw13.parallel_sum(myarray, nthreads))
     parallel_timings_naive.append(time.time()-start)
     start = time.time()
     serial_result.append(hw13.serial_summation(myarray))
