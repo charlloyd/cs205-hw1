@@ -10,7 +10,7 @@ from libc.stdlib cimport malloc, free
 # but means python style negative indexing will cause segfaults
 
 ###########################
-# 4. matrix multiplication
+# 3. matrix vector multiplication
 ###########################
 
 cpdef double matMult_naive(double[::,::] mat, double[:] vec, int nthreads):
@@ -44,3 +44,7 @@ cpdef double matMult_thread(double[::,::] mat, double[:] vec, int nthreads):
             out[s] += mat[s,j] * vec[j]
 
     return out
+
+###########################
+# 4. matrix multiplication
+###########################
