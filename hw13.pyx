@@ -39,7 +39,7 @@ cpdef long parallel_sum(long[:] a, int nthreads):
 # Attempt at more cost effective Sum
 cpdef long parallel_sum_thread(long[::] data, int nthreads):
     cdef unsigned int N = data.shape[0]
-    cdef unsigned int s
+    cdef int s
     cdef unsigned int chunk = N/nthreads
     cdef long sums = 0
 
