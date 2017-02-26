@@ -5,7 +5,6 @@ import numpy as np
 
 sizes =  [2**6, 2**10]#, 2**20, 2**32]
 
-
 mod = SourceModule("""
     __global__ void doublify(float *a)
     {
@@ -41,9 +40,7 @@ mod = SourceModule("""
     
     """)
 
-
 func = mod.get_function("parallel_sum_gpu")
-
 
 # test cases
 
@@ -66,7 +63,3 @@ for i in range(len(sizes)):
     cuda.memcpy_dtoh(myarray_sum, myarray_gpu)
     parallel_timings_gpu.append(time.time()-start)
     print(myarray_sum)
-
-
-
-
