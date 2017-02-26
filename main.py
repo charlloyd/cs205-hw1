@@ -24,7 +24,7 @@ serial_result=[]
 start = 0
 myarray = []
 #nthreads = int(os.environ.get('SLURM_ARRAY_TASK_ID'))
-nthreads = int('64')
+nthreads = 64
 
 iter = range(len(sizes))
 
