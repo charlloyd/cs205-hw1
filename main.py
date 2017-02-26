@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import math
 import matplotlib.patches as mpatches
 
+print('main.py')
+
 # test cases
 sizes =  [2**6, 2**10, 2**20]#, 2**32]
 
