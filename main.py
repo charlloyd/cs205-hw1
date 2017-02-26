@@ -8,6 +8,10 @@ import matplotlib.pyplot as plt
 import math
 import matplotlib.patches as mpatches
 
+###########################
+# HW 1 QUESTION 3
+###########################
+
 # test cases
 sizes =  [2**6, 2**10, 2**20,]# 2**32]
 
@@ -107,5 +111,9 @@ with open(filename_results, 'w', newline='') as f:
     writer.writerow([str(i) for i in parallel_result_naive])
     writer.writerow([str(i) for i in parallel_result_thread])
     f.close()
+
+###########################
+# HW 1 QUESTION 4
+###########################
     
 exit()
