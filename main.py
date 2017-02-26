@@ -28,12 +28,18 @@ iter = range(len(sizes))
 
 for i in iter:
     myarray = np.ones((sizes[i],), dtype=np.int_)
-    start = time.time()
-    parallel_result_naive.append(hw13.parallel_sum(myarray, nthreads))
-    parallel_timings_naive.append(time.time()-start)
+    
+    # serial
     start = time.time()
     serial_result.append(hw13.serial_summation(myarray))
     serial_timings.append(time.time()-start)
+    
+    # parallel naive
+    start = time.time()
+    parallel_result_naive.append(hw13.parallel_sum(myarray, nthreads))
+    parallel_timings_naive.append(time.time()-start)
+
+    # parallel thread
     start = time.time()
     parallel_result_thread.append(hw13.parallel_sum_thread(myarray, nthreads))
     parallel_timings_thread.append(time.time()-start)
@@ -66,6 +72,7 @@ parallel_eff_thread.append(parallel_timings_thread[-1])
 filename_time = "sum_timings_nthread_" + str(nthreads) + ".csv"
 filename_spd = "sum_spd_nthread_" + str(nthreads) + ".csv"
 filename_eff = "sum_eff_nthread_" + str(nthreads) + ".csv"
+filename_results = "sum_results" + str(nthreads) + ".csv"
 
 with open(filename_time, 'w', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
@@ -91,6 +98,14 @@ with open(filename_eff, 'w', newline='') as f:
     writer.writerow([str(i) for i in colnames])
     writer.writerow([str(i) for i in parallel_eff_naive])
     writer.writerow([str(i) for i in parallel_eff_thread])
+    f.close()
+    
+with open(filename_results, 'w', newline='') as f:
+    writer = csv.writer(f, delimiter = ',')
+    writer.writerow([str(i) for i in colnames])
+    writer.writerow([str(i) for i in serial_result])
+    writer.writerow([str(i) for i in parallel_result_naive])
+    writer.writerow([str(i) for i in parallel_result_thread])
     f.close()
     
 exit()
