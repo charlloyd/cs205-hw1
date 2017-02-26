@@ -31,7 +31,7 @@ cpdef long parallel_sum(long[:] a, int nthreads):
     for i in prange(1, a.shape[0], nogil=True, schedule='dynamic', num_threads=nthreads):
         sums += a[i];
         
-    return sums;
+    return sums
 
 # Optimize this parallelization
 # adjust the number of threads to make the algorithm cost optimal
