@@ -7,7 +7,7 @@ import math
 import matplotlib.patches as mpatches
 
 # test cases
-sizes =  [2**6, 2**10, 2**20]#, 2**32]
+sizes =  [2**6, 2**10, 2**20, 2**32]
 
 parallel_timings_naive = []
 parallel_timings_thread = []
