@@ -11,3 +11,6 @@ srun --mem-per-cpu=4000 -p general -n 64 --pty -t 0-06:00 /bin/bash
 python setup.py build_ext --inplace
 
 python main.py
+
+
+sbatch --array=4,8,16,32,64 cython_bash.sh
