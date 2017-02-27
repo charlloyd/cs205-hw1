@@ -16,7 +16,7 @@ from libc.stdlib cimport malloc, free
 # 4. matrix multiplication
 ###########################
 
-cpdef double * matMult_naive(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads):
+cdef double * matMult_naive(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads):
     cdef unsigned int N = X.shape[0]
     cdef unsigned int J = Y.shape[0]
     cdef unsigned int K = Y.shape[1]
@@ -28,7 +28,7 @@ cpdef double * matMult_naive(double[::,::] X, double[::,::] Y, double[::,::] out
                 out[n,j] += X[n,j] * Y[j,k]
 
 
-cpdef double * matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads):
+cdef double * matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads):
     cdef unsigned int N = X.shape[0]
     cdef unsigned int J = Y.shape[0]
     cdef unsigned int K = Y.shape[1]
