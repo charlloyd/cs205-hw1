@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import math
 import matplotlib.patches as mpatches
 import random
+from scipy.linalg.blas import dgemm
 
 ###########################
 # HW 1 QUESTION 3
@@ -171,5 +172,28 @@ with open(filename_time, 'w', newline='') as f:
 ###########################
 # HW 1 QUESTION 4
 ###########################
+star = []
+dgemm_time = []
+
+operations
+
+for i in iter:
+    random.seed(5555)
+    X = Y = np.zeros((sqrt(sizes[i]),sqrt(sizes[i])))
+    outvec = np.zeros_like(myvec)
+    mymat = np.zeros((sizes[i], sizes[i]))
+    #
+    for j in range(X.shape(0)):
+        for k in range(X.shape(1)):
+            X[j,k] = random.gauss(0,1)
+            Y[j,k] = random.gauss(0,1)
+
+    start = time.time()
+    dgemm(X,Y)
+    dgemm_time.append(time.time()-start)
+    #
+
+
+
 
 exit()
