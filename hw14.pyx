@@ -55,37 +55,4 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
                 out[n,k] += X[n,j] * Y[j,k]
     return 0
 
-cpdef int matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads):
-    cdef unsigned int N = X.shape[0]
-    cdef unsigned int J = Y.shape[0]
-    cdef unsigned int K = Y.shape[1]
-    cdef unsigned int f, g, h, i, j, k, l, m, n, tid
-    cdef unsigned int chunk = <int>((23*100*1000 / sizeof(double))/(N*2))
-    cdef double *A = <double *>(malloc (N * chunk * sizeof(double)))
-    cdef double *B = <double *>(malloc (N * chunk * sizeof(double)))
-    cdef double *C = <double *>(malloc (N * chunk * sizeof(double)))
-    cdef int[::] step = range(0,N, chunk)
-    cdef int n_threads
-
-    n_threads = min(nthreads, len(step))
-
-    with nogil, parallel(num_threads=n_threads):
-        tid = threadid()
-        for f in step:
-            for g in range(chunk):
-                for h in range(chunk):
-                    A[g * h + h] = X[step[tid] + g, h + f]
-                    B[g * h + h] = Y[h + f, step[tid] + g]
-            for i in range(chunk):
-                for j in range(chunk):
-                    C =  C + A[i + j] * B[i + j]
-
-            for n in prange(N):
-                for m in range(chunk):
-                    out[n,k+m] += C
-        free(A)
-        free(B)
-        free(C)
-    return 0
-
 
