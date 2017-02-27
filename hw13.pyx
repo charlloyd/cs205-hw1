@@ -57,7 +57,7 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
 ###########################
 # MATRIX VECTOR MULTIPLICATION
 ###########################
-cpdef void vecmatMult_serial(double[::,::] mat, double[:] vec, double[:] out):
+cpdef void vecmatMult_serial(double[::,::] mat, double[::] vec, double[::] out):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef unsigned int s,j, n
@@ -67,7 +67,7 @@ cpdef void vecmatMult_serial(double[::,::] mat, double[:] vec, double[:] out):
             out[s] += mat[s,j] * vec[j]
 
 
-cpdef void vecmatMult_naive(double[::,::] mat, double[:] vec, double[:] out, int nthreads):
+cpdef void vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef unsigned int s,j, n
@@ -77,7 +77,7 @@ cpdef void vecmatMult_naive(double[::,::] mat, double[:] vec, double[:] out, int
             out[s] += mat[s,j] * vec[j]
 
 
-cpdef void vecmatMult_thread(double[::,::] mat, double[:] vec, double[:] out, int nthreads):
+cpdef void vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef unsigned int s, j, n
