@@ -60,31 +60,31 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
 cpdef int vecmatMult_serial(double[::,::] mat, double[::] vec, double[::] out):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
-    cdef unsigned int s,j, n
+    cdef unsigned int j, n
 
-    for s in range(N):
+    for n in range(N):
         for j in range(J):
-            out[s] += mat[s,j] * vec[j]
+            out[n] += mat[n,j] * vec[j]
     return 0
 
 
 cpdef int vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
-    cdef unsigned int s,j, n
+    cdef unsigned int n,j
 
-    for s in prange(N, nogil=True, num_threads=nthreads, schedule='dynamic'):
+    for n in prange(N, nogil=True, num_threads=nthreads, schedule='dynamic'):
         for j in prange(J, num_threads=nthreads, schedule='dynamic'):
-            out[s] += mat[s,j] * vec[j]
+            out[n] += mat[n,j] * vec[j]
     return 0
 
 cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
-    cdef unsigned int s, j, n
+    cdef unsigned int n, j
     cdef unsigned int chunk = N/nthreads
 
-    for s in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
+    for n in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
         for j in range(J):
-            out[s] += mat[s,j] * vec[j]
+            out[n] += mat[n,j] * vec[j]
     return 0
