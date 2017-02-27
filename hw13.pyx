@@ -57,7 +57,7 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
 ###########################
 # MATRIX VECTOR MULTIPLICATION
 ###########################
-cdef void vecmatMult_serial(double[::,::] mat, double[::] vec, double[::] out):
+cpdef int vecmatMult_serial(double[::,::] mat, double[::] vec, double[::] out):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef unsigned int s,j, n
@@ -65,9 +65,10 @@ cdef void vecmatMult_serial(double[::,::] mat, double[::] vec, double[::] out):
     for s in range(N):
         for j in range(J):
             out[s] += mat[s,j] * vec[j]
+    return 0
 
 
-cdef void vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
+cpdef void vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef unsigned int s,j, n
@@ -75,9 +76,9 @@ cdef void vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, in
     for s in prange(N, nogil=True, num_threads=nthreads, schedule='dynamic'):
         for j in prange(J, num_threads=nthreads, schedule='dynamic'):
             out[s] += mat[s,j] * vec[j]
+    return 0
 
-
-cdef void vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
+cpdef void vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef unsigned int s, j, n
@@ -86,3 +87,4 @@ cdef void vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, i
     for s in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
         for j in range(J):
             out[s] += mat[s,j] * vec[j]
+    return 0
