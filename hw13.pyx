@@ -101,8 +101,8 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
     cdef int[:] step = <int*>malloc(N/chunk)
 
     step[0] = 0
-    if len(chunk_iter) > 1:
-        for i in range(N/chunk):
+    if len(range(N/chunk)) > 1:
+        for i in range(1, N/chunk):
             step[i] = step[i-1] + chunk
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
