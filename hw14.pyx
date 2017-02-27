@@ -55,22 +55,6 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
                 out[n,k] += X[n,j] * Y[j,k]
     return 0
 
-cpdef int matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads):
-    cdef unsigned int N = X.shape[0]
-    cdef unsigned int J = Y.shape[0]
-    cdef unsigned int K = Y.shape[1]
-    cdef unsigned int k, j, n, tid
-    cdef unsigned int chunk = <int>((2.3*1000*1000 / sizeof(double))/(N*2))
-    cdef double *A = <double *>(malloc (N * chunk * sizeof(double)))
-    cdef double *B = <double *>(malloc (N * chunk * sizeof(double)))
-    cdef double *C = <double *>(malloc (N * chunk * sizeof(double)))
 
-
-    with nogil, parallel(num_threads=nthreads):
-        tid = threadid()
-        for f in range(chunk):
-            A
-
-    return 0
 
 

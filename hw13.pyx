@@ -23,7 +23,7 @@ cpdef long serial_summation(long[:] a):
     
     for i in xrange(1, a.shape[0]):
         sums += a[i]
-
+    
     return sums
 
 
