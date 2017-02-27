@@ -98,7 +98,7 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
     cdef double vecChunk = <double >(malloc (N * sizeof(double)))
     cdef double matChunk = <double >(malloc (N * chunk * sizeof(double)))
     cdef double temp = <double>(malloc (chunk * sizeof(double)))
-    cdef int step[len(range(0,N, chunk))]
+    cdef int *step[len(range(0,N, chunk))]
 
     for i in len(range(0,N,chunk)):
         step[i] = range(0,N,chunk)[i]
