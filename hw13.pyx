@@ -99,7 +99,7 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
     cdef double *matChunk = <double *>(malloc (N * chunk * sizeof(double)))
     cdef double *temp = <double *>(malloc (chunk * sizeof(double)))
     cdef int chunk_iter = range(0, N, chunk)
-    cdef int step[vec.shape[0]/(23*100*1000 / sizeof(double)/(N*2))]
+    cdef int[:] step = chunk_iter
 
     step[0] = 0
     if len(chunk_iter) > 1:
