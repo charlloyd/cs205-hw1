@@ -68,7 +68,7 @@ cpdef int vecmatMult_serial(double[::,::] mat, double[::] vec, double[::] out):
     return 0
 
 
-cpdef void vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
+cpdef int vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef unsigned int s,j, n
@@ -78,7 +78,7 @@ cpdef void vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, i
             out[s] += mat[s,j] * vec[j]
     return 0
 
-cpdef void vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
+cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef unsigned int s, j, n
