@@ -1,3 +1,4 @@
+
 #!python
 #cython: boundscheck=False, wraparound=False, nonecheck=False
 #cython: --compile-args=-fopenmp --link-args=-fopenmp --force -a
@@ -54,5 +55,4 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
             for j in range(J):
                 out[n,k] += X[n,j] * Y[j,k]
     return 0
-
 

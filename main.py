@@ -27,7 +27,9 @@ serial_result=[]
 
 start = 0
 myarray = []
+
 nthreads = [4, 8, 16, 32]
+
 
 iter = range(len(sizes))
 
