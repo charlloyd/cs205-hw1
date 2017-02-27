@@ -26,13 +26,6 @@ cpdef long serial_summation(long[:] a):
 
     return sums
 
-cpdef double serial_summation(double[:] a):
-    cdef  double  sums = a[0]
-
-    for i in xrange(1, a.shape[0]):
-        sums += a[i]
-
-    return sums
 
 # Parallelize summation using Cython
 cpdef long parallel_sum(long[:] a, int nthreads):
@@ -42,15 +35,6 @@ cpdef long parallel_sum(long[:] a, int nthreads):
     for i in prange(1, a.shape[0], nogil=True, schedule='dynamic', num_threads=nthreads):
         sums += a[i];
         
-    return sums
-
-cpdef double parallel_sum(double[:] a, int nthreads):
-    cdef  double  sums = a[0]
-    cdef int i
-
-    for i in prange(1, a.shape[0], nogil=True, schedule='dynamic', num_threads=nthreads):
-        sums += a[i];
-
     return sums
 
 # Optimize this parallelization
@@ -68,16 +52,7 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
         
     return sums
 
-cpdef double parallel_sum_thread(long[::] data, int nthreads):
-    cdef unsigned int N = data.shape[0]
-    cdef int s
-    cdef unsigned int chunk = N/nthreads
-    cdef double sums = 0
 
-    for s in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
-        sums += data[s]
-
-    return sums
 
 ###########################
 # MATRIX VECTOR MULTIPLICATION
