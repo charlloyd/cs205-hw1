@@ -55,6 +55,3 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
                 out[n,k] += X[n,j] * Y[j,k]
     return 0
 
-
-
-
