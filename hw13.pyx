@@ -89,7 +89,7 @@ cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, i
             out[n] += mat[n,j] * vec[j]
     return 0
 
-cpdef int (double[::,::] mat, double[::] vec, double[::] out, int nthreads):
+cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef size_t int n, j, k, f, g, tid, s, t, v
@@ -116,3 +116,4 @@ cpdef int (double[::,::] mat, double[::] vec, double[::] out, int nthreads):
         free(temp)
         free(vecChunk)
     return 0
+
