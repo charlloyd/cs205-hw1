@@ -93,7 +93,7 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef unsigned int n, j, k, f, g, tid, s, t, v
-    cdef unsigned int chunk = <unsigned int>(malloc(2.3*1000*1000 / sizeof(double)/(N*2)))
+    cdef unsigned int chunk = <unsigned int>(malloc(2.3*1000*1000 / 8/(N*2)))
     cdef double *vecChunk = <double *>(malloc (N * sizeof(double)))
     cdef double *matChunk = <double *>(malloc (N * chunk * sizeof(double)))
     cdef double *temp = <double *>(malloc (chunk * sizeof(double)))
