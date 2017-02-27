@@ -89,12 +89,11 @@ cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, i
             out[n] += mat[n,j] * vec[j]
     return 0
 
-cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out, int nthreads, int[:] step):
+cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out, int nthreads, int[:] step, int chunk):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef size_t n, j, k, f, g, s, t, v, i
     cdef int tid;
-    cdef unsigned int chunk = 23*100*1000 / sizeof(double)/(N*2)
     cdef double *vecChunk = <double *>(malloc (N * sizeof(double)))
     cdef double *matChunk = <double *>(malloc (N * chunk * sizeof(double)))
     cdef double *temp = <double *>(malloc (chunk * sizeof(double)))
