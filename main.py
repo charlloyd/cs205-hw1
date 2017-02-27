@@ -7,13 +7,14 @@ import csv
 import matplotlib.pyplot as plt
 import math
 import matplotlib.patches as mpatches
+import random
 
 ###########################
 # HW 1 QUESTION 3
 ###########################
 
 # test cases
-sizes =  [2**6, 2**10, 2**20,]# 2**32]
+sizes =  [2**6, 2**10, 2**20]# 2**32]
 
 parallel_timings_naive = []
 parallel_timings_thread = []
@@ -90,30 +91,87 @@ with open(filename_time, 'w', newline='') as f:
     writer.writerow([str(i) for i in serial_timings])
     f.close()
 
-with open(filename_spd, 'w', newline='') as f:
-    writer = csv.writer(f, delimiter = ',')
-    writer.writerow([str(i) for i in colnames])
-    writer.writerow([str(i) for i in parallel_spd_naive])
-    writer.writerow([str(i) for i in parallel_spd_thread])
-    f.close()
 
-with open(filename_eff, 'w', newline='') as f:
-    writer = csv.writer(f, delimiter = ',')
-    writer.writerow([str(i) for i in colnames])
-    writer.writerow([str(i) for i in parallel_eff_naive])
-    writer.writerow([str(i) for i in parallel_eff_thread])
-    f.close()
+
+### Matrix Vector Multiplication ###
+sizes = [2**6, 2**10, 2**16]
+
+parallel_timings_naive = []
+parallel_timings_thread = []
+serial_timings = []
+
+parallel_result_naive =[]
+parallel_result_thread=[]
+serial_result=[]
+
+
+iter = range(len(sizes))
+
+for i in iter:
+    random.seed(5555)
+    myvec = np.zeros((sizes[i],))
+    outvec = numpy.zeros_like(myvec)
+    mymat = np.zeros((sizes[i], sizes[i]))
     
-with open(filename_results, 'w', newline='') as f:
+    for j in range(sizes[i]):
+        myvec[j] = np.gauss(0,1)
+        for k in range(sizes[i]):
+            mymat[j,k] = np.gauss(0,1)
+
+    # NP test
+    print(np.dot(mymat, myvec))
+
+    # serial
+    start = time.time()
+    serial_result.append(hw13.vecmatMult_serial(mymat, myvec, outvec))
+    serial_timings.append(time.time()-start)
+    
+    # parallel naive
+    start = time.time()
+    parallel_result_naive.append(hw13.vecmatMult_naive(mymat, myvec, outvec, nthreads))
+    parallel_timings_naive.append(time.time()-start)
+    
+    # parallel thread
+    start = time.time()
+    parallel_result_thread.append(hw13.vecmatMult_thread(mymat, myvec, outvec, nthreads))
+    parallel_timings_thread.append(time.time()-start)
+
+
+parallel_eff_naive = [serial_timings[i]/parallel_timings_naive[i]/nthreads for i in iter]
+parallel_eff_thread = [serial_timings[i]/parallel_timings_thread[i]/nthreads for i in iter]
+
+parallel_timings_naive.insert(0,"Parallel Naive Times")
+parallel_timings_thread.insert(0,"Parallel Chunked Times")
+serial_timings.insert(0,"Serial Times")
+parallel_eff_naive.insert(0,"Parallel Naive Efficiency")
+parallel_eff_thread.insert(0,"Parallel Chunked Efficiency")
+
+colnames = ["Algorithm"]
+colnames.append(sizes)
+colnames.append("Pass")
+parallel_timings_naive.append(np.array_equal(sizes, parallel_result_naive))
+parallel_timings_thread.append(np.array_equal(sizes, parallel_result_thread))
+serial_timings.append(np.array_equal(sizes, serial_result))
+
+parallel_eff_naive.append(parallel_timings_naive[-1])
+parallel_eff_thread.append(parallel_timings_thread[-1])
+
+filename_time = "matvec_timings_nthread_" + str(nthreads) + ".csv"
+filename_eff = "matvec_eff_nthread_" + str(nthreads) + ".csv"
+filename_results = "matvec_results" + str(nthreads) + ".csv"
+
+with open(filename_time, 'w', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow([str(i) for i in colnames])
-    writer.writerow([str(i) for i in serial_result])
-    writer.writerow([str(i) for i in parallel_result_naive])
-    writer.writerow([str(i) for i in parallel_result_thread])
+    writer.writerow([str(i) for i in parallel_timings_naive])
+    writer.writerow([str(i) for i in parallel_eff_naive])
+    writer.writerow([str(i) for i in parallel_timings_thread])
+    writer.writerow([str(i) for i in parallel_eff_thread])
+    writer.writerow([str(i) for i in serial_timings])
     f.close()
 
 ###########################
 # HW 1 QUESTION 4
 ###########################
-    
+
 exit()

@@ -57,5 +57,32 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
 ###########################
 # MATRIX VECTOR MULTIPLICATION
 ###########################
+cpdef void vecmatMult_serial(double[::,::] mat, double[:] vec, double[:] out):
+    cdef unsigned int N = vec.shape[0]
+    cdef unsigned int J = mat.shape[1]
+    cdef unsigned int s,j, n
 
-# note -- I moved 2 functions for matrix vector multiplication into hw14.pyx so i could get this file to compile
+    for s in range(N):
+        for j in range(J):
+            out[s] += mat[s,j] * vec[j]
+
+
+cpdef void vecmatMult_naive(double[::,::] mat, double[:] vec, double[:] out, int nthreads):
+    cdef unsigned int N = vec.shape[0]
+    cdef unsigned int J = mat.shape[1]
+    cdef unsigned int s,j, n
+
+    for s in prange(N, nogil=True, num_threads=nthreads, schedule='dynamic'):
+        for j in prange(J, num_threads=nthreads, schedule='dynamic'):
+            out[s] += mat[s,j] * vec[j]
+
+
+cpdef void vecmatMult_thread(double[::,::] mat, double[:] vec, double[:] out, int nthreads):
+    cdef unsigned int N = vec.shape[0]
+    cdef unsigned int J = mat.shape[1]
+    cdef unsigned int s, j, n
+    cdef unsigned int chunk = N/nthreads
+
+    for s in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
+        for j in range(J):
+            out[s] += mat[s,j] * vec[j]
