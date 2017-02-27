@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import hw13
-#import hw14
+import hw14
 import time
 import csv
 import matplotlib.pyplot as plt
@@ -96,7 +96,7 @@ for n in nthreads:
 
 
     ### Matrix Vector Multiplication ###
-    sizes = [2**6, 2**10, 2**16]
+    sizes = [2**6, 2**10]#, 2**16]
 
     parallel_timings_naive = []
     parallel_timings_thread = []
@@ -140,7 +140,7 @@ for n in nthreads:
         # parallel thread
         outvec = np.zeros_like(myvec)
         start = time.time()
-        hw13.vecmatMult_thread(mymat, myvec, outvec, n)
+        hw13.vecmatMult_explicit(mymat, myvec, outvec, n)
         parallel_timings_thread.append(time.time()-start)
         parallel_result_thread.append(outvec)
 

@@ -5,7 +5,7 @@ module load centos6/cython-0.20_python-3.3.2
 module load gcc/6.2.0-fasrc02
 module load cuda/7.5-fasrc01
 
-srun --mem-per-cpu=4000 -p general -N 1 -n 8 --pty -t 0-06:00 /bin/bash
+srun --mem-per-cpu=2000 -p general -N 1 -n 4 --pty -t 0-06:00 /bin/bash
 #srun --mem-per-cpu=4000 -p holyseasgpu -n 64 --gres=gpu:1 --constraint=cuda-7.5 --pty -t 0-06:00 /bin/bash
 
 python setup.py build_ext --inplace
