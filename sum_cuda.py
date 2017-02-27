@@ -42,9 +42,6 @@ mod = SourceModule("""
 
 func = mod.get_function("parallel_sum_gpu")
 
-# test cases
-
-#lists = [np.asarray([1]*size) for size in sizes] #each element is a list of specified size
 
 parallel_timings_gpu = []
 start = 0
