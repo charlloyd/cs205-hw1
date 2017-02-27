@@ -28,6 +28,7 @@ start = 0
 myarray = []
 nthreads = int(os.environ.get('SLURM_ARRAY_TASK_ID'))
 #nthreads = 64
+nthreads = 8
 
 iter = range(len(sizes))
 
@@ -43,7 +44,7 @@ for i in iter:
     start = time.time()
     parallel_result_naive.append(hw13.parallel_sum(myarray, nthreads))
     parallel_timings_naive.append(time.time()-start)
-
+    
     # parallel thread
     start = time.time()
     parallel_result_thread.append(hw13.parallel_sum_thread(myarray, nthreads))
@@ -103,6 +104,7 @@ serial_timings = []
 parallel_result_naive =[]
 parallel_result_thread=[]
 serial_result=[]
+compare = []
 
 
 iter = range(len(sizes))
@@ -110,31 +112,36 @@ iter = range(len(sizes))
 for i in iter:
     random.seed(5555)
     myvec = np.zeros((sizes[i],))
-    outvec = numpy.zeros_like(myvec)
+    outvec = np.zeros_like(myvec)
     mymat = np.zeros((sizes[i], sizes[i]))
-    
+    #
     for j in range(sizes[i]):
-        myvec[j] = np.gauss(0,1)
+        myvec[j] = random.gauss(0,1)
         for k in range(sizes[i]):
-            mymat[j,k] = np.gauss(0,1)
-
+            mymat[j,k] = random.gauss(0,1)
+    #
     # NP test
-    print(np.dot(mymat, myvec))
-
+    compare.append(np.dot(mymat, myvec))
+    #
     # serial
     start = time.time()
-    serial_result.append(hw13.vecmatMult_serial(mymat, myvec, outvec))
+    hw13.vecmatMult_serial(mymat, myvec, outvec)
     serial_timings.append(time.time()-start)
-    
+    serial_result.append(outvec)
+    #
     # parallel naive
+    outvec = np.zeros_like(myvec)
     start = time.time()
-    parallel_result_naive.append(hw13.vecmatMult_naive(mymat, myvec, outvec, nthreads))
+    hw13.vecmatMult_naive(mymat, myvec, outvec, nthreads)
     parallel_timings_naive.append(time.time()-start)
-    
+    parallel_result_naive.append(outvec)
+    #
     # parallel thread
+    outvec = np.zeros_like(myvec)
     start = time.time()
-    parallel_result_thread.append(hw13.vecmatMult_thread(mymat, myvec, outvec, nthreads))
+    hw13.vecmatMult_thread(mymat, myvec, outvec, nthreads)
     parallel_timings_thread.append(time.time()-start)
+    parallel_result_thread.append(outvec)
 
 
 parallel_eff_naive = [serial_timings[i]/parallel_timings_naive[i]/nthreads for i in iter]
@@ -148,17 +155,8 @@ parallel_eff_thread.insert(0,"Parallel Chunked Efficiency")
 
 colnames = ["Algorithm"]
 colnames.append(sizes)
-colnames.append("Pass")
-parallel_timings_naive.append(np.array_equal(sizes, parallel_result_naive))
-parallel_timings_thread.append(np.array_equal(sizes, parallel_result_thread))
-serial_timings.append(np.array_equal(sizes, serial_result))
-
-parallel_eff_naive.append(parallel_timings_naive[-1])
-parallel_eff_thread.append(parallel_timings_thread[-1])
 
 filename_time = "matvec_timings_nthread_" + str(nthreads) + ".csv"
-filename_eff = "matvec_eff_nthread_" + str(nthreads) + ".csv"
-filename_results = "matvec_results" + str(nthreads) + ".csv"
 
 with open(filename_time, 'w', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
