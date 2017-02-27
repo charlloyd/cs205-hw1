@@ -92,22 +92,27 @@ cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, i
 cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
-    cdef unsigned int n, j, f, g, tid, s, t
-    cdef unsigned int chunk = (2.3*1000*1000 / sizeof(double))/(N*2)
-    cdef long *matchunk = <double*> malloc (chunk * sizeof(double))
-    cdef long *vec  = <double*> malloc (chunk * sizeof(double))
-    cdef long *temp = <double*> malloc (chunk * sizeof(double))
-    cdef unsigned int step = range(0,N, chunk)
+    cdef int n, j, k, f, g, tid, s, t, v
+    cdef int chunk = <int>((2.3*1000*1000 / sizeof(double))/(N*2))
+    cdef double *vecChunk = <double *>(malloc (N * sizeof(double)))
+    cdef double *matChunk = <double *>(malloc (N * chunk * sizeof(double)))
+    cdef double *temp = <double *>(malloc (chunk * sizeof(double)))
+    cdef int[::] step = range(0,N, chunk)
 
 
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
         for f in range(chunk):
             for g in range(J):
-                matchunk[f,g] = mat[step[tid] + f,g]
-
-        for n in prange(N):
-            if step[tid] < n & step[tid+1] >= n:
-                for t in range(chunk):
-                    out[n] += temp[step[tid] + t]
+                matChunk[f*J + g] = mat[step[tid] + f,g]
+        for v in range(N):
+            vecChunk[v] = vec[v]
+        for k in range(chunk):
+            for j in range(N):
+                temp[k] = temp[k] + matChunk[k*J + j] * vecChunk[j]
+        for t in prange(chunk):
+            out[step[tid] + t] += temp[t]
+        free(matChunk)
+        free(temp)
+        free(vecChunk)
     return 0
