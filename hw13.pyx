@@ -94,12 +94,16 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
     cdef unsigned int J = mat.shape[1]
     cdef size_t n, j, k, f, g, s, t, v, i
     cdef int tid;
-    cdef double *vecChunk = <double *>(malloc (N * sizeof(double)))
-    cdef double *matChunk = <double *>(malloc (N * chunk * sizeof(double)))
-    cdef double *temp = <double *>(malloc (chunk * sizeof(double)))
+    cdef double *vecChunk
+    cdef double *matChunk
+    cdef double *temp
 
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
+        vecChunk = <double *>(malloc (N * sizeof(double)))
+        matChunk = <double *>(malloc (N * chunk * sizeof(double)))
+        temp = <double *>(malloc (chunk * sizeof(double)))
+
         for f in range(chunk):
             for g in range(J):
                 matChunk[f*J + g] = mat[step[tid] + f,g]
