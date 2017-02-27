@@ -112,40 +112,49 @@ compare = []
 
 iter = range(len(sizes))
 
-    for i in iter:
-random.seed(5555)
-myvec = np.zeros((sizes[i],))
-outvec = np.zeros_like(myvec)
-mymat = np.zeros((sizes[i], sizes[i]))
-#
-for j in range(sizes[i]):
-    myvec[j] = random.gauss(0,1)
-    for k in range(sizes[i]):
-        mymat[j,k] = random.gauss(0,1)
-#
-# NP test
-compare.append(np.dot(mymat, myvec))
-#
-# serial
-start = time.time()
-hw13.vecmatMult_serial(mymat, myvec, outvec)
-serial_timings.append(time.time()-start)
-serial_result.append(outvec)
-#
-# parallel naive
-outvec = np.zeros_like(myvec)
-start = time.time()
-hw13.vecmatMult_naive(mymat, myvec, outvec, n)
-parallel_timings_naive.append(time.time()-start)
-parallel_result_naive.append(outvec)
-#
-# parallel thread
+for i in iter:
+    random.seed(5555)
+    myvec = np.zeros((sizes[i],))
+    outvec = np.zeros_like(myvec)
+    mymat = np.zeros((sizes[i], sizes[i]))
+    #
+    for j in range(sizes[i]):
+        myvec[j] = random.gauss(0,1)
+        for k in range(sizes[i]):
+            mymat[j,k] = random.gauss(0,1)
+    #
+    # NP test
+    compare.append(np.dot(mymat, myvec))
+    #
+    # serial
+    outvec = np.zeros_like(myvec)
+    start = time.time()
+    hw13.vecmatMult_serial(mymat, myvec, outvec)
+    serial_timings.append(time.time()-start)
+    serial_result.append(outvec)
+    #
+    # parallel naive
+    outvec = np.zeros_like(myvec)
+    start = time.time()
+    hw13.vecmatMult_naive(mymat, myvec, outvec, n)
+    parallel_timings_naive.append(time.time()-start)
+    parallel_result_naive.append(outvec)
+    #
+    # parallel thread
 outvec = np.zeros_like(myvec)
 chunk = round(23*100*1000 / 8/(sizes[i]*2))
+if chunk > myvec.shape[0]:
+    chunk = myvec.shape[0]
+#
+if myvec.shape[0]/chunk < n:
+     ntemp = round(myvec.shape[0]/chunk)
+else:
+     ntemp= n
+#
 step = [idx for idx in range(0,sizes[i],chunk)]
 step = np.array(step, dtype=np.intc)
 start = time.time()
-hw13.vecmatMult_explicit(mymat, myvec, outvec, n,step)
+hw13.vecmatMult_explicit(mymat, myvec, outvec, ntemp,step, chunk)
 parallel_timings_thread.append(time.time()-start)
 parallel_result_thread.append(outvec)
 

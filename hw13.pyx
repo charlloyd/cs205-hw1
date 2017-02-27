@@ -92,7 +92,7 @@ cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, i
 cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out, int nthreads, int[:] step, int chunk):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
-    cdef size_t n, j, k, f, g, s, t, v, i
+    cdef size_t j, k, f, g, s, t, v
     cdef int tid;
     cdef double *vecChunk
     cdef double *matChunk
@@ -112,8 +112,9 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
         for k in range(chunk):
             for j in range(N):
                 temp[k] = temp[k] + matChunk[k*J + j] * vecChunk[j]
-        for t in prange(chunk):
-            out[step[tid] + t] += temp[t]
+        with gil:
+            for t in prange(chunk):
+                out[step[tid] + t] += temp[t]
         free(matChunk)
         free(temp)
         free(vecChunk)
