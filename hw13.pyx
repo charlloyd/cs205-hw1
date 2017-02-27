@@ -98,9 +98,9 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
     cdef double vecChunk = <double >(malloc (N * sizeof(double)))
     cdef double matChunk = <double >(malloc (N * chunk * sizeof(double)))
     cdef double temp = <double>(malloc (chunk * sizeof(double)))
-    cdef int step = range(0,N, chunk)
+    cdef int step[len(range(0,N, chunk))]
 
-
+    step = range(0,N,chunk)
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
         for f in range(chunk):
