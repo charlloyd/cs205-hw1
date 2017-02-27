@@ -7,7 +7,7 @@ from Cython.Distutils import build_ext
 
 our_modules = [
     Extension("hw13", ["hw13.pyx"], extra_compile_args=['-fopenmp'], extra_link_args=['-fopenmp']),
-    #Extension("hw14", ["hw14.pyx"], extra_compile_args=['-fopenmp'], extra_link_args=['-fopenmp']),
+    Extension("hw14", ["hw14.pyx"], extra_compile_args=['-fopenmp'], extra_link_args=['-fopenmp']),
 ]
 
 ### apparently equivalent ways to do setup
