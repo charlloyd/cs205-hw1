@@ -101,8 +101,10 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
     cdef int chunk_iter = range(0, N, chunk)
     cdef int step[len(chunk_iter)]
 
-    for i in len(chunk_iter):
-        step[i] = chunk_iter[i]
+    step[0] = 0
+    if len(chunk_iter) > 1:
+        for i in len(chunk_iter):
+            step[i] = step[i-1] + chunk
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
         for f in range(chunk):
