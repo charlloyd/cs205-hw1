@@ -64,8 +64,8 @@ cpdef int matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int
         A = <double *>(malloc (J * chunk * sizeof(double)))
         B = <double *>(malloc (J * chunk * sizeof(double)))
         C = <double *>(malloc (chunk * sizeof(double)))
-        for t in T:
-            for s in S:
+        for t in range(T):
+            for s in range(S):
                 for a in range(chunk):
                     C[a] = 0
                     for b in range(J):
