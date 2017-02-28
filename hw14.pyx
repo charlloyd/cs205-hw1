@@ -8,6 +8,7 @@ from cython.parallel cimport parallel, prange, threadid
 from cython.operator cimport dereference as deref
 from libc.stdlib cimport malloc, free, rand
 cimport numpy as np
+import numpu as np
 
 
 ###########################
@@ -96,7 +97,7 @@ def matMult_block(double[::,::] X, double[::,::] Y, int nthreads, int[::, ::] st
     cdef int chunkC = chunk
 
     mmb(Xc, Yc, outC, nt, stepC, S, chunkC, N, J, K)
-    return np.array(outC)
+    return np.asarray(outC)
 
 
 

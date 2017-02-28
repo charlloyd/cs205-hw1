@@ -136,8 +136,8 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
 
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
-        vecChunk = <double *>(malloc (N * sizeof(double)))
-        matChunk = <double *>(malloc (N * chunk * sizeof(double)))
+        vecChunk = <double *>(malloc (N*32 * sizeof(double)))
+        matChunk = <double *>(malloc (N*32 * chunk * sizeof(double)))
         temp = <double *>(malloc (chunk * sizeof(double)))
 
         for f in range(chunk):
