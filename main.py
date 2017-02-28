@@ -18,8 +18,8 @@ from scipy.linalg.blas import dgemm
 nthreads = [2, 4,]# 8, 16, 32]
 
 # over-write files
-fn_sum = "sum_timings_nthread_" + str(n) + ".csv"
-fn_matvec = "matvec_timings_nthread_" + str(n) + ".csv"
+fn_sum = "summmation.csv"
+fn_matvec = "matvecs.csv"
 f = open(fn_sum, "w+")
 f.close()
 f = open(fn_matvec, "w+")
