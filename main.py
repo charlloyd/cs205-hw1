@@ -81,14 +81,11 @@ for n in nthreads:
     parallel_eff_naive.append(parallel_timings_naive[-1])
     parallel_eff_thread = [parallel_spd_thread[i]/n for i in iter]
     parallel_eff_thread.append(parallel_timings_thread[-1])
-<<<<<<< HEAD
+
 
     # prep before writing
-=======
-    
     # write results to csv file
     
->>>>>>> f7ecb9317e8d9363704e0737ed0a9f8715ac651a
     colnames = ["Algorithm"]
     colnames.append(sizes)
     colnames.append("Pass")
@@ -168,16 +165,15 @@ for n in nthreads:
         step = [idx for idx in range(0,sizes[i],chunk)]
         step = np.array(step, dtype=np.intc)
         start = time.time()
-<<<<<<< HEAD
+
         hw13.vecmatMult_thread(mymat, myvec, outvec, n)
-=======
+
         hw13.vecmatMult_explicit(mymat, myvec, outvec, ntemp, step, chunk)
->>>>>>> f7ecb9317e8d9363704e0737ed0a9f8715ac651a
         parallel_timings_thread.append(time.time()-start)
         parallel_result_thread.append(outvec)
 
         
-<<<<<<< HEAD
+
     # timings
     serial_timings.append(np.array_equal(sizes, serial_result))
     parallel_timings_naive.append(np.array_equal(sizes, parallel_result_naive))
@@ -220,7 +216,7 @@ for n in nthreads:
         writer.writerow([str(i) for i in parallel_spd_thread])
         writer.writerow([str(i) for i in parallel_eff_thread])
         f.close()
-=======
+        
         # timings
         serial_timings.insert(0,"Serial Times")
         serial_timings.append(np.array_equal(sizes, serial_result))
@@ -260,7 +256,6 @@ for n in nthreads:
             writer.writerow([str(i) for i in parallel_spd_thread])
             writer.writerow([str(i) for i in parallel_eff_thread])
             f.close()
->>>>>>> f7ecb9317e8d9363704e0737ed0a9f8715ac651a
 
 ###########################
 # HW 1 QUESTION 4
@@ -291,10 +286,7 @@ for i in iter:
     start = time.time()
     #matMult_serial(X, Y, outmat, 32)
     serial_time.append(time.time()-start)
-<<<<<<< HEAD
-    
+
     #Naive parallel algorithm without blocking
-=======
->>>>>>> f7ecb9317e8d9363704e0737ed0a9f8715ac651a
 
 exit()

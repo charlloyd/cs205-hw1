@@ -48,7 +48,7 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
                 out[n,k] += X[n,j] * Y[j,k]
     return 0
 
-cpdef int matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads):
+cpdef int matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[:] step, int chunk):
     cdef unsigned int N = X.shape[0]
     cdef unsigned int J = Y.shape[0]
     cdef unsigned int K = Y.shape[1]
