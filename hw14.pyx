@@ -76,6 +76,6 @@ cpdef int matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int
                         C[k] = C[k] + A[k*J + j] * B[k*J + j]
                 for n in prange(nthreads):
                     for k in range(chunk):
-                        out[k + step1[tid,s],t] += out[k + step1[tid,s],t] + C[k]
+                        out[k + step1[tid,s],t] +=  C[k]
     return 0
 
