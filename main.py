@@ -147,7 +147,7 @@ for n in nthreads:
         step = [idx for idx in range(0,sizes[i],chunk)]
         step = np.array(step, dtype=np.intc)
         start = time.time()
-        #hw13.vecmatMult_explicit(mymat, myvec, outvec, n,step)
+        hw13.vecmatMult_thread(mymat, myvec, outvec, n)
         parallel_timings_thread.append(time.time()-start)
         parallel_result_thread.append(outvec)
         
