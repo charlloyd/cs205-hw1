@@ -15,7 +15,15 @@ from scipy.linalg.blas import dgemm
 ###########################
 
 # set number of threads
-nthreads = [2, 4, 8, 16, 32]
+nthreads = [2, 4,#] 8, 16, 32]
+
+# over-write files
+fn_sum = "sum_timings_nthread_" + str(n) + ".csv"
+fn_matvec = "matvec_timings_nthread_" + str(n) + ".csv"
+f = open(fn_sum, "w+")
+f.close()
+f = open(fn_matvec, "w+")
+f.close()
 
 # main loop for different numbers of threads
 for n in nthreads:
@@ -79,7 +87,7 @@ for n in nthreads:
     colnames.append(sizes)
     colnames.append("Pass")
     serial_timings.insert(0,"Serial Times")
-    parallel_timings_naive.insert(0,"Parallel Naive Times")
+    parallel_timings_naive.insert(0,"Parallel Naive Times",nthreads)
     parallel_timings_thread.insert(0,"Parallel Guided Times")
     parallel_spd_naive.insert(0,"Parallel Naive Speed-up")
     parallel_spd_thread.insert(0,"Parallel Guided Speed-up")
@@ -87,8 +95,8 @@ for n in nthreads:
     parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
     
     # write results to csv
-    fn = "sum_timings_nthread_" + str(n) + ".csv"
-    with open(fn, 'w', newline='') as f:
+    
+    with open(fn_sum, 'a', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in colnames])
         writer.writerow([str(i) for i in serial_timings])
@@ -184,8 +192,7 @@ for n in nthreads:
     parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
     
     # write results to csv
-    fn = "matvec_timings_nthread_" + str(n) + ".csv"
-    with open(fn, 'w', newline='') as f:
+    with open(fn_matvec, 'a', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in colnames])
         writer.writerow([str(i) for i in serial_timings])
