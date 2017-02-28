@@ -258,21 +258,24 @@ row = round(23*100*1000 / 8/(sizes[i]/2))
 chunk = round(((sizes[i]**2))//(row**2))
 if chunk < n:
     chunk = n
-    row = sizes[i]*2//n
+    row = int(np.ceil(np.sqrt(sizes[i]**2/n)))
 repfact = len(range(0,sizes[i],row))
-step1 = step2 = np.zeros((n,repfact), dtype=np.intc)
-divisions1 = [t for t in range(0,sizes[i],rownew)]
-divisions2 = np.repeat(divisions1, repfact)
-divisions1 = np.repeat(divisions1, chunk)
-step1 = np.tile(divisions1, )
-count1 = count2 = 0
-for idx in range(n):
-    for jdx in range(step1.shape[1]):
-        step1[idx,jdx] = divisions[count]
-        count += 1
-
+step1 = step2 = np.zeros((n,int(np.ceil(repfact**2/n))), dtype=np.intc)
+divisions = [t for t in range(0,sizes[i],row)]
+divisions2 = np.repeat(divisions, repfact)
+divisions1 = (divisions * repfact)
+count =  0
+for jdx in range(step1.shape[1]):
+    for idx in range(step1.shape[0]):
+        if count < divisions2.shape[0]:
+            step1[idx,jdx] = divisions1[count]
+            step2[idx,jdx] = divisions2[count]
+            count += 1
+        else:
+            step1[idx,jdx] = 2**50
+            step2[idx,jdx] = 2**50
 start = time.time()
-out = hw14.matMult_block(X, Y, n, step,row)
+out = hw14.matMult_block(X, Y, n, step1, step2,row)
 parallel_time_naive.append(time.time() - start)
 
 exit()

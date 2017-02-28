@@ -67,11 +67,27 @@ for n in nthreads:
         #Naive parallel algorithm with blocking
         outmat = np.zeros((sizes[i],sizes[i]))
         row = round(23*100*1000 / 8/(sizes[i]/2))
-        chunk = (2*(sizes[i]**2))/(row**2)
+        chunk = round(((sizes[i]**2))//(row**2))
         if chunk < n:
             chunk = n
+            row = int(np.ceil(np.sqrt(sizes[i]**2/n)))
+        repfact = len(range(0,sizes[i],row))
+        step1 = step2 = np.zeros((n,int(np.ceil(repfact**2/n))), dtype=np.intc)
+        divisions = [t for t in range(0,sizes[i],row)]
+        divisions2 = np.repeat(divisions, repfact)
+        divisions1 = (divisions * repfact)
+        count =  0
+        for jdx in range(step1.shape[1]):
+            for idx in range(step1.shape[0]):
+                if count < divisions2.shape[0]:
+                    step1[idx,jdx] = divisions1[count]
+                    step2[idx,jdx] = divisions2[count]
+                    count += 1
+                else:
+                    step1[idx,jdx] = 2**25
+                    step2[idx,jdx] = 2**25
         start = time.time()
-        hw14.matMult_block(X, Y, outmat, n, chunk)
+        hw14.matMult_block(X, Y, outmat, n, step1, step2)
         parallel_time_block.append(time.time() - start)
         operations_block.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
 
