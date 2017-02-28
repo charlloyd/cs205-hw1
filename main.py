@@ -165,7 +165,7 @@ for n in nthreads:
         parallel_result_thread.append(outvec)
     #
     # timings
-    serial_timings.append(np.array_equal(sizes, serial_result))
+    #serial_timings.append(np.array_equal(sizes, serial_result))
     parallel_timings_naive.append(np.array_equal(sizes, parallel_result_naive))
     parallel_timings_thread.append(np.array_equal(sizes, parallel_result_thread))
     
