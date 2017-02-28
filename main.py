@@ -201,7 +201,7 @@ gflopsPerSec = []
 
 for i in iter:
     random.seed(5555)
-    X = Y = outmat = np.zeros((sizes[i]),sizes[i]))
+    X = Y = outmat = np.zeros((sizes[i],sizes[i]))
     
     operations.append(2 * (i**3))
     #
