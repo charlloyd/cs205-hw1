@@ -17,10 +17,14 @@ from scipy.linalg.blas import dgemm
 # over-write files
 fn_sum = "summmation.csv"
 fn_matvec = "matvecs.csv"
-f = open(fn_sum, "w+")
-f.close()
-f = open(fn_matvec, "w+")
-f.close()
+with open(fn_sum, 'w+', newline='') as f:
+    writer = csv.writer(f, delimiter = ',')
+    writer.writerow(['Algorithm','p','2^6','2^10','2^20','thingy'])
+    f.close()
+with open(fn_sum, 'w+', newline='') as f:
+    writer = csv.writer(f, delimiter = ',')
+    writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
+    f.close()
 
 # set number of threads
 nthreads = [2, 4,]# 8, 16, 32]
@@ -99,7 +103,6 @@ for n in nthreads:
     
     with open(fn_sum, 'a', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
-        writer.writerow(['hi']+[str(i) for i in sizes])
         writer.writerow([str(i) for i in serial_timings])
         writer.writerow([str(i) for i in parallel_timings_naive])
         writer.writerow([str(i) for i in parallel_timings_thread])
