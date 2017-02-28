@@ -69,23 +69,24 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         A = <double *>(malloc (J * chunk * sizeof(double)))
         B = <double *>(malloc (J * chunk * sizeof(double)))
         C = <double *>(malloc (chunk * sizeof(double)))
-        for t in range(K):
-            for s in range(S):
-                for a in range(chunk):
+        for s in range(S):
+            for a in range(chunk):
+                if ((a + step[tid,s]) < N) & ((s + step2[tid,s])<K):
                     for b in range(J):
-                        A[a*J + b] = X[a + step[tid,s],b]
-                        B[a*J + b] = Y[b,t]
-                for k in range(chunk):
+                        A[a*J + b] = X[a + step1[tid,s],b]
+                        B[a*J + b] = Y[b,s + step2[tid,s]]
+            for k in range(chunk):
+                if ((k + step[tid,s]) < N) & ((k + step2[tid,s])<K):
                     for j in range(J):
                         C[k] = C[k] + A[k*J + j] * B[k*J + j]
-                for n in prange(nthreads):
-                    reduce(out, C, step[tid,s], t, chunk)
+            for n in prange(nthreads):
+                reduce(out, C, step1[tid,s], step2[tid,s], chunk)
         free(A)
         free(B)
         free(C)
 
-def matMult_block(double[::,::] X, double[::,::] Y, int nthreads, int[::, ::] step, int chunk):
-    cdef int S = step.shape[1]
+def matMult_block(double[::,::] X, double[::,::] Y, int nthreads, int[::, ::] step1, int[::, ::] step2, int chunk):
+    cdef int S = step1.shape[1]
     cdef int K = Y.shape[1]
     cdef int N = X.shape[0]
     cdef int J = Y.shape[0]
@@ -93,7 +94,8 @@ def matMult_block(double[::,::] X, double[::,::] Y, int nthreads, int[::, ::] st
     cdef double[::,::] Yc = Y
     cdef double[::,::] outC = np.zeros(N,K)
     cdef int nt = nthreads
-    cdef int[::,::] stepC = step
+    cdef int[::,::] stepC1 = step1
+    cdef int[::,::] stepC2 = step2
     cdef int chunkC = chunk
 
     mmb(Xc, Yc, outC, nt, stepC, S, chunkC, N, J, K)
