@@ -99,7 +99,7 @@ for n in nthreads:
     
     # write results to csv
     
-    with open(fn_sum, 'a', newline='') as f:
+    with open(fn_sum, 'a') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in serial_timings])
         writer.writerow([str(i) for i in parallel_timings_naive])
@@ -198,7 +198,7 @@ for n in nthreads:
     parallel_eff_thread.insert(1,n)
     
     # write results to csv
-    with open(fn_matvec, 'a', newline='') as f:
+    with open(fn_matvec, 'a') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in serial_timings])
         writer.writerow([str(i) for i in parallel_timings_naive])
