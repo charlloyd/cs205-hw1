@@ -221,7 +221,7 @@ for i in iter:
     dgemm_time.append(time.time()-start)
     
     start = time.time()
-    matMult_serial(X, Y, outmat, 32)
+    #matMult_serial(X, Y, outmat, 32)
     serial_time.append(time.time()-start)
     
     #Naive parallel algorithm without blocking
