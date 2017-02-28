@@ -58,7 +58,7 @@ cdef void reduce(double[::,::] out, double * C, int s, int t, int N, int stop) n
     cdef size_t k,j
 
     for k in range(N):
-        for j in range(N)
+        for j in range(N):
             if (s+k < stop) & (t+j < stop):
                 out[s+k,t+j] += C[N*k + j]
 
