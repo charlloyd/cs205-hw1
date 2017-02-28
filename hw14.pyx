@@ -49,6 +49,12 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
                 out[n,k] += X[n,j] * Y[j,k]
     return 0
 
+cdef void reduce(double[::,::] out, vec[:] C, int s, int t, int N):
+    cdef size_t k
+
+    for k in range(N):
+        out[s+k,t] += C[k]
+
 cpdef int mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[:,:] step, int S, int T, int chunk):
     cdef unsigned int N = X.shape[0]
     cdef unsigned int J = Y.shape[0]
@@ -75,8 +81,7 @@ cpdef int mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
                     for j in range(J):
                         C[k] = C[k] + A[k*J + j] * B[k*J + j]
                 for n in prange(nthreads):
-                    for k in range(chunk):
-                        out[k + step[tid,s],t] +=  C[k]
+                    reduce(out, C, step[tid,s], t chunk)
         free(A)
         free(B)
         free(C)
