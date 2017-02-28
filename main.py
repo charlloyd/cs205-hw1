@@ -15,7 +15,7 @@ from scipy.linalg.blas import dgemm
 ###########################
 
 # set number of threads
-nthreads = [2, 4,]# 8, 16, 32]
+nthreads = [2, 4, 8, 16, 32]
 
 # main loop for different numbers of threads
 for n in nthreads:
@@ -181,7 +181,7 @@ for n in nthreads:
     parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
     
     # write results to csv
-    filename_time = "matvec_timings_nthread_" + str(n) + ".csv"
+    fn = "matvec_timings_nthread_" + str(n) + ".csv"
     with open(fn, 'w', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in colnames])
