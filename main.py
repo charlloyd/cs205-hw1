@@ -211,7 +211,7 @@ for i in iter:
             Y[j,k] = random.gauss(0,1)
 
 # Linear comparison between dgemm and cython function
-start = time.time()
+    start = time.time()
     dgemm(X,Y)
     dgemm_time.append(time.time()-start)
     #
