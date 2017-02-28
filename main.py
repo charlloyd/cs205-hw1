@@ -15,7 +15,7 @@ from scipy.linalg.blas import dgemm
 ###########################
 
 # set number of threads
-nthreads = [2, 4,#] 8, 16, 32]
+nthreads = [2, 4,]# 8, 16, 32]
 
 # over-write files
 fn_sum = "sum_timings_nthread_" + str(n) + ".csv"
