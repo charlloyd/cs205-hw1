@@ -54,7 +54,7 @@ cdef void reduce(double[::,::] out, double * C, int s, int t, int N) nogil:
     for k in range(N):
         out[s+k,t] += C[k]
 
-cdef int mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::,::] step, int S, int chunk, int N, int J, int K):
+cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::,::] step, int S, int chunk, int N, int J, int K):
     cdef size_t a, b, k, j, n, s,t
     cdef int tid
     cdef double *A
@@ -80,7 +80,6 @@ cdef int mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, 
         free(A)
         free(B)
         free(C)
-    return 0
 
 def matMult_block(double[::,::] X, double[::,::] Y, int nthreads, int[::, ::] step):
     cdef int S = step.shape[1]
@@ -91,10 +90,10 @@ def matMult_block(double[::,::] X, double[::,::] Y, int nthreads, int[::, ::] st
     cdef double[::J,::K] Yc = Y
     cdef double[::N,::K] outC = np.zeros(N,K)
     cdef int nt = nthreads
-    cdef int[::nt,::S] step = step
+    cdef int[::nt,::S] stepC = step
     cdef int chunk = round(23*100*1000 / 8/(N*2))
 
-    mmb(Xc, Yc, outC, nt, step, S, chunk, N, J, K)
+    mmb(Xc, Yc, outC, nt, stepC, S, chunk, N, J, K)
     return np.array(outC)
 
 
