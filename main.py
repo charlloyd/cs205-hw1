@@ -56,7 +56,7 @@ for n in nthreads:
         step = np.array(step, dtype=np.intc)
         start = time.time()
         hw13.parallel_sum_block(myarray, n, step, chunk, sums)
-        parallel_result_thread.append()
+        parallel_result_thread.append(sums)
         parallel_timings_thread.append(time.time()-start)
 
     # timings
