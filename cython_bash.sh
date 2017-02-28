@@ -16,4 +16,4 @@ module load gcc/6.2.0-fasrc01 openmpi/2.0.1-fasrc01
 ## EXECUTE CODE ##
 python setup.py build_ext --inplace
 
-python main.py
+python main3.py
