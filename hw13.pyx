@@ -73,7 +73,6 @@ cdef long psb(long[::] data, int nthreads, int[::] step, int chunk, int N):
             sums += temp_sum
         free(tid)
         free(sdata)
-        free(temp_sum)
     return sums
 
 # Attempt at more cost effective Sum
@@ -114,11 +113,10 @@ cpdef int vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, in
             out[n] += mat[n,j] * vec[j]
     return 0
 
-cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
+cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, int nthreads, int chunk):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef size_t n, j
-    cdef unsigned int chunk = N/nthreads
 
     for n in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='static'):
         for j in range(J):

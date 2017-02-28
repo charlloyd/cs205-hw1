@@ -9,7 +9,7 @@ cimport numpy as np
 
 
 ###########################
-# 3. matrix-vector multiplication
+# 4. matrix-matrix multiplication
 ###########################
 
 cpdef int matMult_serial(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads):
