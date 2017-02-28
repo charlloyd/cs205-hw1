@@ -14,9 +14,6 @@ from scipy.linalg.blas import dgemm
 # HW 1 QUESTION 3
 ###########################
 
-# set number of threads
-nthreads = [2, 4,]# 8, 16, 32]
-
 # over-write files
 fn_sum = "summmation.csv"
 fn_matvec = "matvecs.csv"
@@ -24,6 +21,9 @@ f = open(fn_sum, "w+")
 f.close()
 f = open(fn_matvec, "w+")
 f.close()
+
+# set number of threads
+nthreads = [2, 4,]# 8, 16, 32]
 
 # main loop for different numbers of threads
 for n in nthreads:
@@ -80,10 +80,6 @@ for n in nthreads:
     parallel_eff_thread.append(parallel_timings_thread[-1])
 
     # prep before writing
-    colnames = ["Algorithm"]
-    for s in sizes: 
-        colnames.append(s)
-    colnames.append("Pass")
     serial_timings.insert(0,"Serial Times")
     parallel_timings_naive.insert(0,"Parallel Naive Times")
     parallel_timings_thread.insert(0,"Parallel Guided Times")
@@ -93,7 +89,7 @@ for n in nthreads:
     parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
     serial_timings.insert(1,n)
     parallel_timings_naive.insert(1,n)
-    parallel_timings_thread.iinsert(1,n)
+    parallel_timings_thread.insert(1,n)
     parallel_spd_naive.insert(1,n)
     parallel_spd_thread.insert(1,n)
     parallel_eff_naive.insert(1,n)
@@ -103,7 +99,7 @@ for n in nthreads:
     
     with open(fn_sum, 'a', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
-        writer.writerow([str(i) for i in colnames])
+        writer.writerow(['hi']+[str(i) for i in sizes])
         writer.writerow([str(i) for i in serial_timings])
         writer.writerow([str(i) for i in parallel_timings_naive])
         writer.writerow([str(i) for i in parallel_timings_thread])
@@ -185,9 +181,6 @@ for n in nthreads:
     parallel_eff_thread.append(parallel_timings_thread[-1])
 
     # prep before writing
-    colnames = ["Algorithm"]
-    colnames.append(sizes)
-    colnames.append("Pass")
     serial_timings.insert(0,"Serial Times")
     parallel_timings_naive.insert(0,"Parallel Naive Times")
     parallel_timings_thread.insert(0,"Parallel Guided Times")
@@ -199,7 +192,6 @@ for n in nthreads:
     # write results to csv
     with open(fn_matvec, 'a', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
-        writer.writerow([str(i) for i in colnames])
         writer.writerow([str(i) for i in serial_timings])
         writer.writerow([str(i) for i in parallel_timings_naive])
         writer.writerow([str(i) for i in parallel_timings_thread])
