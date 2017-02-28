@@ -54,7 +54,6 @@ cpdef int matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int
     cdef unsigned int K = Y.shape[1]
     cdef unsigned int k, j, n
     cdef unsigned int chunk = N/nthreads
-    cdef 
 
     for n in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
         for k in range(K):
