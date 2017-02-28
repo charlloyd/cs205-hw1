@@ -59,7 +59,7 @@ cpdef int mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
     cdef unsigned int N = X.shape[0]
     cdef unsigned int J = Y.shape[0]
     cdef unsigned int K = Y.shape[1]
-    cdef size_t int a, b, k, j, n, s,t
+    cdef size_t a, b, k, j, n, s,t
     cdef size_t *tid
     cdef double *A
     cdef double *B
