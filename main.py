@@ -163,11 +163,6 @@ for n in nthreads:
         #hw13.vecmatMult_thread(mymat, myvec, outvec, n)
         parallel_timings_thread.append(time.time()-start)
         parallel_result_thread.append(outvec)
-    #
-    # timings
-    #serial_timings.append(np.array_equal(sizes, serial_result))
-    parallel_timings_naive.append(np.array_equal(sizes, parallel_result_naive))
-    parallel_timings_thread.append(np.array_equal(sizes, parallel_result_thread))
     
     # speedup
     parallel_spd_naive = [serial_timings[i]/parallel_timings_naive[i] for i in iter]
