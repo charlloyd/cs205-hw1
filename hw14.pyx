@@ -108,7 +108,7 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
     mmb(Xc, Yc, outC, nt, stepC1, stepC2, S, chunkC, N, J, K)
     return np.asarray(outC)
 
-cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::, ::] step1, int[::, ::] step2, int chunk):
+cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::, ::] step1, int[::, ::] step2, int chunk, int N, int J, int K):
     cdef size_t a, b, k, j, n, s,t
     cdef int tid
     cdef double *A
