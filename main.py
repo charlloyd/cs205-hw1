@@ -90,13 +90,13 @@ for n in nthreads:
     parallel_spd_thread.insert(0,"Parallel Guided Speed-up")
     parallel_eff_naive.insert(0,"Parallel Naive Efficiency")
     parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
-    serial_timings.append(nthreads)
-    parallel_timings_naive.append(nthreads)
-    parallel_timings_thread.append(nthreads)
-    parallel_spd_naive.append(nthreads)
-    parallel_spd_thread.append(nthreads)
-    parallel_eff_naive.append(nthreads)
-    parallel_eff_thread.append(nthreads)
+    serial_timings.insert(1,n)
+    parallel_timings_naive.insert(1,n)
+    parallel_timings_thread.iinsert(1,n)
+    parallel_spd_naive.insert(1,n)
+    parallel_spd_thread.insert(1,n)
+    parallel_eff_naive.insert(1,n)
+    parallel_eff_thread.insert(1,n)
     
     # write results to csv
     
