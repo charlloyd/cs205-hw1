@@ -99,7 +99,7 @@ for n in nthreads:
 ### MATRIX VECTOR MULTIPLICATION ###
 
 # re-initialize arrays
-serial_timings = []
+    serial_timings = []
     parallel_timings_naive = []
     parallel_timings_thread = []
     serial_result=[]
