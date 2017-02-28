@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import hw13
-import hw14
 import time
 import csv
 import math
@@ -205,9 +204,5 @@ for n in nthreads:
         writer.writerow([str(i) for i in parallel_spd_thread])
         writer.writerow([str(i) for i in parallel_eff_thread])
         f.close()
-
-
-
-        
 
 exit()
