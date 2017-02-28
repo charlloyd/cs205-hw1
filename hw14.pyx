@@ -42,7 +42,7 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
     cdef unsigned int k, j, n
     cdef unsigned int chunk = N/nthreads
 
-    for n in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
+    for n in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='static'):
         for k in range(K):
             for j in range(J):
                 out[n,k] += X[n,j] * Y[j,k]
