@@ -21,7 +21,7 @@ with open(fn_sum, 'w+', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow(['Algorithm','p','2^6','2^10','2^20','thingy'])
     f.close()
-with open(fn_sum, 'w+', newline='') as f:
+with open(fn_matvec, 'w+', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
     f.close()
@@ -191,6 +191,13 @@ for n in nthreads:
     parallel_spd_thread.insert(0,"Parallel Guided Speed-up")
     parallel_eff_naive.insert(0,"Parallel Naive Efficiency")
     parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
+    serial_timings.insert(1,n)
+    parallel_timings_naive.insert(1,n)
+    parallel_timings_thread.insert(1,n)
+    parallel_spd_naive.insert(1,n)
+    parallel_spd_thread.insert(1,n)
+    parallel_eff_naive.insert(1,n)
+    parallel_eff_thread.insert(1,n)
     
     # write results to csv
     with open(fn_matvec, 'a', newline='') as f:
