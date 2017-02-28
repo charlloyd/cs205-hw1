@@ -1,5 +1,5 @@
 #stuff
-import pandas
+import pandas as pd
 import matplotlib.pyplot as plt
 
 sums = pd.read_csv('summation.csv')
