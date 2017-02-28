@@ -158,7 +158,7 @@ for n in nthreads:
         outvec = np.zeros_like(myvec)
         chunk = round(23*100*1000 / 8/(sizes[i]*2))
         #step = [idx for idx in range(0,sizes[i],chunk)]
-        step = np.array(step, dtype=np.intc)
+        #step = np.array(step, dtype=np.intc)
         start = time.time()
         #hw13.vecmatMult_thread(mymat, myvec, outvec, n)
         parallel_timings_thread.append(time.time()-start)
