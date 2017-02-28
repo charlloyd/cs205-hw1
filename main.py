@@ -238,8 +238,9 @@ for i in iter:
 
     #Naive parallel algorithm without blocking
     outmat = np.zeros((sizes[i],sizes[i]))
+    chunk = round(23*100*1000 / 8/(sizes[i]*2))
     start = time.time()
-    matMult_thread(X, Y, outmat, n)
+    matMult_thread(X, Y, outmat, n, chunk)
     parallel_time_naive.append(time.time() - start)
 
     #Naive parallel algorithm with blocking
