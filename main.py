@@ -25,7 +25,7 @@ with open(fn_matvec, 'w+', newline='') as f:
     f.close()
 
 # set number of threads
-nthreads = [2, 4,]# 8, 16, 32]
+nthreads = [2, 4, 8, 16, 32]
 
 # main loop for different numbers of threads
 for n in nthreads:
