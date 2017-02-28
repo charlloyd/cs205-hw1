@@ -143,12 +143,19 @@ for n in nthreads:
         # parallel thread ("guided") matrix-vector multiplication algorithm
         outvec = np.zeros_like(myvec)
         chunk = round(23*100*1000 / 8/(sizes[i]*2))
+        if chunk > myvec.shape[0]:
+            chunk = myvec.shape[0]
+        if myvec.shape[0]/chunk < n:
+            ntemp = round(myvec.shape[0]/chunk)
+        else:
+            ntemp = n
         step = [idx for idx in range(0,sizes[i],chunk)]
         step = np.array(step, dtype=np.intc)
         start = time.time()
-        #hw13.vecmatMult_explicit(mymat, myvec, outvec, n,step)
+        hw13.vecmatMult_explicit(mymat, myvec, outvec, ntemp, step, chunk)
         parallel_timings_thread.append(time.time()-start)
         parallel_result_thread.append(outvec)
+
         
         # timings
         serial_timings.insert(0,"Serial Times")
