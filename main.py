@@ -15,13 +15,7 @@ from scipy.linalg.blas import dgemm
 ###########################
 
 # set number of threads
-<<<<<<< HEAD
 nthreads = [2, 4, 8, 16, 32]
-=======
-
-nthreads = [2, 4, 8, 16, 32]
-
->>>>>>> f7ecb9317e8d9363704e0737ed0a9f8715ac651a
 
 # main loop for different numbers of threads
 for n in nthreads:
