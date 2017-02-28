@@ -202,6 +202,7 @@ start = []
 dgemm_time = []
 serial_time = []
 gflopsPerSec = []
+operations = []
 
 for i in iter:
     random.seed(5555)
