@@ -13,11 +13,7 @@ from cython.operator cimport dereference as deref
 from libc.stdlib cimport malloc, free, rand
 cimport numpy as np
 import numpy as np
-import distutils.sysconfig
-cfg_vars = distutils.sysconfig.get_config_vars()
-for key, value in cfg_vars.items():
-    if type(value) == str:
-        cfg_vars[key] = value.replace("-Wstrict-prototypes", "")
+
 
 ###########################
 # 4. matrix-matrix multiplication

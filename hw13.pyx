@@ -132,37 +132,3 @@ cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, i
         for j in range(J):
             out[n] += mat[n,j] * vec[j]
     return 0
-
-cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out, int nthreads, int[:] step, int chunk):
-    cdef unsigned int N = vec.shape[0]
-    cdef unsigned int J = mat.shape[1]
-    cdef size_t j, k, f, g, v, s
-    cdef int t
-    cdef unsigned int tid
-    cdef double *vecChunk
-    cdef double *matChunk
-    cdef double *temp
-
-    with nogil, parallel(num_threads=nthreads):
-        tid = threadid()
-        vecChunk = <double *>(malloc (N*32 * sizeof(double)))
-        matChunk = <double *>(malloc (N*32 * chunk * sizeof(double)))
-        temp = <double *>(malloc (chunk * sizeof(double)))
-
-        for f in range(chunk):
-            for g in range(J):
-                matChunk[f*J + g] = mat[step[tid] + f, g]
-        for v in range(N):
-            vecChunk[v] = vec[v]
-        for k in range(chunk):
-            for j in range(N):
-                temp[k] = temp[k] + matChunk[k*J + j] * vecChunk[j]
-        for t in prange(nthreads):
-            for s in range(chunk):
-                out[step[tid] + s] += temp[s]
-
-        free(matChunk)
-        free(temp)
-        free(vecChunk)
-    return 0
-
