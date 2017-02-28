@@ -85,7 +85,8 @@ def parallel_sum_block(long[::] data, int nthreads, int[:] step, int chunk):
     cdef int[::] stepC = step
     cdef int chunkC = chunk
 
-    return np.asarray(psb(d, nt, stepC, sums, chunkC, N))
+    sums = psb(d, nt, stepC, chunkC, N)
+    return np.asarray(sums)
 
 
 
