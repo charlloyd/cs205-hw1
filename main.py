@@ -162,7 +162,7 @@ parallel_result_naive.append(outvec)
 outvec = np.zeros_like(myvec)
 chunk = round(23*100*1000 / 8/(sizes[i]*2))
 start = time.time()
-hw13.vecmatMult_explicit(mymat, myvec, outvec, n, chunk)
+hw13.vecmatMult_thread(mymat, myvec, outvec, n, chunk)
 parallel_timings_thread.append(time.time()-start)
 parallel_result_thread.append(outvec)
 
@@ -235,20 +235,25 @@ dgemm(alpha=1.,a=X,b=Y)
 dgemm_time.append(time.time()-start)
 
 start = time.time()
-matMult_serial(X, Y, outmat, n)
+hw14.matMult_serial(X, Y, outmat, n)
 serial_time.append(time.time()-start)
 
 #Naive parallel algorithm without blocking
 outmat = np.zeros((sizes[i],sizes[i]))
-chunk = round(23*100*1000 / 8/(sizes[i]*2))
+row = round(23*100*1000 / 8/(sizes[i]/2))
+chunk = (2*(2**32))/(row**2)
 start = time.time()
 matMult_thread(X, Y, outmat, n, chunk)
 parallel_time_naive.append(time.time() - start)
 
 #Naive parallel algorithm with blocking
 outmat = np.zeros((sizes[i],sizes[i]))
+row = round(23*100*1000 / 8/(sizes[i]/2))
+chunk = (2*(2**32))/(row**2)
+step = [idx for idx in range(0,sizes[i],chunk)]
+step = np.array(step, dtype=np.intc)
 start = time.time()
-matMult_block(X, Y, outmat, n)
+out = hw14.matMult_block(X, Y, n, step,row)
 parallel_time_naive.append(time.time() - start)
 
 exit()

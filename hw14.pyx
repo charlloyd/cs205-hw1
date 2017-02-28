@@ -1,6 +1,8 @@
 #!python
 #cython: boundscheck=False, wraparound=False, nonecheck=False
 #cython: --compile-args=-fopenmp --link-args=-fopenmp --force -a
+# distutils: extra_compile_args = -fopenmp
+# distutils: extra_link_args = -fopenmp
 
 from cython.parallel cimport parallel, prange, threadid
 from cython.operator cimport dereference as deref
@@ -91,7 +93,7 @@ def matMult_block(double[::,::] X, double[::,::] Y, int nthreads, int[::, ::] st
     cdef double[::,::] outC = np.zeros(N,K)
     cdef int nt = nthreads
     cdef int[::,::] stepC = step
-    cdef int chunk = round(23*100*1000 / 8/(N*2))
+    cdef int chunk = round(23*100*1000 / 8/(N/2))
 
     mmb(Xc, Yc, outC, nt, stepC, S, chunk, N, J, K)
     return np.array(outC)
