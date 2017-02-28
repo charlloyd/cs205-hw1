@@ -34,7 +34,7 @@ nthreads = [2, 4, 8, 16, 32]
 
 # main loop for different numbers of threads
 for n in nthreads:
-    
+    print(n)
     ### SUMMATION ###
     
     # initialize variables
