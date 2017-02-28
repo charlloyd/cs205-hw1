@@ -53,7 +53,7 @@ chunk = round(sizes[i]/n)
 step = [idx for idx in range(0,sizes[i],chunk)]
 step = np.array(step, dtype=np.intc)
 start = time.time()
-parallel_result_thread.append(hw13.parallel_sum_thread(myarray, n))
+parallel_result_thread.append(hw13.parallel_sum_block(myarray, n, step, chunk))
 parallel_timings_thread.append(time.time()-start)
 
     # timings
