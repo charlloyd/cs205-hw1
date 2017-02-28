@@ -24,12 +24,12 @@ import numpy as np
 # Serial summation
 cpdef long serial_summation(long[:] a):
     cdef  long  sums = a[0]
+    cdef size_t i
     
-    for i in xrange(1, a.shape[0]):
+    for i in range(1,a.shape[0]):
         sums += a[i]
-
+        
     return sums
-
 
 # Parallelize summation using Cython
 cpdef long parallel_sum(long[:] a, int nthreads):
@@ -57,7 +57,8 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
     return sums
 
 cdef long psb(long[::] data, int nthreads, int[::] step, int chunk, int N):
-    cdef size_t s, j, n
+    cdef size_t j, n
+    cdef int s
     cdef long *sdata
     cdef long temp_sum
     cdef unsigned int tid
@@ -89,8 +90,6 @@ def parallel_sum_block(long[::] data, int nthreads, int[::] step, int chunk):
     sums = psb(d, nt, stepC, chunkC, N)
     return np.asarray(sums)
 
-
-
 ###########################
 # MATRIX VECTOR MULTIPLICATION
 ###########################
@@ -108,7 +107,7 @@ cpdef int vecmatMult_serial(double[::,::] mat, double[::] vec, double[::] out):
 cpdef int vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
-    cdef size_t n,j
+    cdef int n,j
 
     for n in prange(N, nogil=True, num_threads=nthreads, schedule='dynamic'):
         for j in prange(J, num_threads=nthreads, schedule='dynamic'):
@@ -118,7 +117,8 @@ cpdef int vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, in
 cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, int nthreads, int chunk):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
-    cdef size_t n, j
+    cdef size_t j
+    cdef int n
 
     for n in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='static'):
         for j in range(J):
@@ -128,7 +128,8 @@ cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, i
 cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out, int nthreads, int[:] step, int chunk):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
-    cdef size_t j, k, f, g, t, v, s
+    cdef size_t j, k, f, g, v, s
+    cdef int t
     cdef unsigned int tid
     cdef double *vecChunk
     cdef double *matChunk

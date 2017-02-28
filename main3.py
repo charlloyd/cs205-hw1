@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import hw13
-import hw14
 import time
 import csv
 import math
@@ -15,7 +14,6 @@ from scipy.linalg.blas import dgemm
 # over-write files
 fn_sum = "summation.csv"
 fn_matvec = "matvec.csv"
-fn_matmat = "matmat.csv"
 with open(fn_sum, 'w+') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow(['Algorithm','p','2^6','2^10','2^20','thingy'])
@@ -24,13 +22,9 @@ with open(fn_matvec, 'w+') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
     f.close()
-with open(fn_matmat, 'w+') as f:
-    writer = csv.writer(f, delimiter = ',')
-    writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
-    f.close() # not written downbelow
 
 # set number of threads
-nthreads = [2, 4, 8, 16, 32]
+nthreads = [2, 4,]# 8, 16, 32, 64]
 
 # main loop for different numbers of threads
 for n in nthreads:
@@ -103,7 +97,6 @@ for n in nthreads:
     parallel_eff_thread.insert(1,n)
     
     # write results to csv
-    
     with open(fn_sum, 'a') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in serial_timings])
@@ -162,16 +155,16 @@ for n in nthreads:
         # parallel thread ("guided") matrix-vector multiplication algorithm
         outvec = np.zeros_like(myvec)
         row = round(23*100*1000 / 8/(sizes[i]/2))
-        chunk = (2*(sizes[i]**2))/(row**2)
+        chunk = round((2*(sizes[i]**2))/(row**2))
         if chunk < n:
             chunk = n
         #step = [idx for idx in range(0,sizes[i],row)]
         #step = np.array(step, dtype=np.intc)
         start = time.time()
-        hw13.vecmatMult_thread(mymat, myvec, outvec, n, chunk)
+        #hw13.vecmatMult_thread(mymat, myvec, outvec, n, chunk)
         parallel_timings_thread.append(time.time()-start)
         parallel_result_thread.append(outvec)
-	
+        
     # speedup
     parallel_spd_naive = [serial_timings[i]/parallel_timings_naive[i] for i in iter]
     parallel_spd_naive.append(parallel_timings_naive[-1])
@@ -211,7 +204,5 @@ for n in nthreads:
         writer.writerow([str(i) for i in parallel_spd_thread])
         writer.writerow([str(i) for i in parallel_eff_thread])
         f.close()
-
-    
 
 exit()
