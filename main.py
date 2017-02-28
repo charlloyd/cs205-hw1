@@ -211,7 +211,7 @@ for i in iter:
     operations.append(2 * (i**3))
     
     for j in range(X.shape[0]):
-        for k in range(X.shape(1)):
+        for k in range(X.shape[1]):
             X[j,k] = random.gauss(0,1)
             Y[j,k] = random.gauss(0,1)
 
