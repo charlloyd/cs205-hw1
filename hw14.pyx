@@ -81,7 +81,7 @@ cpdef int mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
                     for j in range(J):
                         C[k] = C[k] + A[k*J + j] * B[k*J + j]
                 for n in prange(nthreads):
-                    reduce(out, C, step[tid,s], t chunk)
+                    reduce(out, C, step[tid,s], t, chunk)
         free(A)
         free(B)
         free(C)
