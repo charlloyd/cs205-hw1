@@ -93,7 +93,7 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
     cdef size_t j, k, f, g, t, v
-    cdef int * tid;
+    cdef unsigned int tid;
     cdef double *vecChunk
     cdef double *matChunk
     cdef double *temp
