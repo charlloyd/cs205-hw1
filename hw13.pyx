@@ -53,12 +53,12 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
     return sums
 
 # Attempt at more cost effective Sum
-cpdef long parallel_sum_block(long[::] data, int nthreads, int[:] step, chunk):
+cpdef long parallel_sum_block(long[::] data, int nthreads, int[:] step, int chunk):
     cdef unsigned int N = data.shape[0]
     cdef size_t s, j, n
     cdef long sums = 0
-    cdef long * sdata
-    cdef long * temp_sum
+    cdef long *sdata
+    cdef long *temp_sum
     cdef int tid
 
     with nogil, parallel(num_threads=nthreads):
