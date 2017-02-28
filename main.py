@@ -15,7 +15,7 @@ from scipy.linalg.blas import dgemm
 ###########################
 
 # over-write files
-fn_sum = "summmation.csv"
+fn_sum = "summation.csv"
 fn_matvec = "matvec.csv"
 with open(fn_sum, 'w+', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
