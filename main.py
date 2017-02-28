@@ -198,7 +198,7 @@ for n in nthreads:
     parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
     serial_timings.insert(1,n)
     parallel_timings_naive.insert(1,n)
-    parallel_timings_thread.iinsert(1,n)
+    parallel_timings_thread.insert(1,n)
     parallel_spd_naive.insert(1,n)
     parallel_spd_thread.insert(1,n)
     parallel_eff_naive.insert(1,n)
