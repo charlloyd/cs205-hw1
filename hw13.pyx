@@ -69,10 +69,10 @@ cpdef long parallel_sum_block(long[::] data, int nthreads, int[:] step, int chun
         for j in range(chunk):
             sdata[j] = data[step[tid] + j]
         for n in range(chunk):
-            temp_sum = temp_sum + s_data[n]
+            temp_sum = temp_sum + sdata[n]
 
         for s in prange(nthreads):
-            sums += sdata
+            sums += temp_sum
         
     return sums
 
