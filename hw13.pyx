@@ -130,7 +130,7 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
 
         for f in range(chunk):
             for g in range(J):
-                matChunk[f*J + g] = mat[step[tid] + f,g]
+                matChunk[f*J + g] = mat[step[tid] + f, g]
         for v in range(N):
             vecChunk[v] = vec[v]
         for k in range(chunk):
