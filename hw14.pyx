@@ -86,11 +86,11 @@ def matMult_block(double[::,::] X, double[::,::] Y, int nthreads, int[::, ::] st
     cdef int K = Y.shape[1]
     cdef int N = X.shape[0]
     cdef int J = Y.shape[0]
-    cdef double[::,::] Xc = <double[:N, :J]>X
-    cdef double[::,::] Yc = <double[:J, :K]>Y
+    cdef double[::,::] Xc = X
+    cdef double[::,::] Yc = Y
     cdef double[::,::] outC = np.zeros(N,K)
     cdef int nt = nthreads
-    cdef int[::nt,::S] stepC = <int[:nt, :S]>step
+    cdef int[::,::] stepC = step
     cdef int chunk = round(23*100*1000 / 8/(N*2))
 
     mmb(Xc, Yc, outC, nt, stepC, S, chunk, N, J, K)
