@@ -48,3 +48,17 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
                 out[n,k] += X[n,j] * Y[j,k]
     return 0
 
+cpdef int matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads):
+    cdef unsigned int N = X.shape[0]
+    cdef unsigned int J = Y.shape[0]
+    cdef unsigned int K = Y.shape[1]
+    cdef unsigned int k, j, n
+    cdef unsigned int chunk = N/nthreads
+    cdef 
+
+    for n in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='guided'):
+        for k in range(K):
+            for j in range(J):
+                out[n,k] += X[n,j] * Y[j,k]
+    return 0
+
