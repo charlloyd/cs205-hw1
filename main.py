@@ -25,7 +25,9 @@ myarray = []
 start = 0
 
 # set number of threads
+
 nthreads = [2, 4, 8, 16, 32]
+
 
 # main loop for different numbers of threads
 for n in nthreads:
@@ -62,7 +64,7 @@ for n in nthreads:
     parallel_timings_naive.append(np.array_equal(sizes, parallel_result_naive))
     parallel_timings_thread.insert(0,"Parallel Guided Times")
     parallel_timings_thread.append(np.array_equal(sizes, parallel_result_thread))
-
+    
     # speedup
     parallel_spd_naive = [serial_timings[i]/parallel_timings_naive[i] for i in iter]
     parallel_spd_naive.insert(0,"Parallel Naive Speed-up")
@@ -70,7 +72,7 @@ for n in nthreads:
     parallel_spd_thread = [serial_timings[i]/parallel_timings_thread[i] for i in iter]
     parallel_spd_thread.insert(0,"Parallel Guided Speed-up")
     parallel_spd_thread.append(parallel_timings_thread[-1])
-
+    
     # efficiency
     parallel_eff_naive = [parallel_spd_naive[i]/n for i in iter]
     parallel_eff_naive.insert(0,"Parallel Naive Efficiency")
@@ -78,8 +80,9 @@ for n in nthreads:
     parallel_eff_thread = [parallel_spd_thread[i]/n for i in iter]
     parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
     parallel_eff_thread.append(parallel_timings_thread[-1])
-
-# write results to csv file
+    
+    # write results to csv file
+    
     colnames = ["Algorithm"]
     colnames.append(sizes)
     colnames.append("Pass")
@@ -95,10 +98,10 @@ for n in nthreads:
         writer.writerow([str(i) for i in parallel_spd_thread])
         writer.writerow([str(i) for i in parallel_eff_thread])
         f.close()
-
-### MATRIX VECTOR MULTIPLICATION ###
-
-# re-initialize arrays
+    
+    ### MATRIX VECTOR MULTIPLICATION ###
+    
+    # re-initialize arrays
     serial_timings = []
     parallel_timings_naive = []
     parallel_timings_thread = []
@@ -123,10 +126,8 @@ for n in nthreads:
             myvec[j] = random.gauss(0,1)
             for k in range(sizes[i]):
                 mymat[j,k] = random.gauss(0,1)
-    
         # NP test
         compare.append(np.dot(mymat, myvec))
-        
         # serial matrix-vector multiplication algorithm
         start = time.time()
         hw13.vecmatMult_serial(mymat, myvec, outvec)
@@ -225,8 +226,5 @@ for i in iter:
     start = time.time()
     matMult_serial(X, Y, outmat, 32)
     serial_time.append(time.time()-start)
-#
-#
-#Naive parallel algorithm without blocking
 
 exit()
