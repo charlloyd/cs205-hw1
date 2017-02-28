@@ -10,6 +10,7 @@
 
 from cython.parallel cimport parallel, prange, threadid
 from cython.operator cimport dereference as deref
+from libcpp.stdlib cimport malloc
 cimport numpy as np
 import numpy as np
 
@@ -87,6 +88,7 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
                             C[k*J + j] = C[k*J + j] + A[k*J + t] * B[j*J + t]
             for n in prange(nthreads):
                 reduce(out, C, step1[tid,s], step2[tid,s], chunk, N)
+
 
 def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::, ::] step1, int[::, ::] step2, int chunk):
     cdef int S = step1.shape[1]
