@@ -49,7 +49,7 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
                 out[n,k] += X[n,j] * Y[j,k]
     return 0
 
-cdef int mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[:,:] step, int S, int T, int chunk):
+cpdef int mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[:,:] step, int S, int T, int chunk):
     cdef unsigned int N = X.shape[0]
     cdef unsigned int J = Y.shape[0]
     cdef unsigned int K = Y.shape[1]
@@ -82,10 +82,3 @@ cdef int mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, 
         free(C)
     return 0
 
-def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[:,:] step, int S, int T, int chunk)
-    cdef int chunk = round(23*100*1000 / 8/(sizes[i]*2))
-    step = [idx for idx in range(0,sizes[i],chunk)]
-    step = np.array(step, dtype=np.intc)
-    step
-
-    mmb(
