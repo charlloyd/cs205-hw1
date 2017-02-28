@@ -97,7 +97,6 @@ for n in nthreads:
     parallel_eff_thread.insert(1,n)
     
     # write results to csv
-    
     with open(fn_sum, 'a') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in serial_timings])
@@ -162,9 +161,10 @@ for n in nthreads:
         #step = [idx for idx in range(0,sizes[i],row)]
         #step = np.array(step, dtype=np.intc)
         start = time.time()
-        hw13.vecmatMult_thread(mymat, myvec, outvec, n, chunk)
+        #hw13.vecmatMult_thread(mymat, myvec, outvec, n, chunk)
         parallel_timings_thread.append(time.time()-start)
         parallel_result_thread.append(outvec)
+        
     # speedup
     parallel_spd_naive = [serial_timings[i]/parallel_timings_naive[i] for i in iter]
     parallel_spd_naive.append(parallel_timings_naive[-1])
