@@ -15,11 +15,11 @@ from scipy.linalg.blas import dgemm
 # over-write files
 fn_sum = "summation.csv"
 fn_matvec = "matvec.csv"
-with open(fn_sum, 'w+', newline='') as f:
+with open(fn_sum, 'w+') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow(['Algorithm','p','2^6','2^10','2^20','thingy'])
     f.close()
-with open(fn_matvec, 'w+', newline='') as f:
+with open(fn_matvec, 'w+') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
     f.close()
