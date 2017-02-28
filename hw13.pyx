@@ -71,7 +71,7 @@ cdef long psb(long[::] data, int nthreads, int[::] step, int chunk, int N):
             temp_sum = temp_sum + deref(sdata[n])
         for s in prange(nthreads):
             sums += temp_sum
-
+        free(tid)
         free(sdata)
         free(temp_sum)
     return sums

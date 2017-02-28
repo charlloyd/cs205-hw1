@@ -28,7 +28,7 @@ f.close()
 nthreads = [2, 4, 8, 16, 32]
 n= 32
 # main loop for different numbers of threads
-for n in nthreads:
+#for n in nthreads:
 
 ### SUMMATION ###
 
@@ -46,7 +46,8 @@ sizes =  [2**6, 2**10, 2**20]# 2**32]
 iter = range(len(sizes))
 
 # main summation loop
-for i in iter:
+#for i in iter:
+i = 2
 myarray = np.ones((sizes[i],), dtype=np.int_)
 
 # serial summation algorithm
