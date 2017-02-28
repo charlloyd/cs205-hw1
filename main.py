@@ -37,27 +37,27 @@ for n in nthreads:
     
     # main summation loop
     for i in iter:
-        myarray = np.ones((sizes[i],), dtype=np.int_)
-        
-        # serial summation algorithm
-        start = time.time()
-        serial_result.append(hw13.serial_summation(myarray))
-        serial_timings.append(time.time()-start)
-        
-        # parallel naive summation algorithm
-        start = time.time()
-        parallel_result_naive.append(hw13.parallel_sum(myarray, n))
-        parallel_timings_naive.append(time.time()-start)
-        
-        # parallel thread ("guided") summation algorithm
-        chunk = round(sizes[i]/n)
-        sums = np.ones(1, dtype=np.int_)
-        step = [idx for idx in range(0,sizes[i],chunk)]
-        step = np.array(step, dtype=np.intc)
-        start = time.time()
-        hw13.parallel_sum_block(myarray, n, step, chunk, sums)
-        parallel_result_thread.append(sums)
-        parallel_timings_thread.append(time.time()-start)
+myarray = np.ones((sizes[i],), dtype=np.int_)
+
+# serial summation algorithm
+start = time.time()
+serial_result.append(hw13.serial_summation(myarray))
+serial_timings.append(time.time()-start)
+
+# parallel naive summation algorithm
+start = time.time()
+parallel_result_naive.append(hw13.parallel_sum(myarray, n))
+parallel_timings_naive.append(time.time()-start)
+
+# parallel thread ("guided") summation algorithm
+chunk = round(sizes[i]/n)
+sums = np.zeros(1, dtype=np.int_)
+step = [idx for idx in range(0,sizes[i],chunk)]
+step = np.array(step, dtype=np.intc)
+start = time.time()
+hw13.parallel_sum_block(myarray, n, step, chunk, sums)
+parallel_result_thread.append(sums)
+parallel_timings_thread.append(time.time()-start)
 
     # timings
     serial_timings.append(np.array_equal(sizes, serial_result))
