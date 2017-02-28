@@ -56,7 +56,7 @@ cdef void psb(long[::] data, int nthreads, int[:] step, long *sums, int chunk, i
     cdef size_t s, j, n
     cdef long *sdata
     cdef long *temp_sum
-    cdef int tid
+    cdef unsigned int tid
 
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
@@ -69,7 +69,7 @@ cdef void psb(long[::] data, int nthreads, int[:] step, long *sums, int chunk, i
             temp_sum = temp_sum + sdata[n]
         for s in prange(nthreads):
             sums += deref(temp_sum)
-        free(tid)
+
         free(sdata)
         free(temp_sum)
 
@@ -148,7 +148,7 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
         for t in prange(nthreads):
             for s in range(chunk):
                 out[step[tid] + s] += temp[s]
-        free(tid)
+
         free(matChunk)
         free(temp)
         free(vecChunk)
