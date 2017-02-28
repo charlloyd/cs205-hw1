@@ -16,7 +16,7 @@ from scipy.linalg.blas import dgemm
 
 # over-write files
 fn_sum = "summmation.csv"
-fn_matvec = "matvecs.csv"
+fn_matvec = "matvec.csv"
 with open(fn_sum, 'w+', newline='') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow(['Algorithm','p','2^6','2^10','2^20','thingy'])
