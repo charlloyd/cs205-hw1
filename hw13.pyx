@@ -107,7 +107,7 @@ cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, i
     cdef unsigned int n, j
     cdef unsigned int chunk = N/nthreads
 
-    for n in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='static'):
+    for n in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='dynamic'):
         for j in range(J):
             out[n] += mat[n,j] * vec[j]
     return 0
