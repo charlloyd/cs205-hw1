@@ -13,7 +13,7 @@
 
 from cython.parallel cimport parallel, prange, threadid
 from cython.operator cimport dereference as deref
-from libcpp.stl cimport malloc
+from libcpp cimport malloc
 cimport numpy as np
 import numpy as np
 import distutils.sysconfig
