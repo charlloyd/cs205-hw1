@@ -56,7 +56,7 @@ cdef void psb(long[::] data, int nthreads, int[:] step, long *sums, int chunk, i
     cdef size_t s, j, n
     cdef long *sdata
     cdef long *temp_sum
-    cdef int *tid
+    cdef int tid
 
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
