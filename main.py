@@ -93,7 +93,7 @@ for n in nthreads:
     
     # write results to csv
     fn_sum = "sum_timings_nthread_" + str(n) + ".csv"
-    with open(fn, 'w', newline='') as f:
+    with open(fn_sum, 'w', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in colnames])
         writer.writerow([str(i) for i in serial_timings])
