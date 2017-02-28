@@ -227,7 +227,7 @@ for i in iter:
 
     # Linear comparison between dgemm and cython function
     start = time.time()
-    #dgemm(X,Y)
+    dgemm(alpha=1.,a=X,b=Y)
     dgemm_time.append(time.time()-start)
     
     start = time.time()
