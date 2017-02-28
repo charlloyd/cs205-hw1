@@ -49,7 +49,7 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
                 out[n,k] += X[n,j] * Y[j,k]
     return 0
 
-cdef void reduce(double[::,::] out, double[::] C, int s, int t, int N) nogil:
+cdef void reduce(double[::,::] out, double * C, int s, int t, int N) nogil:
     cdef size_t k
 
     for k in range(N):
