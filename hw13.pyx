@@ -59,7 +59,7 @@ cpdef int parallel_sum_block(long[::] data, int nthreads, int[:] step, int chunk
     cdef long *sdata
     cdef long *temp_sum
     cdef int tid
-    cdef long sums
+    cdef long *sums
 
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
