@@ -64,39 +64,7 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
         
     return sums
 
-cdef long psb(long[::] data, int nthreads, int[::] step, int chunk, int N):
-    cdef size_t j, n
-    cdef int s
-    cdef long *sdata
-    cdef long temp_sum
-    cdef unsigned int tid
-    cdef long sums = 0
 
-    with nogil, parallel(num_threads=nthreads):
-        tid = threadid()
-        sdata = <long*>(malloc(32*chunk * sizeof(long)*nthreads))
-        temp_sum = <long>(malloc(sizeof(long)*32*nthreads))
-
-        for j in range(chunk):
-            sdata[j] = data[step[tid] + j]
-        for n in range(chunk):
-            temp_sum = temp_sum + sdata[n]
-        for s in prange(nthreads):
-            sums += temp_sum
-        free(sdata)
-    return sums
-
-# Attempt at more cost effective Sum
-def parallel_sum_block(long[::] data, int nthreads, int[::] step, int chunk):
-    cdef unsigned int N = data.shape[0]
-    cdef long sums
-    cdef long[::] d = data
-    cdef int nt = nthreads
-    cdef int[::] stepC = step
-    cdef int chunkC = chunk
-
-    sums = psb(d, nt, stepC, chunkC, N)
-    return np.asarray(sums)
 
 ###########################
 # MATRIX VECTOR MULTIPLICATION
