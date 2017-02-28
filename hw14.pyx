@@ -144,8 +144,8 @@ def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthr
     cdef double[::,::] Yc = Y
     cdef double[::,::] outC = out
     cdef int nt = nthreads
-    cdef int[::,::] stepC1 = step1
-    cdef int[::,::] stepC2 = step2
+    cdef int[::] stepC1 = step1
+    cdef int[::] stepC2 = step2
     cdef int chunkC = chunk
 
     mmb2(Xc, Yc, outC, nt, stepC1, stepC2, S, chunkC, N, J, K)
