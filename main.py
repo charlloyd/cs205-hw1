@@ -80,7 +80,7 @@ for n in nthreads:
     parallel_eff_thread.append(parallel_timings_thread[-1])
 
 # write results to csv file
-colnames = ["Algorithm"]
+    colnames = ["Algorithm"]
     colnames.append(sizes)
     colnames.append("Pass")
     fn = "sum_timings_nthread_" + str(n) + ".csv"
