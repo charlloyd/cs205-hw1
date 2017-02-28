@@ -55,7 +55,7 @@ cdef void reduce(double[::,::] out, vec[:] C, int s, int t, int N) nogil:
     for k in range(N):
         out[s+k,t] += C[k]
 
-cpdef int mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[:,:] step, int S, int T, int chunk):
+cpdef int mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::,::] step, int S, int T, int chunk):
     cdef unsigned int N = X.shape[0]
     cdef unsigned int J = Y.shape[0]
     cdef unsigned int K = Y.shape[1]
