@@ -213,6 +213,8 @@ dgemm_time = []
 serial_time = []
 gflopsPerSec = []
 operations = []
+parallel_time_naive = []
+parallel_time_block = []
 
 for i in iter:
     random.seed(5555)
@@ -225,15 +227,25 @@ for i in iter:
             X[j,k] = random.gauss(0,1)
             Y[j,k] = random.gauss(0,1)
 
-# Linear comparison between dgemm and cython function
+    # Linear comparison between dgemm and cython function
     start = time.time()
     dgemm(alpha=1.,a=X,b=Y)
     dgemm_time.append(time.time()-start)
     
     start = time.time()
-    #matMult_serial(X, Y, outmat, 32)
+    matMult_serial(X, Y, outmat, n)
     serial_time.append(time.time()-start)
 
-#Naive parallel algorithm without blocking
+    #Naive parallel algorithm without blocking
+    outmat = np.zeros((sizes[i],sizes[i]))
+    start = time.time()
+    matMult_thread(X, Y, outmat, n)
+    parallel_time_naive.append(time.time() - start)
+
+    #Naive parallel algorithm with blocking
+    outmat = np.zeros((sizes[i],sizes[i]))
+    start = time.time()
+    matMult_block(X, Y, outmat, n)
+    parallel_time_naive.append(time.time() - start)
 
 exit()

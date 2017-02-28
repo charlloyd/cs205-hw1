@@ -47,7 +47,7 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
     cdef unsigned int chunk = N/nthreads
     cdef long sums = 0
 
-    for s in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='dynamic'):
+    for s in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='static'):
         sums += data[s]
         
     return sums
@@ -69,7 +69,7 @@ cpdef int parallel_sum_block(long[::] data, int nthreads, int[:] step, int chunk
         for j in range(chunk):
             sdata[j] = data[step[tid] + j]
         for n in range(chunk):
-            temp_sum = temp_sum + sdata[n]
+            temp_sum += sdata[n]
         for s in prange(nthreads):
             sums += deref(temp_sum)
     return sums
@@ -107,7 +107,7 @@ cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, i
     cdef size_t n, j
     cdef unsigned int chunk = N/nthreads
 
-    for n in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='dynamic'):
+    for n in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='static'):
         for j in range(J):
             out[n] += mat[n,j] * vec[j]
     return 0
