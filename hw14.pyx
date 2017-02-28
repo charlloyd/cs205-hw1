@@ -8,7 +8,7 @@ from cython.parallel cimport parallel, prange, threadid
 from cython.operator cimport dereference as deref
 from libc.stdlib cimport malloc, free, rand
 cimport numpy as np
-import numpu as np
+import numpy as np
 
 
 ###########################
