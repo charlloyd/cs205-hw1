@@ -62,7 +62,7 @@ cdef void reduce(double[::,::] out, double * C, int s, int t, int N, int stop) n
             if (s+k < stop) & (t+j < stop):
                 out[s+k,t+j] += C[N*k + j]
 
-cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::,::] step, int S, int chunk, int N, int J, int K):
+cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::,::] step1, int[::,::] step2, int S, int chunk, int N, int J, int K):
     cdef size_t a, b, k, j, n, s,t
     cdef int tid
     cdef double *A
@@ -104,7 +104,7 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
     cdef int[::,::] stepC2 = step2
     cdef int chunkC = chunk
 
-    mmb(Xc, Yc, outC, nt, stepC, S, chunkC, N, J, K)
+    mmb(Xc, Yc, outC, nt, stepC1, stepC2, S, chunkC, N, J, K)
     return np.asarray(outC)
 
 
