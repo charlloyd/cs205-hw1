@@ -55,7 +55,7 @@ for n in nthreads:
         
         #Naive parallel algorithm without blocking
         outmat = np.zeros((sizes[i],sizes[i]))
-        row = round(23*100*1000 / 8/(sizes[i]/2))
+        row = round(np.floor((sqrt(16*2^20/3)))
         chunk = (2*(sizes[i]**2))/(row**2)
         if chunk < n:
             chunk = n

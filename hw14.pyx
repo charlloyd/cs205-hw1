@@ -108,7 +108,47 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
     mmb(Xc, Yc, outC, nt, stepC1, stepC2, S, chunkC, N, J, K)
     return np.asarray(outC)
 
+cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::, ::] step1, int[::, ::] step2, int chunk):
+    cdef size_t a, b, k, j, n, s,t
+    cdef int tid
+    cdef double *A
+    cdef double *B
+    cdef double *C
 
+    with nogil, parallel(num_threads = nthreads):
+        tid = threadid()
+        A = <double *>(malloc (10*J * chunk * sizeof(double)))
+        B = <double *>(malloc (10*J * chunk * sizeof(double)))
+        C = <double *>(malloc (10*chunk * chunk * sizeof(double)))
+        for s in range(S):
+            for a in range(chunk):
+                if ((a + step1[s]) < N) & ((a + step2[s])<K):
+                    for b in range(J):
+                        A[a*J + b] = X[a + step1[s], b]
+                        B[a*J + b] = Y[b, a + step2[s]]
+            for k in range(chunk):
+                for j in range(chunk):
+                    if ((k + step1[s]) < N) & ((j + step2[s])<K):
+                        for t in prange(J):
+                            out[k + step1[s], j + step2[s]] += A[k*J + t] * B[j*J + t]
+        free(A)
+        free(B)
+        free(C)
 
+def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::, ::] step1, int[::, ::] step2, int chunk):
+    cdef int S = step1.shape[1]
+    cdef int K = Y.shape[1]
+    cdef int N = X.shape[0]
+    cdef int J = Y.shape[0]
+    cdef double[::,::] Xc = X
+    cdef double[::,::] Yc = Y
+    cdef double[::,::] outC = out
+    cdef int nt = nthreads
+    cdef int[::,::] stepC1 = step1
+    cdef int[::,::] stepC2 = step2
+    cdef int chunkC = chunk
+
+    mmb2(Xc, Yc, outC, nt, stepC1, stepC2, S, chunkC, N, J, K)
+    return np.asarray(outC)
 
 
