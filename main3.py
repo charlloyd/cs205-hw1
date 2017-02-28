@@ -15,7 +15,6 @@ from scipy.linalg.blas import dgemm
 # over-write files
 fn_sum = "summation.csv"
 fn_matvec = "matvec.csv"
-fn_matmat = "matmat.csv"
 with open(fn_sum, 'w+') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow(['Algorithm','p','2^6','2^10','2^20','thingy'])
@@ -24,14 +23,9 @@ with open(fn_matvec, 'w+') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
     f.close()
-with open(fn_matmat, 'w+') as f:
-    writer = csv.writer(f, delimiter = ',')
-    writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
-    f.close() # not written downbelow
-
 
 # set number of threads
-nthreads = [2, 4, 8, 16, 32]
+nthreads = [2, 4, 8, 16, 32, 64]
 
 # main loop for different numbers of threads
 for n in nthreads:
@@ -163,7 +157,7 @@ for n in nthreads:
         # parallel thread ("guided") matrix-vector multiplication algorithm
         outvec = np.zeros_like(myvec)
         row = round(23*100*1000 / 8/(sizes[i]/2))
-        chunk = (2*(sizes[i]**2))/(row**2)
+        chunk = round((2*(sizes[i]**2))/(row**2))
         if chunk < n:
             chunk = n
         #step = [idx for idx in range(0,sizes[i],row)]
@@ -213,88 +207,7 @@ for n in nthreads:
         f.close()
 
 
-    ###########################
-    # HW 1 QUESTION 4
-    ###########################
-    
-    start = []
-    dgemm_time = []
-    serial_time = []
-    gflopsPerSec = []
-    operations = []
-    parallel_time_naive = []
-    parallel_time_block = []
 
-    for i in iter:
-        random.seed(5555)
-        X = Y = outmat = np.zeros((sizes[i],sizes[i]))
         
-        operations.append(2 * (i**3))
-        
-        for j in range(X.shape[0]):
-            for k in range(X.shape[1]):
-                X[j,k] = random.gauss(0,1)
-                  Y[j,k] = random.gauss(0,1)
-
-        # Linear comparison between dgemm and cython function
-        start = time.time()
-        dgemm(alpha=1.,a=X,b=Y)
-        dgemm_time.append(time.time()-start)
-        
-        start = time.time()
-        hw14.matMult_serial(X, Y, outmat, n)
-        serial_time.append(time.time()-start)
-        
-        #Naive parallel algorithm without blocking
-        outmat = np.zeros((sizes[i],sizes[i]))
-        row = round(23*100*1000 / 8/(sizes[i]/2))
-        chunk = (2*(sizes[i]**2))/(row**2)
-        if chunk < n:
-            chunk = n
-        start = time.time()
-        hw14.matMult_thread(X, Y, outmat, n, chunk)
-        parallel_time_naive.append(time.time() - start)
-        
-        #Naive parallel algorithm with blocking
-        outmat = np.zeros((sizes[i],sizes[i]))
-        row = round(23*100*1000 / 8/(sizes[i]/2))
-        chunk = (2*(sizes[i]**2))/(row**2)
-        if chunk < n:
-            chunk = n
-        start = time.time()
-        hw14.matMult_block(X, Y, outmat, n, chunk)
-        parallel_time_naive.append(time.time() - start)
-        
-###########################
-# HW 1 QUESTION 4
-###########################
-
-start = []
-dgemm_time = []
-serial_time = []
-gflopsPerSec = []
-operations = []
-
-for i in iter:
-    random.seed(5555)
-    X = Y = outmat = np.zeros((sizes[i],sizes[i]))
-    
-    operations.append(2 * (i**3))
-    
-    for j in range(X.shape[0]):
-        for k in range(X.shape[1]):
-            X[j,k] = random.gauss(0,1)
-            Y[j,k] = random.gauss(0,1)
-
-    # Linear comparison between dgemm and cython function
-    start = time.time()
-    dgemm(alpha=1.,a=X,b=Y)
-    dgemm_time.append(time.time()-start)
-    
-    start = time.time()
-    #matMult_serial(X, Y, outmat, 32)
-    serial_time.append(time.time()-start)
-    
-    #Naive parallel algorithm without blocking
 
 exit()
