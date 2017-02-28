@@ -55,19 +55,24 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
 # Attempt at more cost effective Sum
 cpdef long parallel_sum_block(long[::] data, int nthreads, int[:] step, chunk):
     cdef unsigned int N = data.shape[0]
-    cdef size_t s, j
+    cdef size_t s, j, n
     cdef long sums = 0
     cdef long * sdata
+    cdef long * temp_sum
     cdef int tid
 
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
+        sdata = <long *>(malloc (chunk * sizeof(long)))
+        temp_sum = <long *>(malloc (sizeof(long)))
 
         for j in range(chunk):
             sdata[j] = data[step[tid] + j]
+        for n in range(chunk):
+            temp_sum = temp_sum + s_data[n]
 
         for s in prange(nthreads):
-            sums += sdata[s]
+            sums += sdata
         
     return sums
 
