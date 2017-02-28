@@ -37,7 +37,7 @@ for n in nthreads:
         random.seed(5555)
         X = Y = outmat = np.zeros((sizes[i],sizes[i]))
         
-        operations.append(2 * (i**3))
+        operations_serial.append(2 * (i**3))
         
         for j in range(X.shape[0]):
             for k in range(X.shape[1]):
@@ -62,6 +62,7 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_thread(X, Y, outmat, n, chunk)
         parallel_time_naive.append(time.time() - start)
+        operations_naive.append(4 * (i**3)/chunk + 2* (i**2)/chunk)
         
         #Naive parallel algorithm with blocking
         outmat = np.zeros((sizes[i],sizes[i]))
@@ -72,12 +73,15 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_block(X, Y, outmat, n, chunk)
         parallel_time_block.append(time.time() - start)
-        operations_block.append(
+        operations_block.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
 
 
     serial_time.insert(0,"Serial Times")
     parallel_time_naive.insert(0,"Parallel Naive Times")
     parallel_time_block.insert(0,"Parallel Block Times")
+    operations_serial.insert(0, "Serial operations")
+    operations_block.insert(0, "Parallel Naive Operations")
+    operations_block.insert(0, "Parallel Block Operations")
     serial_time.insert(1,n)
     parallel_time_naive.insert(1,n)
     parallel_time_block.insert(1,n)
