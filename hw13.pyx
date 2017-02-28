@@ -12,6 +12,8 @@
 ###########################
 
 from cython.parallel cimport parallel, prange, threadid
+from libc.stdlib cimport malloc, free
+
 
 
 ###########################
