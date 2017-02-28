@@ -104,7 +104,7 @@ cpdef int vecmatMult_naive(double[::,::] mat, double[::] vec, double[::] out, in
 cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, int nthreads):
     cdef unsigned int N = vec.shape[0]
     cdef unsigned int J = mat.shape[1]
-    cdef size_t int n, j
+    cdef size_t n, j
     cdef unsigned int chunk = N/nthreads
 
     for n in prange(0, N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='dynamic'):
