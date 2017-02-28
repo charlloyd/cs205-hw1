@@ -3,7 +3,6 @@
 #cython: --compile-args=-fopenmp --link-args=-fopenmp --force -a
 # distutils: extra_compile_args = -fopenmp
 # distutils: extra_link_args = -fopenmp
-# distutils: language = c++
 
 
 
