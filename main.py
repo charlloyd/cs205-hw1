@@ -20,22 +20,22 @@ nthreads = [2, 4, 8, 16, 32]
 # main loop for different numbers of threads
 for n in nthreads:
     
-    ### SUMMATION ###
-    
-    # initialize variables
-    serial_timings = []
-    parallel_timings_naive = []
-    parallel_timings_thread = []
-    serial_result=[]
-    parallel_result_naive =[]
-    parallel_result_thread=[]
-    myarray = []
-    
-    # define sizes for summation
-    sizes =  [2**6, 2**10, 2**20]# 2**32]
-    iter = range(len(sizes))
-    
-    # main summation loop
+### SUMMATION ###
+
+# initialize variables
+serial_timings = []
+parallel_timings_naive = []
+parallel_timings_thread = []
+serial_result=[]
+parallel_result_naive =[]
+parallel_result_thread=[]
+myarray = []
+
+# define sizes for summation
+sizes =  [2**6, 2**10, 2**20]# 2**32]
+iter = range(len(sizes))
+
+# main summation loop
     for i in iter:
 myarray = np.ones((sizes[i],), dtype=np.int_)
 
@@ -55,7 +55,7 @@ sums = np.zeros(1, dtype=np.int_)
 step = [idx for idx in range(0,sizes[i],chunk)]
 step = np.array(step, dtype=np.intc)
 start = time.time()
-hw13.parallel_sum_block(myarray, n, step, chunk, sums)
+hw13.parallel_sum_block(myarray, n, step, chunk)
 parallel_result_thread.append(sums)
 parallel_timings_thread.append(time.time()-start)
 

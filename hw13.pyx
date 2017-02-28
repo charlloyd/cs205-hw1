@@ -63,7 +63,7 @@ cpdef int parallel_sum_block(long[::] data, int nthreads, int[:] step, int chunk
 
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
-        sdata = <long *>(malloc (chunk * sizeof(long)))
+        sdata = <long>(malloc (chunk * sizeof(long)))
         temp_sum = <long>(malloc (sizeof(long)))
 
         for j in range(chunk):
