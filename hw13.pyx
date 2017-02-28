@@ -24,12 +24,12 @@ import numpy as np
 # Serial summation
 cpdef long serial_summation(long[:] a):
     cdef  long  sums = a[0]
+    cdef size_t i
     
-    for i in xrange(1, a.shape[0]):
+    for i in range(1,a.shape[0]):
         sums += a[i]
-
+        
     return sums
-
 
 # Parallelize summation using Cython
 cpdef long parallel_sum(long[:] a, int nthreads):
