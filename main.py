@@ -101,7 +101,8 @@ for n in nthreads:
         writer.writerow([str(i) for i in parallel_eff_thread])
         f.close()
 
-    ### Matrix Vector Multiplication ###
+### MATRIX VECTOR MULTIPLICATION ###
+
 sizes = [2**6, 2**10]#, 2**16]
 
 parallel_timings_naive = []
