@@ -76,13 +76,13 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         C = <double *>(malloc (10*chunk * chunk * sizeof(double)))
         for s in range(S):
             for a in range(chunk):
-                if ((a + step[tid,s]) < N) & ((a + step2[tid,s])<K):
+                if ((a + step1[tid,s]) < N) & ((a + step2[tid,s])<K):
                     for b in range(J):
                         A[a*J + b] = X[a + step1[tid,s], b]
                         B[a*J + b] = Y[b, a + step2[tid,s]]
             for k in range(chunk):
                 for j in range(chunk):
-                    if ((k + step[tid,s]) < N) & ((j + step2[tid,s])<K):
+                    if ((k + step1[tid,s]) < N) & ((j + step2[tid,s])<K):
                         for t in range(J):
                             C[k*J + j] = C[k*J + j] + A[k*J + t] * B[j*J + t]
             for n in prange(nthreads):
