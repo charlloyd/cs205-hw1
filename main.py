@@ -14,16 +14,6 @@ from scipy.linalg.blas import dgemm
 # HW 1 QUESTION 3
 ###########################
 
-# initialize variables
-serial_timings = []
-parallel_timings_naive = []
-parallel_timings_thread = []
-serial_result=[]
-parallel_result_naive =[]
-parallel_result_thread=[]
-myarray = []
-start = 0
-
 # set number of threads
 nthreads = [2, 4,]# 8, 16, 32]
 
@@ -31,6 +21,15 @@ nthreads = [2, 4,]# 8, 16, 32]
 for n in nthreads:
     
     ### SUMMATION ###
+    
+    # initialize variables
+    serial_timings = []
+    parallel_timings_naive = []
+    parallel_timings_thread = []
+    serial_result=[]
+    parallel_result_naive =[]
+    parallel_result_thread=[]
+    myarray = []
     
     # define sizes for summation
     sizes =  [2**6, 2**10, 2**20]# 2**32]
