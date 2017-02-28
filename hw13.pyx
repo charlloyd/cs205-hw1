@@ -135,7 +135,7 @@ cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out,
             for j in range(N):
                 temp[k] = temp[k] + matChunk[k*J + j] * vecChunk[j]
         for t in prange(nthreads):
-            for s in range(chunk)
+            for s in range(chunk):
                 out[step[tid] + s] += temp[s]
         free(matChunk)
         free(temp)
