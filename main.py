@@ -14,8 +14,7 @@ from scipy.linalg.blas import dgemm
 # HW 1 QUESTION 3
 ###########################
 
-# test cases
-sizes =  [2**6, 2**10, 2**20]# 2**32]
+### SUMMATION ###
 
 serial_timings = []
 parallel_timings_naive = []
@@ -28,9 +27,14 @@ parallel_result_thread=[]
 start = 0
 myarray = []
 
+# test cases
+sizes =  [2**6, 2**10, 2**20]# 2**32]
+
+# number of threads
 nthreads = [4, 8, 16, 32]
 iter = range(len(sizes))
 
+# main summation loop
 for n in nthreads:
 
     for i in iter:
@@ -75,7 +79,7 @@ for n in nthreads:
     parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
     parallel_eff_thread.append(parallel_timings_thread[-1])
 
-    # prep files
+    # prep file
     colnames = ["Algorithm"]
     colnames.append(sizes)
     colnames.append("Pass")
@@ -84,6 +88,7 @@ for n in nthreads:
     filename_eff = "sum_eff_nthread_" + str(n) + ".csv"
     filename_results = "sum_results" + str(n) + ".csv"
 
+    # write file
     with open(filename_time, 'w', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in colnames])
