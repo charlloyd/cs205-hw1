@@ -11,8 +11,20 @@ from scipy.linalg.blas import dgemm
 # HW 1 QUESTION 3
 ###########################
 
+# over-write files
+fn_sum = "summation.csv"
+fn_matvec = "matvec.csv"
+with open(fn_sum, 'w+') as f:
+    writer = csv.writer(f, delimiter = ',')
+    writer.writerow(['Algorithm','p','2^6','2^10','2^20','thingy'])
+    f.close()
+with open(fn_matvec, 'w+') as f:
+    writer = csv.writer(f, delimiter = ',')
+    writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
+    f.close()
+
 # set number of threads
-nthreads = [2, 4]# 8, 16, 32, 64]
+nthreads = [2, 4,]# 8, 16, 32, 64]
 
 # main loop for different numbers of threads
 for n in nthreads:
@@ -83,6 +95,18 @@ for n in nthreads:
     parallel_spd_thread.insert(1,n)
     parallel_eff_naive.insert(1,n)
     parallel_eff_thread.insert(1,n)
+    
+    # write results to csv
+    with open(fn_sum, 'a') as f:
+        writer = csv.writer(f, delimiter = ',')
+        writer.writerow([str(i) for i in serial_timings])
+        writer.writerow([str(i) for i in parallel_timings_naive])
+        writer.writerow([str(i) for i in parallel_timings_thread])
+        writer.writerow([str(i) for i in parallel_spd_naive])
+        writer.writerow([str(i) for i in parallel_eff_naive])
+        writer.writerow([str(i) for i in parallel_spd_thread])
+        writer.writerow([str(i) for i in parallel_eff_thread])
+        f.close()
     
     ### MATRIX VECTOR MULTIPLICATION ###
     
@@ -169,6 +193,16 @@ for n in nthreads:
     parallel_eff_naive.insert(1,n)
     parallel_eff_thread.insert(1,n)
     
-
+    # write results to csv
+    with open(fn_matvec, 'a') as f:
+        writer = csv.writer(f, delimiter = ',')
+        writer.writerow([str(i) for i in serial_timings])
+        writer.writerow([str(i) for i in parallel_timings_naive])
+        writer.writerow([str(i) for i in parallel_timings_thread])
+        writer.writerow([str(i) for i in parallel_spd_naive])
+        writer.writerow([str(i) for i in parallel_eff_naive])
+        writer.writerow([str(i) for i in parallel_spd_thread])
+        writer.writerow([str(i) for i in parallel_eff_thread])
+        f.close()
 
 exit()
