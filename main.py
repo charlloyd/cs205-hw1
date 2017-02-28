@@ -92,7 +92,7 @@ for n in nthreads:
     parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
     
     # write results to csv
-    fn = "sum_timings_nthread_" + str(n) + ".csv"
+    fn_sum = "sum_timings_nthread_" + str(n) + ".csv"
     with open(fn, 'w', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in colnames])
@@ -205,7 +205,7 @@ for n in nthreads:
     parallel_eff_thread.insert(1,n)
     
     # write results to csv
-    
+    fn_mat = "mat_timings_nthread_" + str(n) + ".csv"
     with open(fn_sum, 'a', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in colnames])
