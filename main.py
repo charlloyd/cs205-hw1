@@ -16,9 +16,9 @@ from scipy.linalg.blas import dgemm
 
 # set number of threads
 nthreads = [2, 4, 8, 16, 32]
-
+n = 32
 # main loop for different numbers of threads
-for n in nthreads:
+#for n in nthreads:
     
 ### SUMMATION ###
 
@@ -36,7 +36,8 @@ sizes =  [2**6, 2**10, 2**20]# 2**32]
 iter = range(len(sizes))
 
 # main summation loop
-    for i in iter:
+#for i in iter:
+i=2
 myarray = np.ones((sizes[i],), dtype=np.int_)
 
 # serial summation algorithm
@@ -51,12 +52,10 @@ parallel_timings_naive.append(time.time()-start)
 
 # parallel thread ("guided") summation algorithm
 chunk = round(sizes[i]/n)
-sums = np.zeros(1, dtype=np.int_)
 step = [idx for idx in range(0,sizes[i],chunk)]
 step = np.array(step, dtype=np.intc)
 start = time.time()
-hw13.parallel_sum_block(myarray, n, step, chunk)
-parallel_result_thread.append(sums)
+parallel_result_thread.append(hw13.parallel_sum_block(myarray, n, step, chunk))
 parallel_timings_thread.append(time.time()-start)
 
     # timings
