@@ -84,12 +84,19 @@ for n in nthreads:
     colnames.append(sizes)
     colnames.append("Pass")
     serial_timings.insert(0,"Serial Times")
-    parallel_timings_naive.insert(0,"Parallel Naive Times",nthreads)
+    parallel_timings_naive.insert(0,"Parallel Naive Times")
     parallel_timings_thread.insert(0,"Parallel Guided Times")
     parallel_spd_naive.insert(0,"Parallel Naive Speed-up")
     parallel_spd_thread.insert(0,"Parallel Guided Speed-up")
     parallel_eff_naive.insert(0,"Parallel Naive Efficiency")
     parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
+    serial_timings.append(nthreads)
+    parallel_timings_naive.append(nthreads)
+    parallel_timings_thread.append(nthreads)
+    parallel_spd_naive.append(nthreads)
+    parallel_spd_thread.append(nthreads)
+    parallel_eff_naive.append(nthreads)
+    parallel_eff_thread.append(nthreads)
     
     # write results to csv
     
