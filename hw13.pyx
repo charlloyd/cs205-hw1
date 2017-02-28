@@ -76,14 +76,14 @@ cdef void psb(long[::] data, int nthreads, int[:] step, long *sums, int chunk, i
 # Attempt at more cost effective Sum
 def parallel_sum_block(long[::] data, int nthreads, int[:] step, int chunk):
     cdef unsigned int N = data.shape[0]
-    cdef long sums = 0
+    cdef long * sums = 0
     cdef long[::] d = data
     cdef int nt = nthreads
     cdef int[::] stepC = step
     cdef int chunkC = chunk
 
     psb(d, nt, stepC, sums, chunkC, N)
-    return sums
+    return np.asarray(sums)
 
 
 
