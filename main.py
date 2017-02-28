@@ -14,171 +14,181 @@ from scipy.linalg.blas import dgemm
 # HW 1 QUESTION 3
 ###########################
 
-# test cases
-sizes =  [2**6, 2**10, 2**20]# 2**32]
-
+# initialize variables
+serial_timings = []
 parallel_timings_naive = []
 parallel_timings_thread = []
-serial_timings = []
-
+serial_result=[]
 parallel_result_naive =[]
 parallel_result_thread=[]
-serial_result=[]
-
-start = 0
 myarray = []
+start = 0
 
-nthreads = [4, 8, 16, 32]
+# set number of threads
+nthreads = [2, 4, 8, 16, 32]
 
-
-iter = range(len(sizes))
-
+# main loop for different numbers of threads
 for n in nthreads:
-
+    
+    ### SUMMATION ###
+    
+    # define sizes for summation
+    sizes =  [2**6, 2**10, 2**20]# 2**32]
+    iter = range(len(sizes))
+    
+    # main summation loop
     for i in iter:
         myarray = np.ones((sizes[i],), dtype=np.int_)
         
-        # serial
+        # serial summation algorithm
         start = time.time()
         serial_result.append(hw13.serial_summation(myarray))
         serial_timings.append(time.time()-start)
         
-        # parallel naive
+        # parallel naive summation algorithm
         start = time.time()
         parallel_result_naive.append(hw13.parallel_sum(myarray, n))
         parallel_timings_naive.append(time.time()-start)
         
-        # parallel thread
+        # parallel thread ("guided") summation algorithm
         start = time.time()
         parallel_result_thread.append(hw13.parallel_sum_thread(myarray, n))
         parallel_timings_thread.append(time.time()-start)
 
-    parallel_spd_naive = [serial_timings[i]/parallel_timings_naive[i] for i in iter]
-    parallel_spd_thread = [serial_timings[i]/parallel_timings_thread[i] for i in iter ]
-    parallel_eff_naive = [parallel_spd_naive[i]/n for i in iter ]
-    parallel_eff_thread = [parallel_spd_thread[i]/n for i in iter ]
-
-    parallel_timings_naive.insert(0,"Parallel Naive Times")
-    parallel_timings_thread.insert(0,"Parallel Chunked Times")
+    # timings
     serial_timings.insert(0,"Serial Times")
-    parallel_spd_naive.insert(0,"Parallel Naive Speed-up")
-    parallel_spd_thread.insert(0,"Parallel Chunked Speed-up")
-    parallel_eff_naive.insert(0,"Parallel Naive Efficiency")
-    parallel_eff_thread.insert(0,"Parallel Chunked Efficiency")
-
-    colnames = ["Algorithm"]
-    colnames.append(sizes)
-    colnames.append("Pass")
-    parallel_timings_naive.append(np.array_equal(sizes, parallel_result_naive))
-    parallel_timings_thread.append(np.array_equal(sizes, parallel_result_thread))
     serial_timings.append(np.array_equal(sizes, serial_result))
+    parallel_timings_naive.insert(0,"Parallel Naive Times")
+    parallel_timings_naive.append(np.array_equal(sizes, parallel_result_naive))
+    parallel_timings_thread.insert(0,"Parallel Guided Times")
+    parallel_timings_thread.append(np.array_equal(sizes, parallel_result_thread))
 
+    # speedup
+    parallel_spd_naive = [serial_timings[i]/parallel_timings_naive[i] for i in iter]
+    parallel_spd_naive.insert(0,"Parallel Naive Speed-up")
     parallel_spd_naive.append(parallel_timings_naive[-1])
+    parallel_spd_thread = [serial_timings[i]/parallel_timings_thread[i] for i in iter]
+    parallel_spd_thread.insert(0,"Parallel Guided Speed-up")
     parallel_spd_thread.append(parallel_timings_thread[-1])
+
+    # efficiency
+    parallel_eff_naive = [parallel_spd_naive[i]/n for i in iter]
+    parallel_eff_naive.insert(0,"Parallel Naive Efficiency")
     parallel_eff_naive.append(parallel_timings_naive[-1])
+    parallel_eff_thread = [parallel_spd_thread[i]/n for i in iter]
+    parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
     parallel_eff_thread.append(parallel_timings_thread[-1])
 
-    filename_time = "sum_timings_nthread_" + str(n) + ".csv"
-    filename_spd = "sum_spd_nthread_" + str(n) + ".csv"
-    filename_eff = "sum_eff_nthread_" + str(n) + ".csv"
-    filename_results = "sum_results" + str(n) + ".csv"
-
-    with open(filename_time, 'w', newline='') as f:
+# write results to csv file
+colnames = ["Algorithm"]
+    colnames.append(sizes)
+    colnames.append("Pass")
+    fn = "sum_timings_nthread_" + str(n) + ".csv"
+    with open(fn, 'w', newline='') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in colnames])
+        writer.writerow([str(i) for i in serial_timings])
         writer.writerow([str(i) for i in parallel_timings_naive])
+        writer.writerow([str(i) for i in parallel_timings_thread])
         writer.writerow([str(i) for i in parallel_spd_naive])
         writer.writerow([str(i) for i in parallel_eff_naive])
-        writer.writerow([str(i) for i in parallel_timings_thread])
         writer.writerow([str(i) for i in parallel_spd_thread])
         writer.writerow([str(i) for i in parallel_eff_thread])
-        writer.writerow([str(i) for i in serial_timings])
         f.close()
 
+### MATRIX VECTOR MULTIPLICATION ###
 
-
-    ### Matrix Vector Multiplication ###
-sizes = [2**6, 2**10]#, 2**16]
-
-parallel_timings_naive = []
-parallel_timings_thread = []
+# re-initialize arrays
 serial_timings = []
-
-parallel_result_naive =[]
-parallel_result_thread=[]
-serial_result=[]
-compare = []
-
-
-iter = range(len(sizes))
-
+    parallel_timings_naive = []
+    parallel_timings_thread = []
+    serial_result=[]
+    parallel_result_naive =[]
+    parallel_result_thread=[]
+    compare = []
+    
+    # re-define sizes
+    sizes = [2**6, 2**10]#, 2**16]
+    iter = range(len(sizes))
+    
+    # main matrix-vector multiplication loop
     for i in iter:
-random.seed(5555)
-myvec = np.zeros((sizes[i],))
-outvec = np.zeros_like(myvec)
-mymat = np.zeros((sizes[i], sizes[i]))
-#
-for j in range(sizes[i]):
-    myvec[j] = random.gauss(0,1)
-    for k in range(sizes[i]):
-        mymat[j,k] = random.gauss(0,1)
-#
-# NP test
-compare.append(np.dot(mymat, myvec))
-#
-# serial
-start = time.time()
-hw13.vecmatMult_serial(mymat, myvec, outvec)
-serial_timings.append(time.time()-start)
-serial_result.append(outvec)
-#
-# parallel naive
-outvec = np.zeros_like(myvec)
-start = time.time()
-hw13.vecmatMult_naive(mymat, myvec, outvec, n)
-parallel_timings_naive.append(time.time()-start)
-parallel_result_naive.append(outvec)
-#
-# parallel thread
-outvec = np.zeros_like(myvec)
-chunk = round(23*100*1000 / 8/(sizes[i]*2))
-if chunk > myvec.shape[0]:
-    chunk = myvec.shape[0]
-if myvec.shape[0]/chunk < n:
-    ntemp = round(myvec.shape[0]/chunk)
-else:
-    ntemp = n
-step = [idx for idx in range(0,sizes[i],chunk)]
-step = np.array(step, dtype=np.intc)
-start = time.time()
-hw13.vecmatMult_explicit(mymat, myvec, outvec, ntemp, step, chunk)
-parallel_timings_thread.append(time.time()-start)
-parallel_result_thread.append(outvec)
-
-
-    parallel_eff_naive = [serial_timings[i]/parallel_timings_naive[i]/n for i in iter]
-    parallel_eff_thread = [serial_timings[i]/parallel_timings_thread[i]/n for i in iter]
-
-    parallel_timings_naive.insert(0,"Parallel Naive Times")
-    parallel_timings_thread.insert(0,"Parallel Chunked Times")
-    serial_timings.insert(0,"Serial Times")
-    parallel_eff_naive.insert(0,"Parallel Naive Efficiency")
-    parallel_eff_thread.insert(0,"Parallel Chunked Efficiency")
-
-    colnames = ["Algorithm"]
-    colnames.append(sizes)
-
-    filename_time = "matvec_timings_nthread_" + str(n) + ".csv"
-
-    with open(filename_time, 'w', newline='') as f:
-        writer = csv.writer(f, delimiter = ',')
-        writer.writerow([str(i) for i in colnames])
-        writer.writerow([str(i) for i in parallel_timings_naive])
-        writer.writerow([str(i) for i in parallel_eff_naive])
-        writer.writerow([str(i) for i in parallel_timings_thread])
-        writer.writerow([str(i) for i in parallel_eff_thread])
-        writer.writerow([str(i) for i in serial_timings])
-        f.close()
+        random.seed(5555)
+        myvec = np.zeros((sizes[i],))
+        outvec = np.zeros_like(myvec)
+        mymat = np.zeros((sizes[i], sizes[i]))
+        
+        # create a matrix and vector
+        for j in range(sizes[i]):
+            myvec[j] = random.gauss(0,1)
+            for k in range(sizes[i]):
+                mymat[j,k] = random.gauss(0,1)
+    
+        # NP test
+        compare.append(np.dot(mymat, myvec))
+        
+        # serial matrix-vector multiplication algorithm
+        start = time.time()
+        hw13.vecmatMult_serial(mymat, myvec, outvec)
+        serial_timings.append(time.time()-start)
+        serial_result.append(outvec)
+        
+        # parallel naive matrix-vector multiplication algorithm
+        outvec = np.zeros_like(myvec)
+        start = time.time()
+        hw13.vecmatMult_naive(mymat, myvec, outvec, n)
+        parallel_timings_naive.append(time.time()-start)
+        parallel_result_naive.append(outvec)
+        
+        # parallel thread ("guided") matrix-vector multiplication algorithm
+        outvec = np.zeros_like(myvec)
+        chunk = round(23*100*1000 / 8/(sizes[i]*2))
+        step = [idx for idx in range(0,sizes[i],chunk)]
+        step = np.array(step, dtype=np.intc)
+        start = time.time()
+        #hw13.vecmatMult_explicit(mymat, myvec, outvec, n,step)
+        parallel_timings_thread.append(time.time()-start)
+        parallel_result_thread.append(outvec)
+        
+        # timings
+        serial_timings.insert(0,"Serial Times")
+        serial_timings.append(np.array_equal(sizes, serial_result))
+        parallel_timings_naive.insert(0,"Parallel Naive Times")
+        parallel_timings_naive.append(np.array_equal(sizes, parallel_result_naive))
+        parallel_timings_thread.insert(0,"Parallel Guided Times")
+        parallel_timings_thread.append(np.array_equal(sizes, parallel_result_thread))
+        
+        # speedup
+        parallel_spd_naive = [serial_timings[i]/parallel_timings_naive[i] for i in iter]
+        parallel_spd_naive.insert(0,"Parallel Naive Speed-up")
+        parallel_spd_naive.append(parallel_timings_naive[-1])
+        parallel_spd_thread = [serial_timings[i]/parallel_timings_thread[i] for i in iter]
+        parallel_spd_thread.insert(0,"Parallel Guided Speed-up")
+        parallel_spd_thread.append(parallel_timings_thread[-1])
+        
+        # efficiency
+        parallel_eff_naive = [parallel_spd_naive[i]/n for i in iter]
+        parallel_eff_naive.insert(0,"Parallel Naive Efficiency")
+        parallel_eff_naive.append(parallel_timings_naive[-1])
+        parallel_eff_thread = [parallel_spd_thread[i]/n for i in iter]
+        parallel_eff_thread.insert(0,"Parallel Guided Efficiency")
+        parallel_eff_thread.append(parallel_timings_thread[-1])
+        
+        # write results to csv file
+        colnames = ["Algorithm"]
+        colnames.append(sizes)
+        filename_time = "matvec_timings_nthread_" + str(n) + ".csv"
+        with open(fn, 'w', newline='') as f:
+            writer = csv.writer(f, delimiter = ',')
+            writer.writerow([str(i) for i in colnames])
+            writer.writerow([str(i) for i in serial_timings])
+            writer.writerow([str(i) for i in parallel_timings_naive])
+            writer.writerow([str(i) for i in parallel_timings_thread])
+            writer.writerow([str(i) for i in parallel_spd_naive])
+            writer.writerow([str(i) for i in parallel_eff_naive])
+            writer.writerow([str(i) for i in parallel_spd_thread])
+            writer.writerow([str(i) for i in parallel_eff_thread])
+            f.close()
 
 ###########################
 # HW 1 QUESTION 4
@@ -200,20 +210,16 @@ for i in iter:
             X[j,k] = random.gauss(0,1)
             Y[j,k] = random.gauss(0,1)
 
-    # Linear comparison between dgemm and cython function
-    start = time.time()
+# Linear comparison between dgemm and cython function
+start = time.time()
     dgemm(X,Y)
     dgemm_time.append(time.time()-start)
     #
     start = time.time()
     matMult_serial(X, Y, outmat, 32)
     serial_time.append(time.time()-start)
-    #
-    #
-    #Naive parallel algorithm without blocking
-
-
-
-
+#
+#
+#Naive parallel algorithm without blocking
 
 exit()
