@@ -249,9 +249,9 @@ parallel_time_naive.append(time.time() - start)
 #Naive parallel algorithm with blocking
 outmat = np.zeros((sizes[i],sizes[i]))
 row = round(23*100*1000 / 8/(sizes[i]/2))
-chunk = (2*(2**32))/(row**2)
-step = [idx for idx in range(0,sizes[i],chunk)]
-step = np.array(step, dtype=np.intc)
+chunk = (2*(sizes[i]**2))/(row**2)
+step1 = step2 = np.zeros(n,chunk, dtype=np.intc)
+step = [idx for idx in range(0,sizes[i],row)]
 start = time.time()
 out = hw14.matMult_block(X, Y, n, step,row)
 parallel_time_naive.append(time.time() - start)

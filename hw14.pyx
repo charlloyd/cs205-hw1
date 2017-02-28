@@ -83,7 +83,7 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         free(B)
         free(C)
 
-def matMult_block(double[::,::] X, double[::,::] Y, int nthreads, int[::, ::] step):
+def matMult_block(double[::,::] X, double[::,::] Y, int nthreads, int[::, ::] step, int chunk):
     cdef int S = step.shape[1]
     cdef int K = Y.shape[1]
     cdef int N = X.shape[0]
@@ -93,9 +93,9 @@ def matMult_block(double[::,::] X, double[::,::] Y, int nthreads, int[::, ::] st
     cdef double[::,::] outC = np.zeros(N,K)
     cdef int nt = nthreads
     cdef int[::,::] stepC = step
-    cdef int chunk = round(23*100*1000 / 8/(N/2))
+    cdef int chunkC = chunk
 
-    mmb(Xc, Yc, outC, nt, stepC, S, chunk, N, J, K)
+    mmb(Xc, Yc, outC, nt, stepC, S, chunkC, N, J, K)
     return np.array(outC)
 
 

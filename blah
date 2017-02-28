@@ -366,10 +366,10 @@ for n in nthreads:
         writer.writerow([str(i) for i in parallel_spd_thread])
         writer.writerow([str(i) for i in parallel_eff_thread])
         f.close()
-
-### MATRIX VECTOR MULTIPLICATION ###
-
-# re-initialize arrays
+    
+    ### MATRIX VECTOR MULTIPLICATION ###
+    
+    # re-initialize arrays
     serial_timings = []
     parallel_timings_naive = []
     parallel_timings_thread = []
@@ -379,7 +379,7 @@ for n in nthreads:
     compare = []
     
     # re-define sizes
-    sizes = [2**6, 2**10]#, 2**16]
+    sizes = [2**6, 2**10, 2**16]
     iter = range(len(sizes))
     
     # main matrix-vector multiplication loop
@@ -394,7 +394,7 @@ for n in nthreads:
             myvec[j] = random.gauss(0,1)
             for k in range(sizes[i]):
                 mymat[j,k] = random.gauss(0,1)
-    
+        
         # NP test
         compare.append(np.dot(mymat, myvec))
         
@@ -413,15 +413,18 @@ for n in nthreads:
         
         # parallel thread ("guided") matrix-vector multiplication algorithm
         outvec = np.zeros_like(myvec)
-        chunk = round(23*100*1000 / 8/(sizes[i]*2))
-        #step = [idx for idx in range(0,sizes[i],chunk)]
+        row = round(23*100*1000 / 8/(sizes[i]/2))
+        chunk = (2*(sizes[i]**2))/(row**2)
+        if chunk < n:
+	    chunk = n
+        #step = [idx for idx in range(0,sizes[i],row)]
         #step = np.array(step, dtype=np.intc)
         start = time.time()
-        hw13.vecmatMult_thread(mymat, myvec, outvec, n)
+        hw13.vecmatMult_thread(mymat, myvec, outvec, n, chunk)
         parallel_timings_thread.append(time.time()-start)
         parallel_result_thread.append(outvec)
-
-# speedup
+	
+    # speedup
     parallel_spd_naive = [serial_timings[i]/parallel_timings_naive[i] for i in iter]
     parallel_spd_naive.append(parallel_timings_naive[-1])
     parallel_spd_thread = [serial_timings[i]/parallel_timings_thread[i] for i in iter]
@@ -492,14 +495,17 @@ for i in iter:
     start = time.time()
     matMult_serial(X, Y, outmat, n)
     serial_time.append(time.time()-start)
-
+    
     #Naive parallel algorithm without blocking
     outmat = np.zeros((sizes[i],sizes[i]))
-    chunk = round(23*100*1000 / 8/(sizes[i]*2))
+    row = round(23*100*1000 / 8/(sizes[i]/2))
+    chunk = (2*(sizes[i]**2))/(row**2)
+    if chunk < n:
+	chunk = n
     start = time.time()
     matMult_thread(X, Y, outmat, n, chunk)
     parallel_time_naive.append(time.time() - start)
-
+    
     #Naive parallel algorithm with blocking
     outmat = np.zeros((sizes[i],sizes[i]))
     start = time.time()
