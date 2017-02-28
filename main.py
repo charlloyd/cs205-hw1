@@ -81,7 +81,8 @@ for n in nthreads:
 
     # prep before writing
     colnames = ["Algorithm"]
-    colnames.append(sizes)
+    for s in sizes: 
+        colnames.append(s)
     colnames.append("Pass")
     serial_timings.insert(0,"Serial Times")
     parallel_timings_naive.insert(0,"Parallel Naive Times")
