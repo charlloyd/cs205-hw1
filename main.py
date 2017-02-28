@@ -164,7 +164,7 @@ for n in nthreads:
         row = round(23*100*1000 / 8/(sizes[i]/2))
         chunk = (2*(sizes[i]**2))/(row**2)
         if chunk < n:
-	    chunk = n
+            chunk = n
         #step = [idx for idx in range(0,sizes[i],row)]
         #step = np.array(step, dtype=np.intc)
         start = time.time()
