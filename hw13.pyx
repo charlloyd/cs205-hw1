@@ -13,7 +13,7 @@
 
 from cython.parallel cimport parallel, prange, threadid
 from cython.operator cimport dereference as deref
-from libc.stdlib cimport malloc, free
+from libcpp.stdlib cimport malloc, free
 cimport numpy as np
 import numpy as np
 import distutils.sysconfig
@@ -64,7 +64,39 @@ cpdef long parallel_sum_thread(long[::] data, int nthreads):
         
     return sums
 
+cdef long psb(long[::] data, int nthreads, int[::] step, int chunk, int N):
+    cdef size_t j, n
+    cdef int s
+    cdef long *sdata
+    cdef long temp_sum
+    cdef unsigned int tid
+    cdef long sums = 0
 
+    with nogil, parallel(num_threads=nthreads):
+        tid = threadid()
+        sdata = <long*>(malloc(32*chunk * sizeof(long)*nthreads))
+        temp_sum = <long>(malloc(sizeof(long)*32*nthreads))
+
+        for j in range(chunk):
+            sdata[j] = data[step[tid] + j]
+        for n in range(chunk):
+            temp_sum = temp_sum + sdata[n]
+        for s in prange(nthreads):
+            sums += temp_sum
+        free(sdata)
+    return sums
+
+# Attempt at more cost effective Sum
+def parallel_sum_block(long[::] data, int nthreads, int[::] step, int chunk):
+    cdef unsigned int N = data.shape[0]
+    cdef long sums
+    cdef long[::] d = data
+    cdef int nt = nthreads
+    cdef int[::] stepC = step
+    cdef int chunkC = chunk
+
+    sums = psb(d, nt, stepC, chunkC, N)
+    return np.asarray(sums)
 
 ###########################
 # MATRIX VECTOR MULTIPLICATION
@@ -100,3 +132,37 @@ cpdef int vecmatMult_thread(double[::,::] mat, double[::] vec, double[::] out, i
         for j in range(J):
             out[n] += mat[n,j] * vec[j]
     return 0
+
+cpdef int vecmatMult_explicit(double[::,::] mat, double[::] vec, double[::] out, int nthreads, int[:] step, int chunk):
+    cdef unsigned int N = vec.shape[0]
+    cdef unsigned int J = mat.shape[1]
+    cdef size_t j, k, f, g, v, s
+    cdef int t
+    cdef unsigned int tid
+    cdef double *vecChunk
+    cdef double *matChunk
+    cdef double *temp
+
+    with nogil, parallel(num_threads=nthreads):
+        tid = threadid()
+        vecChunk = <double *>(malloc (N*32 * sizeof(double)))
+        matChunk = <double *>(malloc (N*32 * chunk * sizeof(double)))
+        temp = <double *>(malloc (chunk * sizeof(double)))
+
+        for f in range(chunk):
+            for g in range(J):
+                matChunk[f*J + g] = mat[step[tid] + f, g]
+        for v in range(N):
+            vecChunk[v] = vec[v]
+        for k in range(chunk):
+            for j in range(N):
+                temp[k] = temp[k] + matChunk[k*J + j] * vecChunk[j]
+        for t in prange(nthreads):
+            for s in range(chunk):
+                out[step[tid] + s] += temp[s]
+
+        free(matChunk)
+        free(temp)
+        free(vecChunk)
+    return 0
+
