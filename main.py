@@ -57,10 +57,12 @@ for n in nthreads:
         
         # parallel thread ("guided") summation algorithm
         chunk = round(sizes[i]/n)
+        sums = np.ones(1, dtype=np.int_)
         step = [idx for idx in range(0,sizes[i],chunk)]
         step = np.array(step, dtype=np.intc)
         start = time.time()
-        parallel_result_thread.append(hw13.parallel_sum_block(myarray, n, chunk, step))
+        hw13.parallel_sum_block(myarray, n, step, chunk, sums)
+        parallel_result_thread.append()
         parallel_timings_thread.append(time.time()-start)
 
     # timings

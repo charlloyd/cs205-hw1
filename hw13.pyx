@@ -72,8 +72,7 @@ cpdef long parallel_sum_block(long[::] data, int nthreads, int[:] step, int chun
 
         for s in prange(nthreads):
             sums += temp_sum
-        
-    return sums
+
 
 
 
