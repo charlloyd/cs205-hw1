@@ -62,7 +62,7 @@ cdef long psb(long[::] data, int nthreads, int[:] step, int chunk, int N):
 
     with nogil, parallel(num_threads=nthreads):
         tid = threadid()
-        sdata = <long*>(malloc(32*chunk * sizeof(long))*nthreads)
+        sdata = <long*>(malloc(32*chunk * sizeof(long)*nthreads))
         temp_sum = <long*>(malloc(sizeof(long)*32*nthreads))
 
         for j in range(chunk):
