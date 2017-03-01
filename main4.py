@@ -49,7 +49,7 @@ for n in nthreads:
     operations_block3 = []
     
     for i in iter:
-        print(i)
+        print(sizes[i])
         random.seed(5555)
         X = Y = outmat = np.zeros((sizes[i],sizes[i]))
         X = Y = np.ones((sizes[i],sizes[i]),dtype=np.float64)
