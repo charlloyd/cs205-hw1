@@ -69,16 +69,17 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
     cdef int a, b, k, j, n, s,t
     cdef int tid
     cdef double* buf1 = <double*>(malloc (nthreads * J * chunk * sizeof(double)))
-    cdef double* buf2 = <double*>(malloc (nthreads * chunk * chunk * sizeof(double)))
+    cdef double* buf2 = <double*>(malloc (nthreads * J * chunk * sizeof(double)))
+    cdef double* buf3 = <double*>(malloc (nthreads * chunk * chunk * sizeof(double)))
     cdef double* A
     cdef double* B
     cdef double* C
 
     with nogil, parallel(num_threads = nthreads):
         tid = threadid()
-        A = tid + buf1
-        B = tid + buf1
-        C = tid + buf2
+        A = buf1 + tid * J * chunk
+        B = buf2 + tid * J * chunk
+        C = buf2 + tid * chunk * chunk
         for s in range(S):
             for a in range(chunk):
                 if ((a + step1[tid,s]) < N) & ((a + step2[tid,s])<K):
@@ -120,14 +121,13 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
 # block 2 wrapper 
 cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1, int[::] step2, int S,  int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
-    cdef int tid
-    cdef double* buf = <double*>(malloc (nthreads * J * chunk * sizeof(double)))
+    cdef double* buf1 = <double*>(malloc (nthreads * J * chunk * sizeof(double)))
+    cdef double* buf2 = <double*>(malloc (nthreads * J * chunk * sizeof(double)))
     cdef double* A
     cdef double* B
     with nogil, parallel(num_threads = nthreads):
-        tid = threadid()
-        A = tid + buf
-        B = tid + buf
+        A = threadid() * J + buf1
+        B = threadid() * J + buf2
         for s in range(S):
             for a in range(chunk):
                 if ((a + step1[s]) < N) & ((a + step2[s])<K):
@@ -141,7 +141,8 @@ cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
                             out[k + step1[s], j + step2[s]] += A[k*J + t] * B[j*J + t]
         free(A)
         free(B)
-    free(buf)
+    free(buf1)
+    free(buf2)
     return 0
 
 # block2 function
