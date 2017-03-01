@@ -13,7 +13,7 @@ from scipy.linalg.blas import dgemm
 ###########################
 
 # set number of threads
-nthreads = [2, 4, 8, 16, 32, 64]
+nthreads = [2, 4]#, 8, 16, 32, 64]
 
 # over-write files
 fn_matmat = "matmat.csv"
@@ -23,7 +23,7 @@ with open(fn_matmat, 'w+') as f:
     f.close()
 
 # define sizes for matrix multiplication
-sizes = [2**6, 2**10, 2**12]
+sizes = [2**6, 2**10]#, 2**12]
 iter = range(len(sizes))
 matlist = [np.ones((sizes[i],sizes[i]),dtype=np.float64) for i in iter]
 
@@ -48,7 +48,6 @@ for n in nthreads:
     operations_block1 = []
     operations_block2 = []
     operations_block3 = []
-    
     for i in iter:
         outmat = np.zeros((sizes[i],sizes[i]))
         operations_serial.append(2 * (i**3))
@@ -129,7 +128,6 @@ for n in nthreads:
         hw14.matMult_block2(X, X, outmat, n, divisions1, divisions2, row)
         parallel_time_block2.append(time.time() - start)
         operations_block2.append((i**2)*((2*i)-1))
-
         # Parallel algorithm with all cores working on same block
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
@@ -178,7 +176,7 @@ for n in nthreads:
     operations_block1.insert(1,n)
     operations_block2.insert(1,n)
     operations_block3.insert(1,n)
-    
+
     # write results to csv
     with open(fn_matmat, 'a') as f:
         writer = csv.writer(f, delimiter = ',')
