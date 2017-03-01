@@ -12,7 +12,7 @@ from scipy.linalg.blas import dgemm
 ###########################
 
 # set number of threads
-nthreads = [2, 4, 8,]# 16, 32, 64]
+nthreads = [2, 4, 8, 16, 32, 64]
 
 # over-write files
 fn_matmat = "matmat.csv"
@@ -22,7 +22,7 @@ with open(fn_matmat, 'w+') as f:
     f.close()
 
 # define sizes for matrix multiplication
-sizes = [2**6, 2**10,]# 2**16]
+sizes = [2**6, 2**10, 2**16]
 iter = range(len(sizes))
 
 # main multiplication loop
