@@ -103,7 +103,7 @@ for n in nthreads:
                     step1[idx,jdx] = 2**25
                     step2[idx,jdx] = 2**25
         start = time.time()
-        hw14.matMult_block(X, Y, outmat, n, step1, step2, row)
+        #hw14.matMult_block(X, Y, outmat, n, step1, step2, row)
         parallel_time_block.append(time.time() - start)
         operations_block.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
         
@@ -119,7 +119,7 @@ for n in nthreads:
         divisions2 = np.repeat(divisions, repfact)
         divisions1 = (divisions * repfact)
         start = time.time()
-        hw14.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
+        #hw14.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
         parallel_time_block.append(time.time() - start)
         operations_block.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
         
