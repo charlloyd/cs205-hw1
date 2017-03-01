@@ -59,7 +59,7 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_serial(X, Y, outmat, n)
         serial_time.append(time.time()-start)
-        operations_serial.append(111)
+        operations_serial.append(i**3)
         
         # serial matrix multiplication - DGEMM
         start = time.time()
