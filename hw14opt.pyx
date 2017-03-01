@@ -68,15 +68,13 @@ cdef void reduce(double[::,::] out, double C, int s, int t, int N, int stop) nog
 cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::,::] step1,  int[::,::] step2, int S, int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
     cdef int tid
-    cdef double A
-    cdef double B
-    cdef double C
-    
+    cdef double[:] A
+    cdef double[:] B
+    cdef double[:] C
+
     with nogil, parallel(num_threads = nthreads):
         tid = threadid()
-        A = <double>(malloc (J * chunk * sizeof(double)))
-        B = <double>(malloc (J * chunk * sizeof(double)))
-        C = <double>(malloc (chunk * chunk * sizeof(double)))
+
         for s in range(S):
             for a in range(chunk):
                 if ((a + step1[tid,s]) < N) & ((a + step2[tid,s])<K):
@@ -114,13 +112,10 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
 cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1, int[::] step2, int S,  int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
     cdef int tid
-    cdef double A
-    cdef double B
+    cdef double[:] A
+    cdef double[:] B
 
     with nogil, parallel(num_threads = nthreads):
-        A = <double>(malloc (J * chunk * sizeof(double)))
-        B = <double>(malloc (J * chunk * sizeof(double)))
-        # load data into shared memory?
         for s in range(S):
             for a in range(chunk):
                 if ((a + step1[s]) < N) & ((a + step2[s])<K):
@@ -132,6 +127,7 @@ cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads
                     if ((k + step1[s]) < N) & ((j + step2[s])<K):
                         for t in prange(J):
                             out[k + step1[s], j + step2[s]] += A[k*J + t] * B[j*J + t]
+
 
 # block2 function
 def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1,  int[::] step2, int chunk):
