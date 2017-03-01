@@ -79,7 +79,7 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         tid = threadid()
         A = buf1 + tid * J * chunk
         B = buf2 + tid * J * chunk
-        C = buf2 + tid * chunk * chunk
+        C = buf3 + tid * chunk * chunk
         for s in range(S):
             for a in range(chunk):
                 if ((a + step1[tid,s]) < N) & ((a + step2[tid,s])<K):
@@ -98,6 +98,7 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         free(C)
     free(buf1)
     free(buf2)
+    free(buf3)
         
 # block1 function
 def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::, ::] step1,  int[::, ::] step2, int chunk):
