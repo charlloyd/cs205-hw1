@@ -59,21 +59,20 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_serial(X, Y, outmat, n)
         serial_time.append(time.time()-start)
-        operations_serial.append((sizes[i]**2)*((2*sizes[i])-1)) # operations n^2(2n-1) http://www2.hawaii.edu/~norbert/CompPhys/chapter10.pdf
+        operations_serial.append((sizes[i]**2)*((2*sizes[i])-1))
         
         # serial matrix multiplication - DGEMM
         start = time.time()
         dgemm(alpha=1.,a=X,b=Y)
         dgemm_time.append(time.time()-start)
-        operations_dgemm.append(((sizes[i]**2)*((2*sizes[i])-1))
-        # same number of operations as the serial 3-loop
+        operations_dgemm.append((sizes[i]**2)*((2*sizes[i])-1))
                                 
         # naive dynamic parallel algorithm (no blocking)
         start = time.time()
         hw14.matMult_naive(X, Y, outmat, n)
         parallel_time_naivedyn.append(time.time()-start)
-        operations_naivedyn.append((sizes[i]**2)*((2*sizes[i])-1)) # should be same number of operations as 3-loop serial
-        
+        operations_naivedyn.append((sizes[i]**2)*((2*sizes[i])-1))
+                                
         # chunked parallel algorithm (no blocking)
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
