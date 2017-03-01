@@ -62,6 +62,10 @@ for n in nthreads:
         start = time.time()
         parallel_result_thread.append(hw13.parallel_sum_thread(myarray, n))
         parallel_timings_thread.append(time.time()-start)
+        print(parallel_timings_thread)
+        print(serial_timings)
+        print(parallel_timings_naive)
+    
 
     # timings
     serial_timings.append(np.array_equal(sizes, serial_result))
@@ -126,9 +130,9 @@ for n in nthreads:
     # main matrix-vector multiplication loop
     for i in iter:
         random.seed(5555)
-        myvec = np.zeros((sizes[i],))
+        myvec = np.ones((sizes[i],), dtype=np.float64)
         outvec = np.zeros_like(myvec)
-        mymat = np.zeros((sizes[i], sizes[i]))
+        mymat = np.ones((sizes[i], sizes[i]), dtype=np.float64)
         
         # create a matrix and vector
         for j in range(sizes[i]):
@@ -164,6 +168,9 @@ for n in nthreads:
         #hw13.vecmatMult_thread(mymat, myvec, outvec, n, chunk)
         parallel_timings_thread.append(time.time()-start)
         parallel_result_thread.append(outvec)
+        print(parallel_timings_thread)
+        print(serial_timings)
+        print(parallel_timings_naive)
         
     # speedup
     parallel_spd_naive = [serial_timings[i]/parallel_timings_naive[i] for i in iter]

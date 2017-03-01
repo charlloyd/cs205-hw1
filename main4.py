@@ -19,7 +19,7 @@ nthreads = [2, 4, 8, 16, 32, 64]
 fn_matmat = "matmat.csv"
 with open(fn_matmat, 'w+') as f:
     writer = csv.writer(f, delimiter = ',')
-    writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
+    writer.writerow(['Algorithm','p','2^6','2^10','2^16','thingy'])
     f.close()
 
 # define sizes for matrix multiplication
