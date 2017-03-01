@@ -68,18 +68,15 @@ cdef void reduce(double[::,::] out, double *C, int s, int t, int N, int stop) no
 cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::,::] step1,  int[::,::] step2, int S, int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
     cdef int tid
-    cdef double* buf1 = <double*>(malloc (nthreads * J * chunk * sizeof(double)))
-    cdef double* buf2 = <double*>(malloc (nthreads * J * chunk * sizeof(double)))
-    cdef double* buf3 = <double*>(malloc (nthreads * chunk * chunk * sizeof(double)))
     cdef double* A
     cdef double* B
     cdef double* C
 
     with nogil, parallel(num_threads = nthreads):
         tid = threadid()
-        A = buf1 + tid * J * chunk
-        B = buf2 + tid * J * chunk
-        C = buf3 + tid * chunk * chunk
+        A = <double*>(malloc (tid + nthreads * J * chunk * sizeof(double)))
+        B = <double*>(malloc (tid + nthreads * J * chunk * sizeof(double)))
+        C = <double*>(malloc (tid + nthreads * chunk * chunk * sizeof(double)))
         for s in range(S):
             for a in range(chunk):
                 if ((a + step1[tid,s]) < N) & ((a + step2[tid,s])<K):
@@ -122,13 +119,11 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
 # block 2 wrapper 
 cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1, int[::] step2, int S,  int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
-    cdef double* buf1 = <double*>(malloc (nthreads * J * chunk * sizeof(double)))
-    cdef double* buf2 = <double*>(malloc (nthreads * J * chunk * sizeof(double)))
     cdef double* A
     cdef double* B
     with nogil, parallel(num_threads = nthreads):
-        A = threadid() * J + buf1
-        B = threadid() * J + buf2
+        A = <double*>(malloc (threadid() + nthreads * J * chunk * sizeof(double)))
+        B = <double*>(malloc (threadid() + nthreads * J * chunk * sizeof(double)))
         for s in range(S):
             for a in range(chunk):
                 if ((a + step1[s]) < N) & ((a + step2[s])<K):
@@ -142,8 +137,6 @@ cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
                             out[k + step1[s], j + step2[s]] += A[k*J + t] * B[j*J + t]
         free(A)
         free(B)
-    free(buf1)
-    free(buf2)
     return 0
 
 # block2 function
