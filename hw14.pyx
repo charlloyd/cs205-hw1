@@ -68,7 +68,7 @@ cdef void reduce(double[::,::] out, double *C, int s, int t, int N, int stop) no
 cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::,::] step1,  int[::,::] step2, int S, int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
     cdef int tid
-    cdef threadlocal(double) A
+    cdef threadlocal(double) A = <double>(malloc (J * chunk * sizeof(double)))
     cdef double[::] B
     cdef double[::] C
 
