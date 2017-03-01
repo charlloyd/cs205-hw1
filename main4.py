@@ -23,8 +23,10 @@ with open(fn_matmat, 'w+') as f:
     f.close()
 
 # define sizes for matrix multiplication
-sizes = [2**6,]# 2**10 2**16]
+sizes = [2**6, 2**10 2**16]
 iter = range(len(sizes))
+Xlist = [np.ones((sizes[i],sizes[i]),dtype=np.float64) for i in iter]
+Ylist = [np.ones((sizes[i],sizes[i]),dtype=np.float64) for i in iter]
 
 # main multiplication loop
 for n in nthreads:
@@ -50,10 +52,11 @@ for n in nthreads:
     
     for i in iter:
         random.seed(5555)
-        X = Y = outmat = np.zeros((sizes[i],sizes[i]))
+        outmat = np.zeros((sizes[i],sizes[i]))
         operations_serial.append(2 * (i**3))
-        X = Y = np.ones((sizes[i],sizes[i]),dtype=np.float64)
-        #Y = np.random.randn(sizes[i],sizes[i])
+        
+        X = Xlist[i]
+        Y = Ylist[i]
 
         # serial matrix multiplication (3 loops)
         start = time.time()
