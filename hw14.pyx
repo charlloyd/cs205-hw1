@@ -92,6 +92,11 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
                             C[k*J + j] = C[k*J + j] + A[k*J + t] * B[j*J + t]
             for n in prange(nthreads):
                 reduce(out, C, step1[tid,s], step2[tid,s], chunk, N)
+        free(A)
+        free(B)
+        free(C)
+    free(buf1)
+    free(buf2)
         
 # block1 function
 def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::, ::] step1,  int[::, ::] step2, int chunk):
@@ -134,6 +139,9 @@ cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
                     if ((k + step1[s]) < N) & ((j + step2[s])<K):
                         for t in prange(J):
                             out[k + step1[s], j + step2[s]] += A[k*J + t] * B[j*J + t]
+        free(A)
+        free(B)
+    free(buf)
     return 0
 
 # block2 function

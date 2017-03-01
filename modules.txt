@@ -15,7 +15,7 @@ srun --mem-per-cpu=2000 -p general -n 32 --pty -t 0-06:00 /bin/bash
 
 #srun --mem-per-cpu=2000 -p holyseasgpu -n 64 --gres=gpu:1 --constraint=cuda-7.5 --pty -t 0-06:00 /bin/bash
 
-python setup.py build_ext --inplace
+git pull origin eifer4; python setup.py build_ext --inplace
 
 python main.py
 
