@@ -31,15 +31,18 @@ for n in nthreads:
     print(n)
     
     # initialize variables
-    dgemm_time = []
-    serial_time = []
     gflopsPerSec = []
-    operations_serial = []
-    operations_block = []
-    operations_chunked = []
+    serial_time = []
+    dgemm_time = []
     parallel_time_naivedyn = []
     parallel_time_chunked = []
-    parallel_time_block = []
+    parallel_time_block1 = []
+    parallel_time_block2 = []
+    operations_serial = []
+    operations_chunked = []
+    operations_block1 = []
+    operations_block2 = []
+
     
     for i in iter:
         random.seed(5555)
@@ -104,8 +107,8 @@ for n in nthreads:
                     step2[idx,jdx] = 2**25
         start = time.time()
         #hw14.matMult_block(X, Y, outmat, n, step1, step2, row)
-        parallel_time_block.append(time.time() - start)
-        operations_block.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
+        parallel_time_block1.append(time.time() - start)
+        operations_block1.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
         
         # Parallel algorithm with all cores working on same block
         outmat = np.zeros((sizes[i],sizes[i]))
@@ -120,19 +123,26 @@ for n in nthreads:
         divisions1 = (divisions * repfact)
         start = time.time()
         #hw14.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
-        parallel_time_block.append(time.time() - start)
-        operations_block.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
+        parallel_time_block2.append(time.time() - start)
+        operations_block2.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
         
     # prep before writing
     serial_time.insert(0,"Serial Times")
-    parallel_time_naive.insert(0,"Parallel Naive Times")
-    parallel_time_block.insert(0,"Parallel Block Times")
-    operations_serial.insert(0, "Serial operations")
-    operations_block.insert(0, "Parallel Naive Operations")
-    operations_block.insert(0, "Parallel Block Operations")
+    dgemm_time.insert(0,"DGEMM Times")
+    parallel_time_naivedyn.insert(0,"Parallel Naive Dynamic Times")
+    parallel_time_chunked.insert(0,"Parallel Naive Chunked Times")
+    parallel_time_block1.insert(0,"Parallel Block1 Times")
+    parallel_time_block2.insert(0,"Parallel Block1 Times")
+    operations_serial.insert(0, "Serial Operations")
+    operations_chunked.insert(0, "Parallel Naive Chunked Operations")
+    operations_block1.insert(0, "Parallel Block1 Operations")
+    operations_block2.insert(0, "Parallel Block2 Operations")
     serial_time.insert(1,n)
-    parallel_time_naive.insert(1,n)
-    parallel_time_block.insert(1,n)
+    dgemm_time.insert(1,n)
+    parallel_time_naivedyn.insert(1,n)
+    parallel_time_chunked.insert(1,n)
+    parallel_time_block1.insert(1,n)
+    parallel_time_block2.insert(1,n)
     
     # write results to csv
     with open(fn_matmat, 'a') as f:
