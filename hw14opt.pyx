@@ -6,7 +6,7 @@
 # distutils: extra_link_args = -fopenmp
 # distutils: language = c++
 
-from cython.parallel cimport parallel, prange, threadid, threadlocal
+from cython.parallel cimport parallel, prange, threadid
 from libc.stdlib cimport malloc, free
 import numpy as np
 
