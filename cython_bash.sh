@@ -16,5 +16,5 @@ module load gcc/6.2.0-fasrc01
 ## EXECUTE CODE ##
 python setup.py build_ext --inplace
 
-#python main3.py
+python main3.py
 python main4.py
