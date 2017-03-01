@@ -66,8 +66,8 @@ for n in nthreads:
         dgemm(alpha=1.,a=X,b=Y)
         dgemm_time.append(time.time()-start)
         operations_dgemm.append(((sizes[i]**2)*((2*sizes[i])-1))
-        # same number of operations as the serial 3-loop?
-        
+        # same number of operations as the serial 3-loop
+                                
         # naive dynamic parallel algorithm (no blocking)
         start = time.time()
         hw14.matMult_naive(X, Y, outmat, n)
