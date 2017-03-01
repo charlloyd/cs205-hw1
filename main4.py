@@ -119,8 +119,8 @@ for n in nthreads:
             row = int(np.ceil(np.sqrt(sizes[i]**2/n)))  
         repfact = len(range(0,sizes[i],row))
         divisions = [t for t in range(0,sizes[i],row)]
-        divisions2 = np.repeat(divisions, repfact)
-        divisions1 = (divisions * repfact)
+        divisions2 = np.array(np.repeat(divisions, repfact), dtype=np.intc)
+        divisions1 = np.array((divisions * repfact), dtype=np.intc)
         start = time.time()
         hw14.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
         parallel_time_block2.append(time.time() - start)
