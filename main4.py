@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import hw14
-import hw14opt
+#import hw14opt
 import time
 import csv
 import math
@@ -144,7 +144,7 @@ for n in nthreads:
         divisions2 = np.array(np.repeat(divisions, repfact), dtype=np.intc)
         divisions1 = np.array((divisions * repfact), dtype=np.intc)
         start = time.time()
-        hw14opt.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
+        #hw14opt.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
         parallel_time_block3.append(time.time() - start)
         operations_block3.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
         
