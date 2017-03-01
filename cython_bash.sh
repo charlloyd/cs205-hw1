@@ -4,7 +4,7 @@
 #SBATCH -e p.err
 #SBATCH -p general
 #SBATCH -t 200
-#SBATCH -c 64
+#SBATCH -c 32
 #SBATCH --mem-per-cpu=2500
 
 ## Load software ##
