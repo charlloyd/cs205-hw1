@@ -22,7 +22,7 @@ with open(fn_matmat, 'w+') as f:
     f.close()
 
 # define sizes for matrix multiplication
-sizes = [2**6, 2**10, 2**16]
+sizes = [2**6,]# 2**10, 2**16]
 iter = range(len(sizes))
 
 # main multiplication loop
