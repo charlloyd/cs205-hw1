@@ -25,6 +25,9 @@ with open(fn_matvec, 'w+') as f:
 
 # set number of threads
 nthreads = [2, 4, 8, 16, 32, 64]
+sizes =  [2**6, 2**10, 2**20]# 2**32]
+iter = range(len(sizes))
+arraylist = [np.ones((sizes[i],), dtype=np.int_) for i in iter]
 
 # main loop for different numbers of threads
 for n in nthreads:
@@ -41,12 +44,11 @@ for n in nthreads:
     myarray = []
     
     # define sizes for summation
-    sizes =  [2**6, 2**10, 2**20]# 2**32]
-    iter = range(len(sizes))
+    
     
     # main summation loop
     for i in iter:
-        myarray = np.ones((sizes[i],), dtype=np.int_)
+        myarray = arraylist[i]
         
         # serial summation algorithm
         start = time.time()
@@ -111,10 +113,17 @@ for n in nthreads:
         writer.writerow([str(i) for i in parallel_spd_thread])
         writer.writerow([str(i) for i in parallel_eff_thread])
         f.close()
-    
-    ### MATRIX VECTOR MULTIPLICATION ###
-    
-    # re-initialize arrays
+
+### MATRIX VECTOR MULTIPLICATION ###
+# re-define sizes
+sizes = [2**6, 2**10, 2**16]
+iter = range(len(sizes))
+
+veclist = [np.ones((sizes[i],), dtype=np.float64) for i in iter]
+mymatlist = [np.ones((sizes[i], sizes[i]), dtype=np.float64) for i in iter]
+
+for n in nthreads:
+    print(n)
     serial_timings = []
     parallel_timings_naive = []
     parallel_timings_thread = []
@@ -122,23 +131,15 @@ for n in nthreads:
     parallel_result_naive =[]
     parallel_result_thread=[]
     compare = []
+
+
     
-    # re-define sizes
-    sizes = [2**6, 2**10, 2**16]
-    iter = range(len(sizes))
     
     # main matrix-vector multiplication loop
     for i in iter:
-        random.seed(5555)
-        myvec = np.ones((sizes[i],), dtype=np.float64)
+        myvec = veclist[i]
         outvec = np.zeros_like(myvec)
-        mymat = np.ones((sizes[i], sizes[i]), dtype=np.float64)
-        
-        # create a matrix and vector
-        for j in range(sizes[i]):
-            myvec[j] = random.gauss(0,1)
-            for k in range(sizes[i]):
-                mymat[j,k] = random.gauss(0,1)
+        mymat = mymatlist[i]
         
         # NP test
         compare.append(np.dot(mymat, myvec))
