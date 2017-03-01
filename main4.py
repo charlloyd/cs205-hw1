@@ -8,21 +8,21 @@ import math
 import random
 from scipy.linalg.blas import dgemm
 
-
 ###########################
 # HW 1 QUESTION 4
 ###########################
-nthreads = [2, 4, 8, 16, 32, 64]
-sizes = [2**6, 2**10, 2**16]
-iter = range(len(sizes))
 
+# set number of threads
+nthreads = [2, 4, 8, 16, 32, 64]
+
+# over-write files
 fn_matmat = "matmat.csv"
 with open(fn_matmat, 'w+') as f:
     writer = csv.writer(f, delimiter = ',')
     writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
     f.close()
 
-
+# initialize variables
 start = []
 dgemm_time = []
 serial_time = []
@@ -32,18 +32,21 @@ operations_block = []
 operations_naive = []
 parallel_time_naive = []
 parallel_time_block = []
-    
+
+# define sizes for matrix multiplication
+sizes = [2**6, 2**10, 2**16]
+iter = range(len(sizes))
+
+# main multiplication loop
 for n in nthreads:
     for i in iter:
         random.seed(5555)
         X = Y = outmat = np.zeros((sizes[i],sizes[i]))
-
         operations_serial.append(2 * (i**3))
-
         X = np.random.randn(sizes[i],sizes[i])
         Y = np.random.randn(sizes[i],sizes[i])
 
-        # Linear comparison between dgemm and cython function
+        # Linear comparison between dgemm and cython function (serial)
         start = time.time()
         dgemm(alpha=1.,a=X,b=Y)
         dgemm_time.append(time.time()-start)
@@ -52,7 +55,7 @@ for n in nthreads:
         hw14.matMult_serial(X, Y, outmat, n)
         serial_time.append(time.time()-start)
         
-        #Naive parallel algorithm without blocking
+        # Naive parallel algorithm without blocking
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
         chunk = int(round(((sizes[i]**2))//(row**2)))
@@ -65,7 +68,7 @@ for n in nthreads:
         parallel_time_naive.append(time.time() - start)
         operations_naive.append(4 * (i**3)/chunk + 2* (i**2)/chunk)
         
-        #Parallel algorithm with blocking
+        # Parallel algorithm with blocking
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
         chunk = int(round(((sizes[i]**2))//(row**2)))
@@ -95,15 +98,14 @@ for n in nthreads:
         hw14.matMult_block(X, Y, outmat, n, step1, step2, row)
         parallel_time_block.append(time.time() - start)
         operations_block.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
-                     
+        
         #Parallel algorithm with all cores working on same block
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
         chunk = int(round(((sizes[i]**2))//(row**2)))
         if chunk < n:
             chunk = n
-            row = int(np.ceil(np.sqrt(sizes[i]**2/n)))
-
+            row = int(np.ceil(np.sqrt(sizes[i]**2/n)))  
         repfact = len(range(0,sizes[i],row))
         divisions = [t for t in range(0,sizes[i],row)]
         divisions2 = np.repeat(divisions, repfact)
@@ -112,9 +114,8 @@ for n in nthreads:
         hw14.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
         parallel_time_block.append(time.time() - start)
         operations_block.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
-
-
-
+        
+    # prep before writing
     serial_time.insert(0,"Serial Times")
     parallel_time_naive.insert(0,"Parallel Naive Times")
     parallel_time_block.insert(0,"Parallel Block Times")
@@ -125,7 +126,7 @@ for n in nthreads:
     parallel_time_naive.insert(1,n)
     parallel_time_block.insert(1,n)
     
-
+    # write results to csv
     with open(fn_matmat, 'a') as f:
         writer = csv.writer(f, delimiter = ',')
         writer.writerow([str(i) for i in serial_time])
