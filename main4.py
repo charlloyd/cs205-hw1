@@ -65,7 +65,8 @@ for n in nthreads:
         start = time.time()
         dgemm(alpha=1.,a=X,b=Y)
         dgemm_time.append(time.time()-start)
-        operations_dgemm.append(((sizes[i]**2)*((2*sizes[i])-1)) # same number of operations as the serial 3-loop? https://software.intel.com/en-us/articles/a-simple-example-to-measure-the-performance-of-an-intel-mkl-function
+        operations_dgemm.append(((sizes[i]**2)*((2*sizes[i])-1))
+        # same number of operations as the serial 3-loop?
         
         # naive dynamic parallel algorithm (no blocking)
         start = time.time()
