@@ -53,7 +53,7 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
                 out[n,k] += X[n,j] * Y[j,k]
     return 0
 
-# block-related wrapper?
+# block-related wrapper: Yes. Does the reduction, in theory
 cdef void reduce(double[::,::] out, double * C, int s, int t, int N, int stop) nogil:
     cdef size_t k,j
     
@@ -119,13 +119,11 @@ cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
     cdef int tid
     cdef double *A
     cdef double *B
-    cdef double *C
-    
+
     with nogil, parallel(num_threads = nthreads):
-        tid = threadid()
         A = <double *>(malloc (10*J * chunk * sizeof(double)))
         B = <double *>(malloc (10*J * chunk * sizeof(double)))
-        C = <double *>(malloc (10*chunk * chunk * sizeof(double)))
+        # load data into shared memory?
         for s in range(S):
             for a in range(chunk):
                 if ((a + step1[s]) < N) & ((a + step2[s])<K):
@@ -139,8 +137,7 @@ cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
                             out[k + step1[s], j + step2[s]] += A[k*J + t] * B[j*J + t]
         free(A)
         free(B)
-        free(C)
-        
+
 # block2 function
 def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::] step1, int[::] step2, int chunk):
     cdef int S = step1.shape[1]
