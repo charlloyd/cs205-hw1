@@ -13,7 +13,7 @@ from scipy.linalg.blas import dgemm
 ###########################
 
 # set number of threads
-nthreads = [2, 4,]# 8, 16, 32, 64]
+nthreads = [2, 4, 8, 16, 32, 64]
 
 # over-write files
 fn_matmat = "matmat.csv"
