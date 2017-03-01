@@ -51,8 +51,8 @@ for n in nthreads:
         random.seed(5555)
         X = Y = outmat = np.zeros((sizes[i],sizes[i]))
         operations_serial.append(2 * (i**3))
-        X = np.random.randn(sizes[i],sizes[i])
-        Y = np.random.randn(sizes[i],sizes[i])
+        X = Y = np.ones((sizes[i],sizes[i]),dtype=np.float64)
+        #Y = np.random.randn(sizes[i],sizes[i])
 
         # serial matrix multiplication (3 loops)
         start = time.time()
