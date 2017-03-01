@@ -36,8 +36,9 @@ for n in nthreads:
     gflopsPerSec = []
     operations_serial = []
     operations_block = []
-    operations_naive = []
-    parallel_time_naive = []
+    operations_chunked = []
+    parallel_time_naivedyn = []
+    parallel_time_chunked = []
     parallel_time_block = []
     
     for i in iter:
@@ -58,7 +59,9 @@ for n in nthreads:
         dgemm_time.append(time.time()-start)
         
         # naive dynamic parallel algorithm (no blocking)
-        
+        start = time.time()
+        hw14.matMult_serial(X, Y, outmat, n)
+        parallel_time_naivedyn.append(time.time()-start)
         
         # chunked parallel algorithm (no blocking)
         outmat = np.zeros((sizes[i],sizes[i]))
@@ -70,8 +73,8 @@ for n in nthreads:
             chunk -= 1
         start = time.time()
         hw14.matMult_thread(X, Y, outmat, n, chunk)
-        parallel_time_naive.append(time.time() - start)
-        operations_naive.append(4 * (i**3)/chunk + 2* (i**2)/chunk)
+        parallel_time_chunked.append(time.time() - start)
+        operations_chunked.append(4 * (i**3)/chunk + 2* (i**2)/chunk)
         
         # Parallel algorithm with blocking
         outmat = np.zeros((sizes[i],sizes[i]))
