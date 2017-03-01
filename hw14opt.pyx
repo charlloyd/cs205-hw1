@@ -54,7 +54,7 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
     return 0
 
 # block-related wrapper: Yes. Does the reduction, in theory
-cdef void reduce(double[::,::] out, double C, int s, int t, int N, int stop) nogil:
+cdef void reduce(double[::,::] out, double *C, int s, int t, int N, int stop) nogil:
     cdef int k,j
     
     for k in range(N):
