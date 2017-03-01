@@ -114,7 +114,7 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
 ### Parallel algorithm with all cores working on same block ###
 
 # block 2 wrapper 
-cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::] step1, int[::] step2, int S, int chunk, int N, int J, int K):
+cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, unsigned int[::] step1, unsigned int[::] step2, unsigned int S, unsigned int chunk, int N, int J, int K):
     cdef size_t a, b, k, j, n, s,t
     cdef int tid
     cdef double *A
@@ -148,8 +148,8 @@ def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthr
     cdef double[::,::] Yc = Y
     cdef double[::,::] outC = out
     cdef int nt = nthreads
-    cdef int[::] stepC1 = step1
-    cdef int[::] stepC2 = step2
+    cdef unsigned int[::] stepC1 = step1
+    cdef unsigned int[::] stepC2 = step2
     cdef int chunkC = chunk
     
     mmb2(Xc, Yc, outC, nt, stepC1, stepC2, S, chunkC, N, J, K)

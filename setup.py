@@ -13,5 +13,5 @@ our_modules = [
 
 ### apparently equivalent ways to do setup
 
-#setup(name = 'hw1', ext_modules=cythonize(our_modules))
-setup(name = 'hw1', cmdclass = {'build_ext': build_ext}, ext_modules = our_modules)
+setup(name = 'hw1', ext_modules=cythonize(our_modules))
+#setup(name = 'hw1', cmdclass = {'build_ext': build_ext}, ext_modules = our_modules)
