@@ -25,8 +25,7 @@ with open(fn_matmat, 'w+') as f:
 # define sizes for matrix multiplication
 sizes = [2**6, 2**10, 2**12]
 iter = range(len(sizes))
-Xlist = [np.ones((sizes[i],sizes[i]),dtype=np.float64) for i in iter]
-Ylist = [np.ones((sizes[i],sizes[i]),dtype=np.float64) for i in iter]
+matlist = [np.ones((sizes[i],sizes[i]),dtype=np.float64) for i in iter]
 
 # main multiplication loop
 for n in nthreads:
@@ -54,24 +53,23 @@ for n in nthreads:
         outmat = np.zeros((sizes[i],sizes[i]))
         operations_serial.append(2 * (i**3))
         
-        X = Xlist[i]
-        Y = Ylist[i]
+        X = matlist[i]
         
         # serial matrix multiplication (3 loops)
         start = time.time()
-        hw14.matMult_serial(X, Y, outmat, n)
+        hw14.matMult_serial(X, X, outmat, n)
         serial_time.append(time.time()-start)
         operations_serial.append((i**2)*((2*i)-1)) # operations n^2(2n-1) http://www2.hawaii.edu/~norbert/CompPhys/chapter10.pdf
         
         # serial matrix multiplication - DGEMM
         start = time.time()
-        dgemm(alpha=1.,a=X,b=Y)
+        dgemm(alpha=1.,a=X,b=X)
         dgemm_time.append(time.time()-start)
         operations_dgemm.append((i**2)*((2*i)-1)) # same number of operations as the serial 3-loop? https://software.intel.com/en-us/articles/a-simple-example-to-measure-the-performance-of-an-intel-mkl-function
         
         # naive dynamic parallel algorithm (no blocking)
         start = time.time()
-        hw14.matMult_naive(X, Y, outmat, n)
+        hw14.matMult_naive(X, X, outmat, n)
         parallel_time_naivedyn.append(time.time()-start)
         operations_naivedyn.append((i**2)*((2*i)-1)) # should be same number of operations as 3-loop serial
         
@@ -84,7 +82,7 @@ for n in nthreads:
         while (sizes[i] % chunk) > 0 :
             chunk -= 1
         start = time.time()
-        hw14.matMult_thread(X, Y, outmat, n, chunk)
+        hw14.matMult_thread(X, X, outmat, n, chunk)
         parallel_time_chunked.append(time.time() - start)
         operations_chunked.append((i**2)*((2*i)-1))
         
@@ -115,7 +113,7 @@ for n in nthreads:
                     step1[idx,jdx] = 2**25
                     step2[idx,jdx] = 2**25
         start = time.time()
-        hw14.matMult_block(X, Y, outmat, n, step1, step2, row)
+        hw14.matMult_block(X, X, outmat, n, step1, step2, row)
         parallel_time_block1.append(time.time() - start)
         operations_block1.append((i**2)*((2*i)-1))
         
@@ -128,7 +126,7 @@ for n in nthreads:
         divisions2 = np.array(np.repeat(divisions, repfact), dtype=np.intc)
         divisions1 = np.array((divisions * repfact), dtype=np.intc)
         start = time.time()
-        hw14.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
+        hw14.matMult_block2(X, X, outmat, n, divisions1, divisions2, row)
         parallel_time_block2.append(time.time() - start)
         operations_block2.append((i**2)*((2*i)-1))
 
@@ -141,7 +139,7 @@ for n in nthreads:
         divisions2 = np.array(np.repeat(divisions, repfact), dtype=np.intc)
         divisions1 = np.array((divisions * repfact), dtype=np.intc)
         start = time.time()
-        hw14opt.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
+        hw14opt.matMult_block2(X, X, outmat, n, divisions1, divisions2, row)
         parallel_time_block3.append(time.time() - start)
         operations_block3.append((i**2)*((2*i)-1))
         
