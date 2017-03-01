@@ -132,7 +132,7 @@ for n in nthreads:
     parallel_time_naivedyn.insert(0,"Parallel Naive Dynamic Times")
     parallel_time_chunked.insert(0,"Parallel Naive Chunked Times")
     parallel_time_block1.insert(0,"Parallel Block1 Times")
-    parallel_time_block2.insert(0,"Parallel Block1 Times")  
+    parallel_time_block2.insert(0,"Parallel Block2 Times")  
     serial_time.insert(1,n)
     dgemm_time.insert(1,n)
     parallel_time_naivedyn.insert(1,n)
