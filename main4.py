@@ -41,11 +41,12 @@ for n in nthreads:
     parallel_time_block2 = []
     parallel_time_block3 = []
     operations_serial = []
+    operations_dgemm = []
+    operations_naivedyn = []
     operations_chunked = []
     operations_block1 = []
     operations_block2 = []
     operations_block3 = []
-
     
     for i in iter:
         random.seed(5555)
@@ -58,16 +59,19 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_serial(X, Y, outmat, n)
         serial_time.append(time.time()-start)
+        operations_serial.append(111)
         
         # serial matrix multiplication - DGEMM
         start = time.time()
         dgemm(alpha=1.,a=X,b=Y)
         dgemm_time.append(time.time()-start)
+        operations_dgemm.append(222)
         
         # naive dynamic parallel algorithm (no blocking)
         start = time.time()
         hw14.matMult_serial(X, Y, outmat, n)
         parallel_time_naivedyn.append(time.time()-start)
+        operations_naivedyn.append(333)
         
         # chunked parallel algorithm (no blocking)
         outmat = np.zeros((sizes[i],sizes[i]))
@@ -161,16 +165,19 @@ for n in nthreads:
     parallel_time_block2.insert(1,n)
     parallel_time_block3.insert(1,n)
     operations_serial.insert(0, "Serial Operations")
+    operations_dgemm.insert(0, "DGEMM Operations")
+    operations_naivedyn.insert(0, "Parallel Naive Dynamic Operations")
     operations_chunked.insert(0, "Parallel Naive Chunked Operations")
     operations_block1.insert(0, "Parallel Block1 Operations")
     operations_block2.insert(0, "Parallel Block2 Operations")
     operations_block2.insert(0, "Parallel Block3 Operations")
     operations_serial.insert(1,n)
+    operations_dgemm.insert(1,n)
+    operations_naivedyn.insert(1,n)
     operations_chunked.insert(1,n)
     operations_block1.insert(1,n)
     operations_block2.insert(1,n)
     operations_block3.insert(1,n)
-
     
     # write results to csv
     with open(fn_matmat, 'a') as f:
@@ -183,8 +190,11 @@ for n in nthreads:
         writer.writerow([str(i) for i in parallel_time_block2])
         writer.writerow([str(i) for i in parallel_time_block3])
         writer.writerow([str(i) for i in operations_serial])
+        writer.writerow([str(i) for i in operations_dgemm])
+        writer.writerow([str(i) for i in operations_naivedyn])
         writer.writerow([str(i) for i in operations_chunked])
         writer.writerow([str(i) for i in operations_block1])
+        writer.writerow([str(i) for i in operations_block2])
         writer.writerow([str(i) for i in operations_block3])
         f.close()
 
