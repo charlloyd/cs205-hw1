@@ -145,6 +145,12 @@ for n in nthreads:
         parallel_time_block3.append(time.time() - start)
         operations_block3.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
         
+        print(serial_time)
+        print(dgemm_time)
+        print(parallel_time_block1)
+        print(parallel_time_block2)
+        print(parallel_time_block3)
+
     # prep before writing
     serial_time.insert(0,"Serial Times")
     dgemm_time.insert(0,"DGEMM Times")
