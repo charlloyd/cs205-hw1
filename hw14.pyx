@@ -6,69 +6,70 @@
 # distutils: extra_link_args = -fopenmp
 # distutils: language = c++
 
-
-
 from cython.parallel cimport parallel, prange, threadid
 from libc.stdlib cimport malloc, free
 import numpy as np
-
-
 
 ###########################
 # 4. matrix-matrix multiplication
 ###########################
 
+# serial matrix multiplication (3 loops)
 cpdef int matMult_serial(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads):
     cdef unsigned int N = X.shape[0]
     cdef unsigned int J = Y.shape[0]
     cdef unsigned int K = Y.shape[1]
     cdef unsigned int k, j, n
-
+    
     for n in range(N):
         for k in range(K):
             for j in range(J):
                 out[n,j] += X[n,j] * Y[j,k]
     return 0
 
+# naive dynamic parallel algorithm (no blocking)
 cpdef int matMult_naive(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads):
     cdef unsigned int N = X.shape[0]
     cdef unsigned int J = Y.shape[0]
     cdef unsigned int K = Y.shape[1]
     cdef size_t k, j, n
-
+    
     for n in prange(N, nogil=True, num_threads=nthreads, schedule='dynamic'):
         for k in range(K):
             for j in range(J):
                 out[n,j] += X[n,j] * Y[j,k]
     return 0
 
+# chunked parallel algorithm (no blocking)
 cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int chunk):
     cdef unsigned int N = X.shape[0]
     cdef unsigned int J = Y.shape[0]
     cdef unsigned int K = Y.shape[1]
     cdef size_t k, j, n
-
+    
     for n in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='static'):
         for k in range(K):
             for j in range(J):
                 out[n,k] += X[n,j] * Y[j,k]
     return 0
 
+# wrapper?
 cdef void reduce(double[::,::] out, double * C, int s, int t, int N, int stop) nogil:
     cdef size_t k,j
-
+    
     for k in range(N):
         for j in range(N):
             if (s+k < stop) & (t+j < stop):
                 out[s+k,t+j] += C[N*k + j]
-
+                
+# wrapper?
 cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::,::] step1, int[::,::] step2, int S, int chunk, int N, int J, int K):
     cdef size_t a, b, k, j, n, s,t
     cdef int tid
     cdef double *A
     cdef double *B
     cdef double *C
-
+    
     with nogil, parallel(num_threads = nthreads):
         tid = threadid()
         A = <double *>(malloc (10*J * chunk * sizeof(double)))
@@ -90,8 +91,8 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         free(A)
         free(B)
         free(C)
-
-
+        
+# Parallel algorithm with blocking
 def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::, ::] step1, int[::, ::] step2, int chunk):
     cdef int S = step1.shape[1]
     cdef int K = Y.shape[1]
@@ -104,17 +105,18 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
     cdef int[::,::] stepC1 = step1
     cdef int[::,::] stepC2 = step2
     cdef int chunkC = chunk
-
+    
     mmb(Xc, Yc, outC, nt, stepC1, stepC2, S, chunkC, N, J, K)
     return np.asarray(outC)
 
+# wrapper?
 cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::] step1, int[::] step2, int S, int chunk, int N, int J, int K):
     cdef size_t a, b, k, j, n, s,t
     cdef int tid
     cdef double *A
     cdef double *B
     cdef double *C
-
+    
     with nogil, parallel(num_threads = nthreads):
         tid = threadid()
         A = <double *>(malloc (10*J * chunk * sizeof(double)))
@@ -134,7 +136,8 @@ cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         free(A)
         free(B)
         free(C)
-
+        
+#Parallel algorithm with all cores working on same block        
 def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::] step1, int[::] step2, int chunk):
     cdef int S = step1.shape[1]
     cdef int K = Y.shape[1]
@@ -147,8 +150,6 @@ def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthr
     cdef int[::] stepC1 = step1
     cdef int[::] stepC2 = step2
     cdef int chunkC = chunk
-
+    
     mmb2(Xc, Yc, outC, nt, stepC1, stepC2, S, chunkC, N, J, K)
     return np.asarray(outC)
-
-
