@@ -51,7 +51,7 @@ for n in nthreads:
     for i in iter:
         print(sizes[i])
         random.seed(5555)
-        X = Y = outmat = np.zeros((sizes[i],sizes[i]))
+        #X = Y = outmat = np.zeros((sizes[i],sizes[i]))
         X = Y = np.ones((sizes[i],sizes[i]),dtype=np.float64)
         #Y = np.random.randn(sizes[i],sizes[i])
 
