@@ -55,7 +55,7 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
 
 # block-related wrapper: Yes. Does the reduction, in theory
 cdef void reduce(double[::,::] out, double * C, int s, int t, int N, int stop) nogil:
-    cdef size_t k,j
+    cdef int k,j
     
     for k in range(N):
         for j in range(N):
@@ -65,8 +65,8 @@ cdef void reduce(double[::,::] out, double * C, int s, int t, int N, int stop) n
 ### Parallel algorithm with blocking ###
 
 # block1 wrapper
-cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, unsigned int[::,::] step1, unsigned int[::,::] step2, int S, int chunk, int N, int J, int K):
-    cdef size_t a, b, k, j, n, s,t
+cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::,::] step1,  int[::,::] step2, int S, int chunk, int N, int J, int K):
+    cdef int a, b, k, j, n, s,t
     cdef int tid
     cdef double *A
     cdef double *B
@@ -95,7 +95,7 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         free(C)
         
 # block1 function
-def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, unsigned int[::, ::] step1, unsigned int[::, ::] step2, int chunk):
+def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::, ::] step1,  int[::, ::] step2, int chunk):
     cdef int S = step1.shape[1]
     cdef int K = Y.shape[1]
     cdef int N = X.shape[0]
@@ -104,8 +104,8 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
     cdef double[::,::] Yc = Y
     cdef double[::,::] outC = out
     cdef int nt = nthreads
-    cdef unsigned int[::,::] stepC1 = step1
-    cdef unsigned int[::,::] stepC2 = step2
+    cdef  int[::,::] stepC1 = step1
+    cdef  int[::,::] stepC2 = step2
     cdef int chunkC = chunk
     
     mmb(Xc, Yc, outC, nt, stepC1, stepC2, S, chunkC, N, J, K)
@@ -114,8 +114,8 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
 ### Parallel algorithm with all cores working on same block ###
 
 # block 2 wrapper 
-cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, unsigned int[::] step1, unsigned int[::] step2, unsigned int S, unsigned int chunk, int N, int J, int K):
-    cdef size_t a, b, k, j, n, s,t
+cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1, int[::] step2, int S,  int chunk, int N, int J, int K):
+    cdef int a, b, k, j, n, s,t
     cdef int tid
     cdef double *A
     cdef double *B
@@ -139,7 +139,7 @@ cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         free(B)
 
 # block2 function
-def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, unsigned int[::] step1, unsigned int[::] step2, int chunk):
+def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1,  int[::] step2, int chunk):
     cdef int S = step1.shape[1]
     cdef int K = Y.shape[1]
     cdef int N = X.shape[0]
@@ -148,9 +148,9 @@ def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthr
     cdef double[::,::] Yc = Y
     cdef double[::,::] outC = out
     cdef int nt = nthreads
-    cdef unsigned int[::] stepC1 = step1
-    cdef unsigned int[::] stepC2 = step2
-    cdef unsigned int chunkC = chunk
+    cdef  int[::] stepC1 = step1
+    cdef  int[::] stepC2 = step2
+    cdef  int chunkC = chunk
     
     mmb2(Xc, Yc, outC, nt, stepC1, stepC2, S, chunkC, N, J, K)
     return np.asarray(outC)
