@@ -22,23 +22,23 @@ with open(fn_matmat, 'w+') as f:
     writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
     f.close()
 
-# initialize variables
-start = []
-dgemm_time = []
-serial_time = []
-gflopsPerSec = []
-operations_serial = []
-operations_block = []
-operations_naive = []
-parallel_time_naive = []
-parallel_time_block = []
-
 # define sizes for matrix multiplication
 sizes = [2**6, 2**10, 2**16]
 iter = range(len(sizes))
 
 # main multiplication loop
 for n in nthreads:
+    
+    # initialize variables
+    dgemm_time = []
+    serial_time = []
+    gflopsPerSec = []
+    operations_serial = []
+    operations_block = []
+    operations_naive = []
+    parallel_time_naive = []
+    parallel_time_block = []
+    
     for i in iter:
         random.seed(5555)
         X = Y = outmat = np.zeros((sizes[i],sizes[i]))
@@ -46,16 +46,20 @@ for n in nthreads:
         X = np.random.randn(sizes[i],sizes[i])
         Y = np.random.randn(sizes[i],sizes[i])
 
-        # Linear comparison between dgemm and cython function (serial)
-        start = time.time()
-        dgemm(alpha=1.,a=X,b=Y)
-        dgemm_time.append(time.time()-start)
-        
+        # serial matrix multiplication (3 loops)
         start = time.time()
         hw14.matMult_serial(X, Y, outmat, n)
         serial_time.append(time.time()-start)
         
-        # Naive parallel algorithm without blocking
+        # serial matrix multiplication - DGEMM
+        start = time.time()
+        dgemm(alpha=1.,a=X,b=Y)
+        dgemm_time.append(time.time()-start)
+        
+        # naive dynamic parallel algorithm (no blocking)
+        
+        
+        # chunked parallel algorithm (no blocking)
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
         chunk = int(round(((sizes[i]**2))//(row**2)))
@@ -99,7 +103,7 @@ for n in nthreads:
         parallel_time_block.append(time.time() - start)
         operations_block.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
         
-        #Parallel algorithm with all cores working on same block
+        # Parallel algorithm with all cores working on same block
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
         chunk = int(round(((sizes[i]**2))//(row**2)))
