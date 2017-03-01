@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import hw14
-import hw14opt
+#import hw14opt
 import time
 import csv
 import math
@@ -23,7 +23,7 @@ with open(fn_matmat, 'w+') as f:
     f.close()
 
 # define sizes for matrix multiplication
-sizes = [2**6,]# 2**10 2**16]
+sizes = [2**2, 2**3]# 2**10 2**16]
 iter = range(len(sizes))
 
 # main multiplication loop
@@ -51,7 +51,6 @@ for n in nthreads:
     for i in iter:
         random.seed(5555)
         X = Y = outmat = np.zeros((sizes[i],sizes[i]))
-        operations_serial.append(2 * (i**3))
         X = Y = np.ones((sizes[i],sizes[i]),dtype=np.float64)
         #Y = np.random.randn(sizes[i],sizes[i])
 
@@ -59,22 +58,19 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_serial(X, Y, outmat, n)
         serial_time.append(time.time()-start)
-        operations_serial.append((i**2)*((2*i)-1))
-        # operations n^2(2n-1) http://www2.hawaii.edu/~norbert/CompPhys/chapter10.pdf
+        operations_serial.append((i**2)*((2*i)-1)) # operations n^2(2n-1) http://www2.hawaii.edu/~norbert/CompPhys/chapter10.pdf
         
         # serial matrix multiplication - DGEMM
         start = time.time()
         dgemm(alpha=1.,a=X,b=Y)
         dgemm_time.append(time.time()-start)
-        operations_dgemm.append((i**2)*((2*i)-1))
-        # same number of operations as the serial 3-loop? https://software.intel.com/en-us/articles/a-simple-example-to-measure-the-performance-of-an-intel-mkl-function
+        operations_dgemm.append((i**2)*((2*i)-1)) # same number of operations as the serial 3-loop? https://software.intel.com/en-us/articles/a-simple-example-to-measure-the-performance-of-an-intel-mkl-function
         
         # naive dynamic parallel algorithm (no blocking)
         start = time.time()
         hw14.matMult_naive(X, Y, outmat, n)
         parallel_time_naivedyn.append(time.time()-start)
-        operations_naivedyn.append((i**2)*((2*i)-1))
-        # should be same number of operations as 3-loop serial
+        operations_naivedyn.append((i**2)*((2*i)-1)) # should be same number of operations as 3-loop serial
         
         # chunked parallel algorithm (no blocking)
         outmat = np.zeros((sizes[i],sizes[i]))
