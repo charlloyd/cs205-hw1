@@ -95,7 +95,7 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         free(C)
         
 # block1 function
-def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::, ::] step1, int[::, ::] step2, int chunk):
+def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, unsigned int[::, ::] step1, unsigned int[::, ::] step2, int chunk):
     cdef int S = step1.shape[1]
     cdef int K = Y.shape[1]
     cdef int N = X.shape[0]
@@ -139,7 +139,7 @@ cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         free(B)
 
 # block2 function
-def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, int[::] step1, int[::] step2, int chunk):
+def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads, unsigned int[::] step1, unsigned int[::] step2, int chunk):
     cdef int S = step1.shape[1]
     cdef int K = Y.shape[1]
     cdef int N = X.shape[0]
