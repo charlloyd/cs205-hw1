@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import hw14
+import hw14opt
 import time
 import csv
 import math
@@ -38,10 +39,12 @@ for n in nthreads:
     parallel_time_chunked = []
     parallel_time_block1 = []
     parallel_time_block2 = []
+    parallel_time_block3 = []
     operations_serial = []
     operations_chunked = []
     operations_block1 = []
     operations_block2 = []
+    operations_block3 = []
 
     
     for i in iter:
@@ -125,6 +128,22 @@ for n in nthreads:
         hw14.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
         parallel_time_block2.append(time.time() - start)
         operations_block2.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
+
+        # Parallel algorithm with all cores working on same block
+        outmat = np.zeros((sizes[i],sizes[i]))
+        row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
+        chunk = int(round(((sizes[i]**2))//(row**2)))
+        if chunk < n:
+            chunk = n
+            row = int(np.ceil(np.sqrt(sizes[i]**2/n)))  
+        repfact = len(range(0,sizes[i],row))
+        divisions = [t for t in range(0,sizes[i],row)]
+        divisions2 = np.array(np.repeat(divisions, repfact), dtype=np.intc)
+        divisions1 = np.array((divisions * repfact), dtype=np.intc)
+        start = time.time()
+        hw14opt.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
+        parallel_time_block3.append(time.time() - start)
+        operations_block3.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
         
     # prep before writing
     serial_time.insert(0,"Serial Times")
@@ -132,21 +151,26 @@ for n in nthreads:
     parallel_time_naivedyn.insert(0,"Parallel Naive Dynamic Times")
     parallel_time_chunked.insert(0,"Parallel Naive Chunked Times")
     parallel_time_block1.insert(0,"Parallel Block1 Times")
-    parallel_time_block2.insert(0,"Parallel Block2 Times")  
+    parallel_time_block2.insert(0,"Parallel Block2 Times")
+    parallel_time_block3.insert(0,"Parallel Block3 Times")
     serial_time.insert(1,n)
     dgemm_time.insert(1,n)
     parallel_time_naivedyn.insert(1,n)
     parallel_time_chunked.insert(1,n)
     parallel_time_block1.insert(1,n)
     parallel_time_block2.insert(1,n)
+    parallel_time_block3.insert(1,n)
     operations_serial.insert(0, "Serial Operations")
     operations_chunked.insert(0, "Parallel Naive Chunked Operations")
     operations_block1.insert(0, "Parallel Block1 Operations")
-    operations_block2.insert(0, "Parallel Block2 Operations")  
+    operations_block2.insert(0, "Parallel Block2 Operations")
+    operations_block2.insert(0, "Parallel Block3 Operations")
     operations_serial.insert(1,n)
     operations_chunked.insert(1,n)
     operations_block1.insert(1,n)
     operations_block2.insert(1,n)
+    operations_block3.insert(1,n)
+
     
     # write results to csv
     with open(fn_matmat, 'a') as f:
@@ -157,10 +181,11 @@ for n in nthreads:
         writer.writerow([str(i) for i in parallel_time_chunked])
         writer.writerow([str(i) for i in parallel_time_block1])
         writer.writerow([str(i) for i in parallel_time_block2])
+        writer.writerow([str(i) for i in parallel_time_block3])
         writer.writerow([str(i) for i in operations_serial])
         writer.writerow([str(i) for i in operations_chunked])
         writer.writerow([str(i) for i in operations_block1])
-        writer.writerow([str(i) for i in operations_block2])
+        writer.writerow([str(i) for i in operations_block3])
         f.close()
 
 exit()

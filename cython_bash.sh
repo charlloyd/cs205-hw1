@@ -3,9 +3,9 @@
 #SBATCH -o p.out
 #SBATCH -e p.err
 #SBATCH -p general
-#SBATCH -t 120
+#SBATCH -t 200
 #SBATCH -c 64
-#SBATCH --mem-per-cpu=2000
+#SBATCH --mem-per-cpu=2500
 
 ## Load software ##
 module load python/3.4.1-fasrc01
@@ -16,5 +16,5 @@ module load gcc/6.2.0-fasrc01
 ## EXECUTE CODE ##
 python setup.py build_ext --inplace
 
-#python main3.py
+python main3.py
 python main4.py
