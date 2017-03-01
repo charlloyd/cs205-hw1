@@ -124,9 +124,6 @@ for n in nthreads:
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
         chunk = int(round(((sizes[i]**2))//(row**2)))
-        if chunk < n:
-            chunk = n
-            row = int(np.ceil(np.sqrt(sizes[i]**2/n)))  
         repfact = len(range(0,sizes[i],row))
         divisions = [t for t in range(0,sizes[i],row)]
         divisions2 = np.array(np.repeat(divisions, repfact), dtype=np.intc)
@@ -140,9 +137,6 @@ for n in nthreads:
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
         chunk = int(round(((sizes[i]**2))//(row**2)))
-        if chunk < n:
-            chunk = n
-            row = int(np.ceil(np.sqrt(sizes[i]**2/n)))  
         repfact = len(range(0,sizes[i],row))
         divisions = [t for t in range(0,sizes[i],row)]
         divisions2 = np.array(np.repeat(divisions, repfact), dtype=np.intc)
