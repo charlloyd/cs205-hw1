@@ -68,8 +68,8 @@ cdef void reduce(double[::,::] out, double *C, int s, int t, int N, int stop) no
 cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::,::] step1,  int[::,::] step2, int S, int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
     cdef int tid
-    cdef double* buf1 = <double*>(malloc (J * chunk * sizeof(double)))
-    cdef double* buf2 = <double*>(malloc (chunk * chunk * sizeof(double)))
+    cdef double* buf1 = <double*>(malloc (nthreads * J * chunk * sizeof(double)))
+    cdef double* buf2 = <double*>(malloc (nthreads * chunk * chunk * sizeof(double)))
     cdef double* A
     cdef double* B
     cdef double* C
@@ -116,7 +116,7 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
 cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1, int[::] step2, int S,  int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
     cdef int tid
-    cdef double* buf = <double*>(malloc (J * chunk * sizeof(double)))
+    cdef double* buf = <double*>(malloc (nthreads * J * chunk * sizeof(double)))
     cdef double* A
     cdef double* B
     with nogil, parallel(num_threads = nthreads):
