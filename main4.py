@@ -57,7 +57,7 @@ for n in nthreads:
         
         X = Xlist[i]
         Y = Ylist[i]
-
+        
         # serial matrix multiplication (3 loops)
         start = time.time()
         hw14.matMult_serial(X, Y, outmat, n)
@@ -87,7 +87,7 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_thread(X, Y, outmat, n, chunk)
         parallel_time_chunked.append(time.time() - start)
-        operations_chunked.append(4 * (i**3)/chunk + 2* (i**2)/chunk)
+        operations_chunked.append((i**2)*((2*i)-1))
         
         # Parallel algorithm with blocking
         outmat = np.zeros((sizes[i],sizes[i]))
@@ -118,7 +118,7 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_block(X, Y, outmat, n, step1, step2, row)
         parallel_time_block1.append(time.time() - start)
-        operations_block1.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
+        operations_block1.append((i**2)*((2*i)-1))
         
         # Parallel algorithm with all cores working on same block
         outmat = np.zeros((sizes[i],sizes[i]))
@@ -131,7 +131,7 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
         parallel_time_block2.append(time.time() - start)
-        operations_block2.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
+        operations_block2.append((i**2)*((2*i)-1))
 
         # Parallel algorithm with all cores working on same block
         outmat = np.zeros((sizes[i],sizes[i]))
@@ -144,7 +144,7 @@ for n in nthreads:
         start = time.time()
         hw14opt.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
         parallel_time_block3.append(time.time() - start)
-        operations_block3.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
+        operations_block3.append((i**2)*((2*i)-1))
         
         print(serial_time)
         print(dgemm_time)
