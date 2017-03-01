@@ -3,15 +3,15 @@
 #SBATCH -o p.out
 #SBATCH -e p.err
 #SBATCH -p general
-#SBATCH -t 30
+#SBATCH -t 120
 #SBATCH -c 64
-#SBATCH --mem-per-cpu=3000
+#SBATCH --mem-per-cpu=2000
 
 ## Load software ##
 module load python/3.4.1-fasrc01
 module load legacy/0.0.1-fasrc01
 module load centos6/cython-0.20_python-3.3.2
-module load gcc/6.2.0-fasrc01 openmpi/2.0.1-fasrc01
+module load gcc/6.2.0-fasrc01
 
 ## EXECUTE CODE ##
 python setup.py build_ext --inplace

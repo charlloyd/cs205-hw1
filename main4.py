@@ -29,6 +29,7 @@ serial_time = []
 gflopsPerSec = []
 operations_serial = []
 operations_block = []
+operations_naive = []
 parallel_time_naive = []
 parallel_time_block = []
     
@@ -36,13 +37,11 @@ for n in nthreads:
     for i in iter:
         random.seed(5555)
         X = Y = outmat = np.zeros((sizes[i],sizes[i]))
-        
+
         operations_serial.append(2 * (i**3))
-        
-        for j in range(X.shape[0]):
-            for k in range(X.shape[1]):
-                X[j,k] = random.gauss(0,1)
-                  Y[j,k] = random.gauss(0,1)
+
+        X = np.random.randn(sizes[i],sizes[i])
+        Y = np.random.randn(sizes[i],sizes[i])
 
         # Linear comparison between dgemm and cython function
         start = time.time()
@@ -55,19 +54,25 @@ for n in nthreads:
         
         #Naive parallel algorithm without blocking
         outmat = np.zeros((sizes[i],sizes[i]))
-        row = round(23*100*1000 / 8/(sizes[i]/2))
-        chunk = (2*(sizes[i]**2))/(row**2)
-        if chunk < n:
-            chunk = n
+        row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
+        chunk = int(round(((sizes[i]**2))//(row**2)))
+        if chunk ==0:
+            chunk = 1
+        while (sizes[i] % chunk) > 0 :
+            chunk -= 1
         start = time.time()
         hw14.matMult_thread(X, Y, outmat, n, chunk)
         parallel_time_naive.append(time.time() - start)
         operations_naive.append(4 * (i**3)/chunk + 2* (i**2)/chunk)
         
-        #Naive parallel algorithm with blocking
+        #Parallel algorithm with blocking
         outmat = np.zeros((sizes[i],sizes[i]))
-        row = round(23*100*1000 / 8/(sizes[i]/2))
-        chunk = round(((sizes[i]**2))//(row**2))
+        row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
+        chunk = int(round(((sizes[i]**2))//(row**2)))
+        if chunk ==0:
+            chunk = 1
+        while (sizes[i] % chunk) > 0 :
+            chunk -= 1
         if chunk < n:
             chunk = n
             row = int(np.ceil(np.sqrt(sizes[i]**2/n)))
@@ -90,6 +95,24 @@ for n in nthreads:
         hw14.matMult_block(X, Y, outmat, n, step1, step2, row)
         parallel_time_block.append(time.time() - start)
         operations_block.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
+                     
+        #Parallel algorithm with all cores working on same block
+        outmat = np.zeros((sizes[i],sizes[i]))
+        row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
+        chunk = int(round(((sizes[i]**2))//(row**2)))
+        if chunk < n:
+            chunk = n
+            row = int(np.ceil(np.sqrt(sizes[i]**2/n)))
+
+        repfact = len(range(0,sizes[i],row))
+        divisions = [t for t in range(0,sizes[i],row)]
+        divisions2 = np.repeat(divisions, repfact)
+        divisions1 = (divisions * repfact)
+        start = time.time()
+        hw14.matMult_block2(X, Y, outmat, n, divisions1, divisions2, row)
+        parallel_time_block.append(time.time() - start)
+        operations_block.append(4 * (i**3)/chunk + 2* (i**2)/chunk )
+
 
 
     serial_time.insert(0,"Serial Times")
