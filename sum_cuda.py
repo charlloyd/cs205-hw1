@@ -15,7 +15,7 @@ mod = SourceModule("""
     
     __global__ void parallel_sum_gpu(float *in_data) {
         extern __shared__ float data[];
-        unsigned int tid = threadIdx.x;
+        unsigned int tid = threadIdx.x + threadIdx.y;
         
         data[tid] = in_data[tid];
         __syncthreads();
@@ -49,15 +49,15 @@ myarray = []
 
 for i in range(len(sizes)):
 myarray = np.ones((sizes[i],), dtype=np.int_)
-in_data = myarray.astype(np.float32)
+myarray = myarray.astype(np.float32)
 myarray_sum = np.empty_like(myarray)
 
 
-myarray_gpu = cuda.mem_alloc(2*myarray.nbytes)
-cuda.memcpy_htod(myarray_gpu, in_data)
+myarray_gpu = cuda.mem_alloc(myarray.nbytes)
+cuda.memcpy_htod(myarray_gpu, myarray)
 #cuda.memcpy_htod(myarray_gpu, myarray_sum)
 start = time.time()
-func(myarray_gpu, block=(1024,1,1))
+func(myarray_gpu, block=(64,1,1))
 cuda.memcpy_dtoh(myarray_sum, myarray_gpu)
 parallel_timings_gpu.append(time.time()-start)
 print(myarray_sum)
