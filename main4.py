@@ -65,7 +65,7 @@ for n in nthreads:
         start = time.time()
         dgemm(alpha=1.,a=X,b=Y)
         dgemm_time.append(time.time()-start)
-        operations_dgemm.append(222)
+        operations_dgemm.append(2*(i**3))
         
         # naive dynamic parallel algorithm (no blocking)
         start = time.time()
