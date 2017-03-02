@@ -73,9 +73,9 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
 
     with nogil, parallel(num_threads = nthreads):
         tid = threadid()
-        A = <double*>(malloc (100 * J * chunk * sizeof(double)))
-        B = <double*>(malloc (100 * J * chunk * sizeof(double)))
-        C = <double*>(malloc (100 * chunk * chunk * sizeof(double)))
+        A = <double*>(malloc (N * J * chunk * sizeof(double)))
+        B = <double*>(malloc (N * J * chunk * sizeof(double)))
+        C = <double*>(malloc (N * chunk * chunk * sizeof(double)))
         for s in range(S):
             for a in range(chunk):
                 if ((a + step1[tid,s]) < N) & ((a + step2[tid,s])<K):
@@ -116,19 +116,21 @@ cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
     cdef int a, b, k, j, n, s,t
     cdef double* A
     cdef double* B
+    cdef double* c
     with nogil, parallel(num_threads = nthreads):
         A = <double*>(malloc (N * J * chunk * sizeof(double)))
         B = <double*>(malloc (N * J * chunk * sizeof(double)))
+        C = <double [chunk, chunk]>(malloc (chunk * chunk * sizeof(double)))
         for s in range(S):
-            for a in range(chunk):
-                if ((a + step1[s]) < N) & ((a + step2[s])<K):
-                    for b in range(J):
+            for a in range(0,chunk):
+                for b in range(0,J):
+                    if ((a + step1[s]) < N) & ((a + step2[s])<K):
                         A[a*J + b] = X[a + step1[s], b]
                         B[a*J + b] = Y[b, a + step2[s]]
-            for k in range(chunk):
-                for j in range(chunk):
+            for k in range(0,chunk):
+                for j in range(0,chunk):
                     if ((k + step1[s]) < N) & ((j + step2[s])<K):
-                        for t in prange(J):
+                        for t in prange(0,J):
                             out[k + step1[s], j + step2[s]] += A[k*J + t] * B[j*J + t]
         free(A)
         free(B)
