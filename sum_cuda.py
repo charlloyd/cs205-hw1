@@ -13,11 +13,12 @@ mod = SourceModule("""
         a[idx] *= 2;
     }
     
-    __global__ void parallel_sum_gpu(float *in_data) {
+    __global__ void parallel_sum_gpu(float *in_data, float *out_data) {
         extern __shared__ float data[];
-        unsigned int tid = threadIdx.x + threadIdx.y;
+        unsigned int i = blockIdx.x*blockDim.x + threadIdx.x
+        unsigned int tid = threadIdx.x;
         
-        data[tid] = in_data[tid];
+        data[tid] = in_data[i];
         __syncthreads();
         
         for (unsigned int s=blockDim.x/2; s>32; s>>=1) {
@@ -36,29 +37,30 @@ mod = SourceModule("""
             data[tid] += data[tid + 1];
         }
     
-        if (tid == 0) in_data[0] = data[0];
+        if (tid == 0) out_data[blockIdx.x] = data[0];
     }
     """)
 
 func = mod.get_function("parallel_sum_gpu")
+#func = mod.get_function("doublify")
 
 
 parallel_timings_gpu = []
 start = 0
 myarray = []
 
-for i in range(len(sizes)):
+#for i in range(len(sizes)):
+i=0
 myarray = np.ones((sizes[i],), dtype=np.int_)
-myarray = myarray.astype(np.float32)
-myarray_sum = np.empty_like(myarray)
+in_data = myarray.astype(np.float32)
+out_sum = np.empty_like(in_data)
 
 
-myarray_gpu = cuda.mem_alloc(myarray.nbytes)
-cuda.memcpy_htod(myarray_gpu, myarray)
-#cuda.memcpy_htod(myarray_gpu, myarray_sum)
+in_data_gpu = cuda.mem_alloc(in_data.nbytes)
+cuda.memcpy_htod(in_data_gpu, in_data)
 start = time.time()
-func(myarray_gpu, block=(64,1,1))
-cuda.memcpy_dtoh(myarray_sum, myarray_gpu)
+func(in_data_gpu, block=(64,1,1), grid=(1,1,1))
+cuda.memcpy_dtoh(out_sum, in_data_gpu)
 parallel_timings_gpu.append(time.time()-start)
 print(myarray_sum)
 
