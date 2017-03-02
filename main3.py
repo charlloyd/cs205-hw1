@@ -116,7 +116,7 @@ for n in nthreads:
 
 ### MATRIX VECTOR MULTIPLICATION ###
 # re-define sizes
-sizes = [2**6, 2**10]#, 2**16]
+sizes = [2**6, 2**10, 2**16]
 iter = range(len(sizes))
 
 veclist = [np.ones((sizes[i],), dtype=np.float64) for i in iter]
