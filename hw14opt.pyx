@@ -147,5 +147,5 @@ def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthr
     cdef  int chunkC = chunk
     cdef temp
     
-    temp = mmb2(Xc, Yc, out, nt, stepC1, stepC2, S, chunkC, N, J, K)
+    mmb2(Xc, Yc, out, nt, stepC1, stepC2, S, chunkC, N, J, K)
     return out
