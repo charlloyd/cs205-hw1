@@ -14,6 +14,7 @@ from scipy.linalg.blas import dgemm
 
 # set number of threads
 nthreads = [2, 4, 8, 16, 32]#, 64]
+nthreads = [2]
 
 # over-write files
 fn_matmat = "matmat.csv"
@@ -23,7 +24,7 @@ with open(fn_matmat, 'w+') as f:
     f.close()
 
 # define sizes for matrix multiplication
-sizes = [2**6, 2**10, 2**12]
+sizes = [2**6, 2**10]#, 2**12]
 iter = range(len(sizes))
 matlist = [np.ones((sizes[i],sizes[i]),dtype=np.float64) for i in iter]
 
@@ -86,40 +87,36 @@ for n in nthreads:
         operations_chunked.append((sizes[i]**2)*((2*sizes[i])-1))
         
         # Parallel algorithm with blocking
-outmat = np.zeros((sizes[i],sizes[i]))
-row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
-chunk = int(round(((sizes[i]**2))//(row**2)))
-if chunk ==0:
-    chunk = 1
+        outmat = np.zeros((sizes[i],sizes[i]))
+        row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
+        chunk = int(round(((sizes[i]**2))//(row**2)))
+        if chunk ==0:
+            chunk = 1
+        while (sizes[i] % chunk) > 0 :
+            chunk -= 1
+        if chunk < n:
+            chunk = n
+            row = int(np.ceil(np.sqrt(sizes[i]**2/n)))
+        repfact = len(range(0,sizes[i],row))
+        step1 = step2 = np.zeros((n,int(np.ceil(repfact**2/n))), dtype=np.intc)
+        divisions = [t for t in range(0,sizes[i],row)]
+        divisions2 = np.repeat(divisions, repfact)
+        divisions1 = (divisions * repfact)
+        count =  0
+        for jdx in range(step1.shape[1]):
+            for idx in range(step1.shape[0]):
+                if count < divisions2.shape[0]:
+                    step1[idx,jdx] = divisions1[count]
+                    step2[idx,jdx] = divisions2[count]
+                    count += 1
+                else:
+                    step1[idx,jdx] = 2**25
+                    step2[idx,jdx] = 2**25
+        start = time.time()
+        hw14.matMult_block(X, X, outmat, n, step1, step2, row)
+        parallel_time_block1.append(time.time() - start)
+        operations_block1.append((sizes[i]**2)*((2*sizes[i])-1))
 
-while (sizes[i] % chunk) > 0 :
-    chunk -= 1
-
-if chunk < n:
-    chunk = n
-    row = int(np.ceil(np.sqrt(sizes[i]**2/n)))
-
-repfact = len(range(0,sizes[i],row))
-step1 = step2 = np.zeros((n,int(np.ceil(repfact**2/n))), dtype=np.intc)
-divisions = [t for t in range(0,sizes[i],row)]
-divisions2 = np.repeat(divisions, repfact)
-divisions1 = (divisions * repfact)
-count =  0
-for jdx in range(step1.shape[1]):
-    for idx in range(step1.shape[0]):
-        if count < divisions2.shape[0]:
-            step1[idx,jdx] = divisions1[count]
-            step2[idx,jdx] = divisions2[count]
-            count += 1
-        else:
-            step1[idx,jdx] = 2**25
-            step2[idx,jdx] = 2**25
-
-start = time.time()
-hw14.matMult_block(X, X, outmat, n, step1, step2, row)
-parallel_time_block1.append(time.time() - start)
-operations_block1.append((sizes[i]**2)*((2*sizes[i])-1))
-    
         # Parallel algorithm with all cores working on same block
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
