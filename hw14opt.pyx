@@ -112,29 +112,25 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
 
 ### Parallel algorithm with all cores working on same block ###
 # block 2 function
-cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1, int[::] step2, int S,  int chunk, int N, int J, int K):
+cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1, int[::] step2, int S,  int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
-    cdef double* A
-    cdef double* B
-    cdef double* c
-    with nogil, parallel(num_threads = nthreads):
-        A = <double*>(malloc (N * J * chunk * sizeof(double)))
-        B = <double*>(malloc (N * J * chunk * sizeof(double)))
-        C = <double [chunk, chunk]>(malloc (chunk * chunk * sizeof(double)))
-        for s in range(S):
-            for a in range(0,chunk):
-                for b in range(0,J):
-                    if ((a + step1[s]) < N) & ((a + step2[s])<K):
-                        A[a*J + b] = X[a + step1[s], b]
-                        B[a*J + b] = Y[b, a + step2[s]]
-            for k in range(0,chunk):
-                for j in range(0,chunk):
+    cdef double* A = <double*>(malloc (J * chunk * sizeof(double)))
+    cdef double* B = <double*>(malloc (J * chunk * sizeof(double)))
+
+    for s in range(S):
+        for a in range(0,chunk):
+            for b in range(0,J):
+                if ((a + step1[s]) < N) & ((a + step2[s])<K):
+                    A[a*J + b] = X[a + step1[s], b]
+                    B[a*J + b] = Y[b, a + step2[s]]
+        with nogil, parallel(num_threads=nthreads):
+            for k in range(chunk):
+                for j in range(chunk):
                     if ((k + step1[s]) < N) & ((j + step2[s])<K):
-                        for t in prange(0,J):
+                        for t in prange(J):
                             out[k + step1[s], j + step2[s]] += A[k*J + t] * B[j*J + t]
-        free(A)
-        free(B)
-    return 0
+    free(A)
+    free(B)
 
 # block2 wrapper
 def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1,  int[::] step2, int chunk):
