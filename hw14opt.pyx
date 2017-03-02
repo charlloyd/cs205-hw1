@@ -73,9 +73,9 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
 
     with nogil, parallel(num_threads = nthreads):
         tid = threadid()
-        A = <double*>(malloc (100 * J * chunk * sizeof(double)))
-        B = <double*>(malloc (100 * J * chunk * sizeof(double)))
-        C = <double*>(malloc (100 * chunk * chunk * sizeof(double)))
+        A = <double*>(malloc (N * J * chunk * sizeof(double)))
+        B = <double*>(malloc (N * J * chunk * sizeof(double)))
+        C = <double*>(malloc (N * chunk * chunk * sizeof(double)))
         for s in range(S):
             for a in range(chunk):
                 if ((a + step1[tid,s]) < N) & ((a + step2[tid,s])<K):
