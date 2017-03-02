@@ -24,7 +24,7 @@ with open(fn_matvec, 'w+') as f:
     f.close()
 
 # set number of threads
-nthreads = [2, 4, 8, 16, 32, 64]
+nthreads = [2, 4, 8, 16, 32]#, 64]
 sizes =  [2**6, 2**10, 2**20]# 2**32]
 iter = range(len(sizes))
 arraylist = [np.ones((sizes[i],), dtype=np.int_) for i in iter]
@@ -116,7 +116,7 @@ for n in nthreads:
 
 ### MATRIX VECTOR MULTIPLICATION ###
 # re-define sizes
-sizes = [2**6, 2**10, 2**16]
+sizes = [2**6, 2**10]#, 2**16]
 iter = range(len(sizes))
 
 veclist = [np.ones((sizes[i],), dtype=np.float64) for i in iter]

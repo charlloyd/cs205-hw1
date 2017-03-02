@@ -62,9 +62,8 @@ cdef void reduce(double[::,::] out, double *C, int s, int t, int N, int stop) no
             if (s+k < stop) & (t+j < stop):
                 out[s+k,t+j] += C[N*k + j]
                 
-### Parallel algorithm with blocking ###
-
-# block1 wrapper
+### Parallel algorithm with blocking loading separate block in each thread?###
+# block1 function
 cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::,::] step1,  int[::,::] step2, int S, int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
     cdef int tid
@@ -74,9 +73,9 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
 
     with nogil, parallel(num_threads = nthreads):
         tid = threadid()
-        A = <double*>(malloc (N * J * chunk * sizeof(double)))
-        B = <double*>(malloc (N * J * chunk * sizeof(double)))
-        C = <double*>(malloc (N * chunk * chunk * sizeof(double)))
+        A = <double*>(malloc (100 * J * chunk * sizeof(double)))
+        B = <double*>(malloc (100 * J * chunk * sizeof(double)))
+        C = <double*>(malloc (100 * chunk * chunk * sizeof(double)))
         for s in range(S):
             for a in range(chunk):
                 if ((a + step1[tid,s]) < N) & ((a + step2[tid,s])<K):
@@ -94,7 +93,7 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         free(B)
         free(C)
         
-# block1 function
+# block1 wrapper
 def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::, ::] step1,  int[::, ::] step2, int chunk):
     cdef int S = step1.shape[1]
     cdef int K = Y.shape[1]
@@ -112,8 +111,7 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
     return np.asarray(outC)
 
 ### Parallel algorithm with all cores working on same block ###
-
-# block 2 wrapper 
+# block 2 function
 cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1, int[::] step2, int S,  int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
     cdef double* A
@@ -136,7 +134,7 @@ cdef int mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         free(B)
     return 0
 
-# block2 function
+# block2 wrapper
 def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1,  int[::] step2, int chunk):
     cdef int S = step1.shape[1]
     cdef int K = Y.shape[1]
