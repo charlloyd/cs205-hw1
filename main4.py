@@ -23,7 +23,7 @@ with open(fn_matmat, 'w+') as f:
     f.close()
 
 # define sizes for matrix multiplication
-sizes = [2**6, 2**10, 2**12]
+sizes = [2**6, 2**10]#, 2**12]
 iter = range(len(sizes))
 matlist = [np.ones((sizes[i],sizes[i]),dtype=np.float64) for i in iter]
 
