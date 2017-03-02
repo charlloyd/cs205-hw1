@@ -15,27 +15,32 @@ mod = SourceModule("""
     
     __global__ void parallel_sum_gpu(float *in_data, float *out_data) {
         extern __shared__ float data[];
-        unsigned int tid = blockIdx.x *blockDim.x + threadIdx.x;
-        unsigned int i = threadIdx.x;
+        unsigned int tid = threadIdx.y * blockDim.x + threadIdx.x;
 
-        data[i] = in_data[tid];
-        
-        for (unsigned int s=blockDim.x/2; s>32; s>>=1) {
+        data[tid] = in_data[tid];
+        __syncthreads();
+
+
+        for (unsigned int s=(blockDim.x*blockDim.y)/2; s>32; s>>=1) {
             if (tid < s) {
                 data[tid] += data[tid + s];
             }
             __syncthreads();
         }
-        
         if (tid < 32) {
             data[tid] += data[tid + 32];
+            __syncthreads();
             data[tid] += data[tid + 16];
+            __syncthreads();
             data[tid] += data[tid + 8];
+            __syncthreads();
             data[tid] += data[tid + 4];
+            __syncthreads();
             data[tid] += data[tid + 2];
+            __syncthreads();
             data[tid] += data[tid + 1];
         }
-    
+        
         if (tid == 0) out_data[blockIdx.x] = data[0];
     }
     
@@ -77,7 +82,7 @@ parallel_timings_gpu.append(time.time()-start)
 print(out_data)
 
 
-i=0
+i=1
 myarray = np.ones((sizes[i],), dtype=np.int_)
 in_data = myarray.astype(np.float32)
 out_data = np.zeros((sizes[i],), dtype=np.float32)
@@ -92,7 +97,7 @@ cuda.memcpy_htod(out_data_gpu, out_data)
 #cuda.memcpy_htod(N_gpu, N)
 
 start = time.time()
-func(in_data_gpu, out_data_gpu, block=(sizes[i],1,1), grid=(1,1,1), shared=in_data.nbytes*sizes[i])
+func(in_data_gpu, out_data_gpu, block=(512,2,1), grid=(1,1,1), shared=(in_data.nbytes))
 cuda.memcpy_dtoh(out_data, out_data_gpu)
 parallel_timings_gpu.append(time.time()-start)
 print(out_data)

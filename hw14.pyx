@@ -118,7 +118,7 @@ cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads
     cdef double* B = <double*>(malloc (J * chunk * sizeof(double)))
 
     for s in range(S):
-        for a in range(0,chunk):
+        for a in prange(0,chunk):
             for b in range(0,J):
                 if ((a + step1[s]) < N) & ((a + step2[s])<K):
                     A[a*J + b] = X[a + step1[s], b]
