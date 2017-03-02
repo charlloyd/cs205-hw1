@@ -13,17 +13,17 @@ from scipy.linalg.blas import dgemm
 ###########################
 
 # set number of threads
-nthreads = [2, 4, 8, 16, 32, 64]
+nthreads = [2, 4, 8, 16, 32]#, 64]
 
 # over-write files
 fn_matmat = "matmat.csv"
 with open(fn_matmat, 'w+') as f:
     writer = csv.writer(f, delimiter = ',')
-    writer.writerow(['Algorithm','p','2^6','2^10','2^16','thingy'])
+    writer.writerow(['Algorithm','p','2^6','2^10','2^12','thingy'])
     f.close()
 
 # define sizes for matrix multiplication
-sizes = [2**6, 2**10]#, 2**12]
+sizes = [2**6, 2**10, 2**12]
 iter = range(len(sizes))
 matlist = [np.ones((sizes[i],sizes[i]),dtype=np.float64) for i in iter]
 
