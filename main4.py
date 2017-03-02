@@ -58,19 +58,19 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_serial(X, X, outmat, n)
         serial_time.append(time.time()-start)
-        operations_serial.append((i**2)*((2*i)-1)) # operations n^2(2n-1) http://www2.hawaii.edu/~norbert/CompPhys/chapter10.pdf
+        operations_serial.append((sizes[i]**2)*((2*sizes[i])-1)) # operations n^2(2n-1) http://www2.hawaii.edu/~norbert/CompPhys/chapter10.pdf
         
         # serial matrix multiplication - DGEMM
         start = time.time()
         dgemm(alpha=1.,a=X,b=X)
         dgemm_time.append(time.time()-start)
-        operations_dgemm.append((i**2)*((2*i)-1)) # same number of operations as the serial 3-loop? https://software.intel.com/en-us/articles/a-simple-example-to-measure-the-performance-of-an-intel-mkl-function
+        operations_dgemm.append((sizes[i]**2)*((2*sizes[i])-1)) # same number of operations as the serial 3-loop? https://software.intel.com/en-us/articles/a-simple-example-to-measure-the-performance-of-an-intel-mkl-function
         
         # naive dynamic parallel algorithm (no blocking)
         start = time.time()
         hw14.matMult_naive(X, X, outmat, n)
         parallel_time_naivedyn.append(time.time()-start)
-        operations_naivedyn.append((i**2)*((2*i)-1)) # should be same number of operations as 3-loop serial
+        operations_naivedyn.append((sizes[i]**2)*((2*sizes[i])-1)) # should be same number of operations as 3-loop serial
         
         # chunked parallel algorithm (no blocking)
         outmat = np.zeros((sizes[i],sizes[i]))
@@ -83,7 +83,7 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_thread(X, X, outmat, n, chunk)
         parallel_time_chunked.append(time.time() - start)
-        operations_chunked.append((i**2)*((2*i)-1))
+        operations_chunked.append((sizes[i]**2)*((2*sizes[i])-1))
         
         # Parallel algorithm with blocking
         outmat = np.zeros((sizes[i],sizes[i]))
@@ -114,7 +114,7 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_block(X, X, outmat, n, step1, step2, row)
         parallel_time_block1.append(time.time() - start)
-        operations_block1.append((i**2)*((2*i)-1))
+        operations_block1.append((sizes[i]**2)*((2*sizes[i])-1))
         
         # Parallel algorithm with all cores working on same block
         outmat = np.zeros((sizes[i],sizes[i]))
@@ -127,7 +127,7 @@ for n in nthreads:
         start = time.time()
         hw14.matMult_block2(X, X, outmat, n, divisions1, divisions2, row)
         parallel_time_block2.append(time.time() - start)
-        operations_block2.append((i**2)*((2*i)-1))
+        operations_block2.append((sizes[i]**2)*((2*sizes[i])-1))
         # Parallel algorithm with all cores working on same block
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
@@ -139,7 +139,7 @@ for n in nthreads:
         start = time.time()
         hw14opt.matMult_block2(X, X, outmat, n, divisions1, divisions2, row)
         parallel_time_block3.append(time.time() - start)
-        operations_block3.append((i**2)*((2*i)-1))
+        operations_block3.append((sizes[i]**2)*((2*sizes[i])-1))
         
         print(serial_time)
         print(dgemm_time)
