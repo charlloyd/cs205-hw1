@@ -24,7 +24,7 @@ cpdef int matMult_serial(double[::,::] X, double[::,::] Y, double[::,::] out, in
     for n in range(N):
         for k in range(K):
             for j in range(J):
-                out[n,j] += X[n,j] * Y[j,k]
+                out[n,k] += X[n,j] * Y[j,k]
     return 0
 
 ### naive dynamic parallel algorithm (no blocking) ###
@@ -37,7 +37,7 @@ cpdef int matMult_naive(double[::,::] X, double[::,::] Y, double[::,::] out, int
     for n in prange(N, nogil=True, num_threads=nthreads, schedule='dynamic'):
         for k in range(K):
             for j in range(J):
-                out[n,j] += X[n,j] * Y[j,k]
+                out[n,k] += X[n,j] * Y[j,k]
     return 0
 
 ### chunked parallel algorithm (no blocking) ###
@@ -127,6 +127,7 @@ cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads
                 for b in prange(J, nogil=True, num_threads=nthreads):
                     A[a*J + b] = X[a + step1[s], b]
                     B[a*J + b] = Y[b, a + step2[s]]
+
         for k in range(chunk):
             for j in range(chunk):
                 if ((k + step1[s]) < N) & ((j + step2[s])<K):
