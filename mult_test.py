@@ -87,7 +87,7 @@ def test_mult_4():
 
         D = np.zeros_like(C,dtype=np.float64)
 
-        hw14.matMult_block2(A, B, D, 2, 0, 0, 1)
+        hw14.matMult_block2(A, B, D, 2, np.array([0],dtype=np.int), np.array([0],dtype=np.int), 1)
 
         result.append(np.allclose(C,D))
 
