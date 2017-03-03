@@ -47,7 +47,7 @@ cpdef int matMult_thread(double[::,::] X, double[::,::] Y, double[::,::] out, in
     cdef unsigned int K = Y.shape[1]
     cdef size_t k, j, n
     
-    for n in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='static'):
+    for n in prange(N, nogil=True, num_threads=nthreads, chunksize=chunk, schedule='static'): #prange may need to be the last loop. not sure if we're getting race condintion
         for k in range(K):
             for j in range(J):
                 out[n,k] += X[n,j] * Y[j,k]
@@ -64,6 +64,7 @@ cdef void reduce(double[::,::] out, double *C, int s, int t, int N, int stop) no
                 
 ### Parallel algorithm with blocking loading separate block in each thread?###
 # block1 function
+# DON'T WORRY ABOUT THIS. IT'S WRONG
 cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::,::] step1,  int[::,::] step2, int S, int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t
     cdef int tid
@@ -94,6 +95,7 @@ cdef void mmb(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,
         free(C)
         
 # block1 wrapper
+# DON'T WORRY ABOUT THIS. IT'S WRONG
 def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::, ::] step1,  int[::, ::] step2, int chunk):
     cdef int S = step1.shape[1]
     cdef int K = Y.shape[1]
@@ -112,6 +114,7 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
 
 ### Parallel algorithm with all cores working on same block ###
 # block 2 function
+# This one needs improvement
 cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1, int[::] step2, int S,  int chunk, int N, int J, int K):
     cdef int a, b, k, j, n, s,t, u,v
     cdef double* A = <double*>(malloc (J * chunk * sizeof(double)))
