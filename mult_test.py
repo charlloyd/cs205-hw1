@@ -28,14 +28,18 @@ def generate_test_matrices(n):
 
 
 
-def test_matMult_serial():
+def test_mult(F):
     matrices = generate_test_matrices(5)
 
     for A,B,C in matrices:
 
         D = np.empty_like(C)
-        hw14.matMult_serial(A,B,D,4)
+        F(A,B,D,4)
 
         result = np.allclose(C,D)
 
     assert(result)
+
+
+test_mult(hw14.matMult_serial)
+test_mult(hw14.matMult_naive)
