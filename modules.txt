@@ -11,7 +11,7 @@ module load gmp/6.1.1-fasrc03
 module load mpc/1.0.3-fasrc05
 module load mpfr/3.1.4-fasrc03
 
-srun --mem-per-cpu=2000 -p general -n 4 --pty -t 0-00:30 /bin/bash
+srun  -p general -n 64 --mem=10 --pty -t 0-00:40 /bin/bash
 
 #srun --mem-per-cpu=2000 -p holyseasgpu -n 1 --gres=gpu:1 --constraint=cuda-7.5 --pty -t 0-01:00 /bin/bash
 
