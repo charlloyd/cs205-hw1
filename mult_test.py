@@ -20,7 +20,7 @@ def generate_test_matrices(n):
 
         A = np.random.normal(size=(n1,n2))
         B = np.random.normal(size=(n2,n3))
-        C = np.matmul(A,B)
+        C = np.dot(A,B)
 
         matrices+= [(A,B,C)]
 
