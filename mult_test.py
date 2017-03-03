@@ -35,28 +35,31 @@ def generate_test_matrices(n):
 def test_mult_1():
     matrices = generate_test_matrices(5)
 
+    result = []
+
     for A,B,C in matrices:
 
         D = np.zeros_like(C,dtype=np.float64)
 
         hw14.matMult_serial(A,B,D,2)
 
-        result = np.mean(np.abs(C-D))
+        result.append(np.allclose(C,D))
 
-        print(result)
+    assert( result  )
 
 
 def test_mult_2():
     matrices = generate_test_matrices(5)
+
+    result = []
 
     for A,B,C in matrices:
 
         D = np.empty_like(C)
         hw14.matMult_naive(A,B,D,2)
 
-        result = np.allclose(C,D)
+        result.append(np.allclose(C,D))
 
-        #print(np.abs(C-D))
 
     print(result)
 
