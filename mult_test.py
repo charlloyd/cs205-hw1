@@ -33,7 +33,7 @@ def test_mult_1():
 
     for A,B,C in matrices:
 
-        D = np.zero_like(C)
+        D = np.zeros_like(C)
         hw14.matMult_serial(A,B,D,4)
 
         print(D)
