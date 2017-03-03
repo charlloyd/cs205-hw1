@@ -52,7 +52,7 @@ def test_mult_2():
     for A,B,C in matrices:
 
         D = np.empty_like(C)
-        hw14.hw14.matMult_naive(A,B,D,4)
+        hw14.matMult_naive(A,B,D,4)
 
         result = np.allclose(C,D)
 
