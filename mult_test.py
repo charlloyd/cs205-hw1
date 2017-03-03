@@ -91,7 +91,6 @@ def test_mult_3():
             print("matMult_thread FAILED")
 
 
-
 def test_mult_4():
     matrices = generate_test_matrices(5)
 
@@ -103,7 +102,7 @@ def test_mult_4():
 
         hw14.matMult_block2(A, B, D, 4, np.array([0],dtype=np.intc), np.array([0],dtype=np.intc), 64)
 
-        results.append(np.allclose(C,D+20))
+        results.append(np.allclose(C,D))
 
     for result in results:
         if(result):
