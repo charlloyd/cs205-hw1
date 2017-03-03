@@ -37,11 +37,6 @@ def test_mult_1():
 
     for A,B,C in matrices:
 
-        print(A)
-        print(B)
-
-        print(C.shape)
-
         D = np.zeros_like(C,dtype=np.float64)
 
         hw14.matMult_serial(A,B,D,2)

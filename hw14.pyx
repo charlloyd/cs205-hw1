@@ -39,7 +39,7 @@ cpdef int matMult_naive(double[::,::] X, double[::,::] Y, double[::,::] out, int
     for n in prange(N, nogil=True, num_threads=nthreads, schedule='dynamic'):
         for k in range(K):
             for j in range(J):
-                out[n,j] += X[n,j] * Y[j,k]
+                out[n,k] += X[n,j] * Y[j,k]
     return 0
 
 ### chunked parallel algorithm (no blocking) ###
