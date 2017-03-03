@@ -116,19 +116,19 @@ cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads
     cdef int a, b, k, j, n, s,t
     cdef double* A = <double*>(malloc (J * chunk * sizeof(double)))
     cdef double* B = <double*>(malloc (J * chunk * sizeof(double)))
+    cdef double* C = <double*>(malloc (J * chunk * sizeof(double)))
 
     for s in range(S):
-        for a in prange(0,chunk):
-            for b in range(0,J):
-                if ((a + step1[s]) < N) & ((a + step2[s])<K):
+        for a in range(0,chunk):
+            if ((a + step1[s]) < N) & ((a + step2[s])<K):
+                for b in prange(J, num_threads=nthreads):
                     A[a*J + b] = X[a + step1[s], b]
                     B[a*J + b] = Y[b, a + step2[s]]
-        with nogil, parallel(num_threads=nthreads):
             for k in range(chunk):
                 for j in range(chunk):
                     if ((k + step1[s]) < N) & ((j + step2[s])<K):
-                        for t in prange(J):
-                            out[k + step1[s], j + step2[s]] += A[k*J + t] * B[j*J + t]
+                        for t in prange(J, num_threads=nthreads):
+                            C[k + step1[s], j + step2[s]] += A[k*J + t] * B[j*J + t]
     free(A)
     free(B)
 
