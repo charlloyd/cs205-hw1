@@ -38,6 +38,8 @@ def test_mult(F):
 
         result = np.allclose(C,D)
 
+        print(np.abs(C-D))
+
     print(result)
 
 
