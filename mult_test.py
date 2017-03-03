@@ -78,8 +78,24 @@ def test_mult_3():
 
     if result: print("matMult_thread PASSED")
 
+def test_mult_4():
+    matrices = generate_test_matrices(5)
+
+    result = []
+
+    for A,B,C in matrices:
+
+        D = np.zeros_like(C,dtype=np.float64)
+
+        hw14.matMult_block2(A, B, D, 2, 0, 0, 1)
+
+        result.append(np.allclose(C,D))
+
+    if result: print("matMult_thread PASSED")
+
 
 
 test_mult_1()
 test_mult_2()
 test_mult_3()
+test_mult_4()
