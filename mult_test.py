@@ -14,9 +14,9 @@ def generate_test_matrices(n):
     matrices = []
 
     for i in range(n):
-        n1 = np.random.randint(low=64,high=64)
-        n2 = np.random.randint(low=64,high=64)
-        n3 = np.random.randint(low=64,high=64)
+        n1 = 64 #np.random.randint(low=64,high=65)
+        n2 = 64 #np.random.randint(low=64,high=65)
+        n3 = 64 #np.random.randint(low=64,high=65)
 
         A = np.random.normal(size=(n1,n2))
         B = np.random.normal(size=(n2,n3))
