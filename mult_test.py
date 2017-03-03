@@ -35,7 +35,7 @@ def generate_test_matrices(n):
 def test_mult_1():
     matrices = generate_test_matrices(5)
 
-    result = []
+    results = []
 
     for A,B,C in matrices:
 
@@ -43,30 +43,38 @@ def test_mult_1():
 
         hw14.matMult_serial(A,B,D,2)
 
-        result.append(np.allclose(C,D))
+        results.append(np.allclose(C,D))
 
-    if result: print("matMult_serial PASSED")
+    for result in results:
+        if(result):
+            print("matMult_serial PASSED")
+        else:
+            print("matMult_serial FAILED")
 
 
 def test_mult_2():
     matrices = generate_test_matrices(5)
 
-    result = []
+    results = []
 
     for A,B,C in matrices:
 
         D = np.zeros_like(C,dtype=np.float64)
         hw14.matMult_naive(A,B,D,2)
 
-        result.append(np.allclose(C,D))
+        results.append(np.allclose(C,D))
 
-    if result: print("matMult_naive PASSED")
+    for result in results:
+        if(result):
+            print("matMult_naive PASSED")
+        else:
+            print("matMult_naive FAILED")
 
 
 def test_mult_3():
     matrices = generate_test_matrices(5)
 
-    result = []
+    results = []
 
     for A,B,C in matrices:
 
@@ -74,14 +82,20 @@ def test_mult_3():
 
         hw14.matMult_thread(A,B,D,2,1)
 
-        result.append(np.allclose(C,D))
+        results.append(np.allclose(C,D))
 
-    if result: print("matMult_thread PASSED")
+    for result in results:
+        if(result):
+            print("matMult_thread PASSED")
+        else:
+            print("matMult_thread FAILED")
+
+
 
 def test_mult_4():
     matrices = generate_test_matrices(5)
 
-    result = []
+    results = []
 
     for A,B,C in matrices:
 
@@ -89,10 +103,13 @@ def test_mult_4():
 
         hw14.matMult_block2(A, B, D, 4, np.array([0],dtype=np.intc), np.array([0],dtype=np.intc), 64)
 
-        result.append(np.allclose(C,D+20))
+        results.append(np.allclose(C,D+20))
 
-    if result: print("matMult_block PASSED")
-
+    for result in results:
+        if(result):
+            print("matMult_block PASSED")
+        else:
+            print("matMult_block FAILED")
 
 
 test_mult_1()
