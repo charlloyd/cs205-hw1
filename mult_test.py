@@ -45,7 +45,7 @@ def test_mult_1():
 
         result.append(np.allclose(C,D))
 
-    assert(result)
+    if result: print("matMult_serial PASSED")
 
 
 def test_mult_2():
@@ -60,7 +60,7 @@ def test_mult_2():
 
         result.append(np.allclose(C,D))
 
-    assert(result)
+    if result: print("matMult_naive PASSED")
 
 
 def test_mult_3():
@@ -76,7 +76,7 @@ def test_mult_3():
 
         result.append(np.allclose(C,D))
 
-    assert(result)
+    if result: print("matMult_thread PASSED")
 
 
 
