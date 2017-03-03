@@ -60,8 +60,7 @@ def test_mult_2():
 
         result.append(np.allclose(C,D))
 
-
-    print(result)
+    assert(result)
 
 test_mult_1()
 test_mult_2()
