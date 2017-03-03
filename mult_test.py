@@ -47,7 +47,7 @@ def test_mult_1():
 
         result = np.mean(np.abs(C-D))
 
-    print(result)
+        print(result)
 
 
 def test_mult_2():
