@@ -36,7 +36,7 @@ def test_mult_1():
         D = np.zeros_like(C)
         hw14.matMult_serial(A,B,D,2)
 
-        result = np.mean(np.abs(C-D))cs
+        result = np.mean(np.abs(C-D))
 
     print(result)
 
