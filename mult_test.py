@@ -91,7 +91,7 @@ def test_mult_4():
 
         result.append(np.allclose(C,D))
 
-    if result: print("matMult_thread PASSED")
+    if result: print("matMult_block PASSED")
 
 
 
