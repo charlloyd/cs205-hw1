@@ -28,13 +28,15 @@ def generate_test_matrices(n):
 
 
 
-def test_mult(F):
+def test_mult_1():
     matrices = generate_test_matrices(5)
 
     for A,B,C in matrices:
 
-        D = np.empty_like(C)
-        F(A,B,D,4)
+        D = np.zero_like(C)
+        hw14.matMult_serial(A,B,D,4)
+
+        print(D)
 
         result = np.allclose(C,D)
 
@@ -42,6 +44,19 @@ def test_mult(F):
 
     print(result)
 
+def test_mult_2():
+    matrices = generate_test_matrices(5)
 
-test_mult(hw14.matMult_serial)
-#test_mult(hw14.matMult_naive)
+    for A,B,C in matrices:
+
+        D = np.empty_like(C)
+        hw14.hw14.matMult_naive(A,B,D,4)
+
+        result = np.allclose(C,D)
+
+        print(np.abs(C-D))
+
+    print(result)
+
+test_mult_1()
+test_mult_2()
