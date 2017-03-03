@@ -18,10 +18,6 @@ def generate_test_matrices(n):
         n2 = np.random.randint(low=2,high=10)
         n3 = np.random.randint(low=2,high=10)
 
-        n1=4
-        n2=4
-        n3=4
-
         A = np.random.normal(size=(n1,n2))
         B = np.random.normal(size=(n2,n3))
         C = np.dot(A,B)
@@ -38,13 +34,12 @@ def test_mult_1():
     for A,B,C in matrices:
 
         D = np.zeros_like(C)
-        hw14.matMult_serial(A,B,D,4)
+        hw14.matMult_serial(A,B,D,2)
 
-        result = np.allclose(C,D)
-
-        print( np.mean(np.abs(C-D)) )
+        result = np.mean(np.abs(C-D))cs
 
     print(result)
+
 
 def test_mult_2():
     matrices = generate_test_matrices(5)
@@ -52,11 +47,11 @@ def test_mult_2():
     for A,B,C in matrices:
 
         D = np.empty_like(C)
-        hw14.matMult_naive(A,B,D,4)
+        hw14.matMult_naive(A,B,D,2)
 
         result = np.allclose(C,D)
 
-        print(np.abs(C-D))
+        #print(np.abs(C-D))
 
     print(result)
 
