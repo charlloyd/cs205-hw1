@@ -20,8 +20,6 @@ cpdef int matMult_serial(double[::,::] X, double[::,::] Y, double[::,::] out, in
     cdef unsigned int J = Y.shape[0]
     cdef unsigned int K = Y.shape[1]
     cdef unsigned int k, j, n
-
-    print(N,J,K)
     
     for n in range(N):
         for k in range(K):

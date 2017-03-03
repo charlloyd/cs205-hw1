@@ -45,7 +45,7 @@ def test_mult_1():
 
         result.append(np.allclose(C,D))
 
-    assert( result  )
+    assert(result)
 
 
 def test_mult_2():
@@ -62,5 +62,24 @@ def test_mult_2():
 
     assert(result)
 
+
+def test_mult_3():
+    matrices = generate_test_matrices(5)
+
+    result = []
+
+    for A,B,C in matrices:
+
+        D = np.zeros_like(C,dtype=np.float64)
+
+        hw14.matMult_thread(A,B,D,2,1)
+
+        result.append(np.allclose(C,D))
+
+    assert(result)
+
+
+
 test_mult_1()
 test_mult_2()
+test_mult_3()
