@@ -89,7 +89,7 @@ def test_mult_4():
 
         hw14.matMult_block2(A, B, D, 4, np.array([0],dtype=np.intc), np.array([0],dtype=np.intc), 64)
 
-        result.append(np.allclose(C,D+0.1))
+        result.append(np.allclose(C,D+20))
 
     if result: print("matMult_block PASSED")
 
