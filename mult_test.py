@@ -44,4 +44,4 @@ def test_mult(F):
 
 
 test_mult(hw14.matMult_serial)
-test_mult(hw14.matMult_naive)
+#test_mult(hw14.matMult_naive)
