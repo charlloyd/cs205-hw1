@@ -120,8 +120,12 @@ for n in nthreads:
 
         # Parallel algorithm with all cores working on same block
         outmat = np.zeros((sizes[i],sizes[i]))
-        row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
+        row =  int(round(np.floor((np.sqrt(2*2**20/24)))))
         chunk = int(round(((sizes[i]**2))//(row**2)))
+        if chunk ==0:
+            chunk = 1
+            row = sizes[i]
+
         repfact = len(range(0,sizes[i],row))
         divisions = [t for t in range(0,sizes[i],row)]
         divisions2 = np.array(np.repeat(divisions, repfact), dtype=np.intc)
