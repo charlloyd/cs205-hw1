@@ -20,11 +20,11 @@ with open(fn_sum, 'w+') as f:
     f.close()
 with open(fn_matvec, 'w+') as f:
     writer = csv.writer(f, delimiter = ',')
-    writer.writerow(['Algorithm','p','2^6','2^10','thingy'])
+    writer.writerow(['Algorithm','p','2^6','2^10','2^16'])
     f.close()
 
 # set number of threads
-nthreads = [2, 4, 8, 16, 32, 64]
+nthreads = [2, 4, 8, 16, 32]#, 64]
 sizes =  [2**6, 2**10, 2**20]# 2**32]
 iter = range(len(sizes))
 arraylist = [np.ones((sizes[i],), dtype=np.int_) for i in iter]
@@ -166,7 +166,7 @@ for n in nthreads:
         #step = [idx for idx in range(0,sizes[i],row)]
         #step = np.array(step, dtype=np.intc)
         start = time.time()
-        #hw13.vecmatMult_thread(mymat, myvec, outvec, n, chunk)
+        hw13.vecmatMult_thread(mymat, myvec, outvec, n, chunk)
         parallel_timings_thread.append(time.time()-start)
         parallel_result_thread.append(outvec)
         print(parallel_timings_thread)
@@ -175,16 +175,12 @@ for n in nthreads:
         
     # speedup
     parallel_spd_naive = [serial_timings[i]/parallel_timings_naive[i] for i in iter]
-    parallel_spd_naive.append(parallel_timings_naive[-1])
     parallel_spd_thread = [serial_timings[i]/parallel_timings_thread[i] for i in iter]
-    parallel_spd_thread.append(parallel_timings_thread[-1])
-    
+
     # efficiency
     parallel_eff_naive = [parallel_spd_naive[i]/n for i in iter]
-    parallel_eff_naive.append(parallel_timings_naive[-1])
     parallel_eff_thread = [parallel_spd_thread[i]/n for i in iter]
-    parallel_eff_thread.append(parallel_timings_thread[-1])
-    
+
     # prep before writing
     serial_timings.insert(0,"Serial Times")
     parallel_timings_naive.insert(0,"Parallel Naive Times")

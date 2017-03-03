@@ -3,8 +3,8 @@
 #SBATCH -o p.out
 #SBATCH -e p.err
 #SBATCH -p general
-#SBATCH -t 200
-#SBATCH -c 64
+#SBATCH -t 30
+#SBATCH -c 2
 #SBATCH --mem 10000
 
 ## Load software ##
@@ -17,4 +17,3 @@ module load gcc/6.2.0-fasrc01
 python setup.py build_ext --inplace
 
 python main4.py
-python main3.py
