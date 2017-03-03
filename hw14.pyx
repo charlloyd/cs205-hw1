@@ -26,7 +26,7 @@ cpdef int matMult_serial(double[::,::] X, double[::,::] Y, double[::,::] out, in
     for n in range(N):
         for k in range(K):
             for j in range(J):
-                out[n,j] += X[n,j] * Y[j,k]
+                out[n,k] += X[n,j] * Y[j,k]
     return 0
 
 ### naive dynamic parallel algorithm (no blocking) ###
