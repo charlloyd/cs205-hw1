@@ -108,7 +108,7 @@ else:
         zdim = 10
 
 start = time.time()
-func(in_data_gpu, out_data_gpu, block=(1024,1,1), grid=(1,1,1), shared=(in_data.nbytes)) #for sum reason requesting 1 gpu core means I can't use more than 1024 here. Once i get to 1024 in any dimension, it throws an error for things beyond that. Probably something with the amount of gpus I can request or how many threads are available per gpu unit requested that i'm not familiar with.
+func(in_data_gpu, out_data_gpu, block=(1024,1,1), grid=(1,1,1), shared=(in_data.nbytes)) #for some reason requesting 1 gpu core means I can't use more than 1024 here. Once i get to 1024 in any dimension, it throws an error for things beyond that. Probably something with the amount of gpus I can request or how many threads are available per gpu unit requested that i'm not familiar with.
 cuda.memcpy_dtoh(out_data, out_data_gpu)
 parallel_timings_gpu.append(time.time()-start)
 print(out_data)
