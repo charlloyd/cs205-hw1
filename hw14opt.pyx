@@ -113,24 +113,31 @@ def matMult_block(double[::,::] X, double[::,::] Y, double[::,::] out, int nthre
 ### Parallel algorithm with all cores working on same block ###
 # block 2 function
 cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1, int[::] step2, int S,  int chunk, int N, int J, int K):
-    cdef int a, b, k, j, n, s,t
+    cdef int a, b, k, j, n, s,t, u,v
     cdef double* A = <double*>(malloc (J * chunk * sizeof(double)))
     cdef double* B = <double*>(malloc (J * chunk * sizeof(double)))
+    cdef double* C = <double*>(malloc (chunk * chunk * sizeof(double)))
 
     for s in range(S):
         for a in range(0,chunk):
-            for b in range(0,J):
-                if ((a + step1[s]) < N) & ((a + step2[s])<K):
+            if ((a + step1[s]) < N) & ((a + step2[s])<K):
+                for b in prange(J, nogil=TRUE, num_threads=nthreads):
                     A[a*J + b] = X[a + step1[s], b]
                     B[a*J + b] = Y[b, a + step2[s]]
-        with nogil, parallel(num_threads=nthreads):
-            for k in range(chunk):
-                for j in range(chunk):
-                    if ((k + step1[s]) < N) & ((j + step2[s])<K):
-                        for t in prange(J):
-                            out[k + step1[s], j + step2[s]] += A[k*J + t] * B[j*J + t]
+        for k in range(chunk):
+            for j in range(chunk):
+                if ((k + step1[s]) < N) & ((j + step2[s])<K):
+                    for t in prange(J, nogil=TRUE, num_threads=nthreads):
+                        C[chunk * k + j] = C[chunk * k + j] + A[k*J + t] * B[j*J + t]
+
+        for u in prange(chunk, nogil = TRUE, num_threads=nthreads):
+            for v in prange(chunk, nogil = TRUE, num_threads=nthreads):
+                if ((u + step1[s]) < N) & ((v + step2[s])<K):
+                    out[u + step1[s], v + step2[s]] = C[u * chunk + v]
+
     free(A)
     free(B)
+    free(C)
 
 # block2 wrapper
 def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1,  int[::] step2, int chunk):
@@ -147,5 +154,5 @@ def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthr
     cdef  int chunkC = chunk
     cdef temp
     
-    mmb2(Xc, Yc, out, nt, stepC1, stepC2, S, chunkC, N, J, K)
-    return out
+    mmb2(Xc, Yc, outC, nt, stepC1, stepC2, S, chunkC, N, J, K)
+    return outC
