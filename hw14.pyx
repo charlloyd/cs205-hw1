@@ -131,7 +131,7 @@ cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads
                         C[chunk * k + j] = C[chunk * k + j] + A[k*J + t] * B[j*J + t]
 
         for u in prange(chunk, nogil = True, num_threads=nthreads):
-            for v in prange(chunk, num_threads=nthreads):
+            for v in range(chunk):
                 if ((u + step1[s]) < N) & ((v + step2[s])<K):
                     out[u + step1[s], v + step2[s]] = C[u * chunk + v]
 
