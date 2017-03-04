@@ -129,11 +129,6 @@ cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads
                     A[a*J + b] = X[a + step1[s], b]
                     B[a*J + b] = Y[b, a + step2[s]]
 
-
-        for a in range(chunk):
-            for b in range(J):
-                if ((a + step1[s]) < N) & ((a + step2[s])<K):
-
         print(A[:])
 
         for k in range(chunk):
