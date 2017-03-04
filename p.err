@@ -1,0 +1,37 @@
+Loading module centos6/cython-0.20_python-3.3.2.
+cc1plus: warning: command line option ‘-Wstrict-prototypes’ is valid for C/ObjC but not for C++
+hw14.cpp: In function ‘<built-in>’:
+hw14.cpp:3389:31: warning: ‘__pyx_v_v’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                       #pragma omp for firstprivate(__pyx_v_u) lastprivate(__pyx_v_u) lastprivate(__pyx_v_v)
+                               ^~~
+hw14.cpp:3059:7: note: ‘__pyx_v_v’ was declared here
+   int __pyx_v_v;
+       ^~~~~~~~~
+hw14.cpp: In function ‘<built-in>’:
+hw14.cpp:2064:29: warning: ‘__pyx_v_k’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                     #pragma omp for lastprivate(__pyx_v_k) lastprivate(__pyx_v_j) firstprivate(__pyx_v_n) lastprivate(__pyx_v_n) schedule(static, __pyx_t_4)
+                             ^~~
+hw14.cpp:1977:10: note: ‘__pyx_v_k’ was declared here
+   size_t __pyx_v_k;
+          ^~~~~~~~~
+hw14.cpp:2064:29: warning: ‘__pyx_v_j’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                     #pragma omp for lastprivate(__pyx_v_k) lastprivate(__pyx_v_j) firstprivate(__pyx_v_n) lastprivate(__pyx_v_n) schedule(static, __pyx_t_4)
+                             ^~~
+hw14.cpp:1978:10: note: ‘__pyx_v_j’ was declared here
+   size_t __pyx_v_j;
+          ^~~~~~~~~
+hw14.cpp: In function ‘<built-in>’:
+hw14.cpp:1751:29: warning: ‘__pyx_v_j’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                     #pragma omp for lastprivate(__pyx_v_k) lastprivate(__pyx_v_j) firstprivate(__pyx_v_n) lastprivate(__pyx_v_n) schedule(dynamic)
+                             ^~~
+hw14.cpp:1675:10: note: ‘__pyx_v_j’ was declared here
+   size_t __pyx_v_j;
+          ^~~~~~~~~
+hw14.cpp:1751:29: warning: ‘__pyx_v_k’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                     #pragma omp for lastprivate(__pyx_v_k) lastprivate(__pyx_v_j) firstprivate(__pyx_v_n) lastprivate(__pyx_v_n) schedule(dynamic)
+                             ^~~
+hw14.cpp:1674:10: note: ‘__pyx_v_k’ was declared here
+   size_t __pyx_v_k;
+          ^~~~~~~~~
+warning: hw14.pyx:37:10: Unsigned index type not allowed before OpenMP 3.0
+warning: hw14.pyx:50:10: Unsigned index type not allowed before OpenMP 3.0
