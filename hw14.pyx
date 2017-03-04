@@ -157,7 +157,7 @@ cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads
 
 # block2 wrapper
 def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads,  int[::] step1,  int[::] step2, int chunk):
-    cdef int S = step1.shape[1]
+    cdef int S = step1.shape[0]
     cdef int K = Y.shape[1]
     cdef int N = X.shape[0]
     cdef int J = Y.shape[0]
