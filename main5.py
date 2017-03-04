@@ -35,5 +35,5 @@ divisions = [t for t in range(0,sizes[i],row)]
 divisions2 = np.array(np.repeat(divisions, repfact), dtype=np.intc)
 divisions1 = np.array((divisions * repfact), dtype=np.intc)
 start = time.time()
-outmat = hw14.matMult_block2(X, X, outmat, n, divisions1, divisions2, row)
+hw14.matMult_block2(X, X, outmat, n, divisions1, divisions2, row)
 print( np.array(outmat) )
