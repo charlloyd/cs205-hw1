@@ -121,22 +121,15 @@ cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads
     cdef double* B = <double*>(malloc (J * chunk * sizeof(double)))
     cdef double* C = <double*>(malloc (chunk * chunk * sizeof(double)))
 
-    for s in range(S):
 
+    for s in range(S):
         for a in range(0,chunk):
             if ((a + step1[s]) < N) & ((a + step2[s])<K):
                 for b in prange(J, nogil=True, num_threads=nthreads):
                     A[a*J + b] = X[a + step1[s], b]
                     B[a*J + b] = Y[b, a + step2[s]]
-
-        print(A[:])
-
         for k in range(chunk):
             for j in range(chunk):
-                print(k)
-                print(j)
-
-
                 if ((k + step1[s]) < N) & ((j + step2[s])<K):
                     for t in prange(J, nogil=True, num_threads=nthreads):
                          out[k + step1[s], j + step2[s]] +=  A[k*J + t] * B[j*J + t]
@@ -159,5 +152,5 @@ def matMult_block2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthr
     cdef  int[::] stepC2 = step2
     cdef  int chunkC = chunk
     cdef temp
-    
+
     mmb2(Xc, Yc, out, nt, stepC1, stepC2, S, chunkC, N, J, K)
