@@ -122,6 +122,10 @@ cdef void mmb2(double[::,::] X, double[::,::] Y, double[::,::] out, int nthreads
     cdef double* C = <double*>(malloc (chunk * chunk * sizeof(double)))
 
     for s in range(S):
+        print(s)
+        print(step1[s])
+        print(step2[s])
+
         for a in range(0,chunk):
             if ((a + step1[s]) < N) & ((a + step2[s])<K):
                 for b in prange(J, nogil=True, num_threads=nthreads):
