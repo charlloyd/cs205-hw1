@@ -24,6 +24,9 @@ with open(fn_matmat, 'w+') as f:
 
 # define sizes for matrix multiplication
 sizes = [2**6, 2**10]#, 2**12]
+
+sizes = [3,6,8]
+
 iter = range(len(sizes))
 matlist = [np.ones((sizes[i],sizes[i]),dtype=np.float64) for i in iter]
 
@@ -89,6 +92,10 @@ for n in nthreads:
         # Parallel algorithm with blocking
         outmat = np.zeros((sizes[i],sizes[i]))
         row =  int(round(np.floor((np.sqrt(16*2**20/3)))))
+
+        row = 4
+
+
         chunk = int(round(((sizes[i]**2))//(row**2)))
         if chunk ==0:
             chunk = 1
